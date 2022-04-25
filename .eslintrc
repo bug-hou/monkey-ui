@@ -1,0 +1,22 @@
+{
+  "extends": ["plugin:prettier/recommended", "eslint:recommended"],
+  "plugins": ["jest"],
+  "globals": {
+    "window": true,
+    "moodJs": true
+  },
+  "rules": {
+    "semi": [2, "never"],
+    "comma-dangle": ["error", "never"],
+    "no-param-reassign": [0],
+    "func-names": [0],
+    "import/no-extraneous-dependencies": [0],
+    "import/no-unresolved": [
+      2,
+      {
+        "ignore": ["moodJs"]
+      }
+    ],
+    "import/extensions": [2, "never"]
+  }
+}
