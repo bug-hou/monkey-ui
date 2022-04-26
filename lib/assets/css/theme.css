@@ -1,0 +1,222 @@
+:root {
+  /* 背景颜色 */
+  --back-color: rgb(255, 192, 203);
+  /* 公共颜色 */
+  --back-color-public: white;
+  /* 公共颜色 */
+  --back-color-black: black;
+  /* 边框背景颜色 */
+  --back-color-button: rgb(236, 65, 65);
+  /* 背景颜色3 */
+  --back-color-three: rgb(246, 246, 247);
+  /* 背景颜色4 */
+  --back-color-carousel-7: rgba(102, 102, 102, 0.7);
+
+  /* 活跃的背景颜色 */
+  /* 默认的活跃的背景颜色 */
+  --back-active-color: rgb(236, 65, 65);
+  --back-active-color-table: #c0c4cc;
+
+  /* hover的背景颜色 */
+  --back-hover-color: rgba(255, 192, 203, 0.6);
+
+  /* 字体颜色 */
+  --font-color: rgb(128, 128, 128);
+  /* 公共颜色 */
+  --font-color-public: white;
+  /* 公共颜色 */
+  --font-color-black: black;
+  /* 字体颜色1 */
+  --font-color-one: rgb(166, 166, 166);
+  /* 字体颜色2 */
+  --font-color-button: rgb(255, 255, 255);
+  --font-color-input: rgb(255, 255, 255);
+
+  /* 活跃的字体颜色 */
+  --font-active-color: rgb(236, 65, 65);
+  /* 活跃的输入框的字体颜色 */
+  --font-active-color-input: rgb(255, 255, 255);
+
+  /* 边框颜色 */
+  --border-color: rgb(255, 192, 203);
+  /* 公共颜色 */
+  --border-color-public: white;
+  /* 公共颜色 */
+  --border-color-black: black;
+  /* 边框颜色2 */
+  --border-color-input: rgb(220, 223, 230);
+  /* 边框颜色1 */
+  --border-color-one: rgb(236, 65, 65);
+  /* 边框颜色3 */
+  --border-color-table: rgb(220, 220, 220);
+  /* 边框颜色4 */
+  --border-color-four: rgb(102, 102, 102);
+
+  --border-active-color: rgb(236, 65, 65);
+
+  /* 阴影颜色 */
+  --shadow-color: rgb(200, 200, 200);
+
+  /* result中的颜色 */
+  --back-color-result: #606266;
+  --back-color-result-title: #303133;
+
+  /* pagination中的颜色 */
+  --font-color-pagination-active: #409eff;
+  --back-color-pagination: #f4f4f5;
+  --font-color-pagination-back: #606266;
+  --font-color-pagination-back-active: white;
+  --back-color-pagination-active: #409eff;
+
+  /* carousel中的颜色 */
+  --back-color-carousel: rgba(102, 102, 102, 0.7);
+  --font-color-carousel: #fff;
+  --back-color-carousel-active: rgb(64, 158, 255);
+
+  /* card中的颜色 */
+  --border-color-card: #e4e7ed;
+  --shadow-color-card: rgba(0, 0, 0, 0.1);
+  --font-color-card-title: rgb(0, 0, 0);
+  --font-color-card: rgb(128, 128, 128);
+
+  /* calcander中的颜色 */
+  --border-color-calender: #e5e7eb;
+  --font-color-calender: rgb(51, 48, 51);
+  --font-color-calender-day: #c0c4cc;
+  --border-color-calender-day: #e5e7eb;
+  --font-color-calender-day-active: rgb(64, 158, 255);
+  --back-color-calender-day-active: #f2f8fe;
+  --font-color-calender-day-current: rgb(51, 48, 51);
+
+  /* popover中的颜色 */
+  --back-color-popover: #fafbfc;
+  --shadow-color-popover: rgba(0, 0, 0, 0.1);
+
+  /* avatar中的颜色 */
+  --back-color-avatar: #f0f2f5;
+
+  /* select中的颜色 */
+  --border-color-select: #e5e7eb;
+  --font-color-select: #606266;
+  --back-color-select: #f6f9fa;
+  --font-color-select-active: #409eff;
+  --border-color-select-active: #409eff;
+  --font-color-select-multiple: #909399;
+  --border-color-select-multiple: #909399;
+  --back-color-select-multiple: #f0f2f5;
+
+  /* switch中的颜色 */
+  --back-color-switch: #dcdfe6;
+  --font-color-switch: #409eff;
+  --back-color-switch-active: white;
+
+  /* slider中的颜色 */
+  --back-color-slider: #e4e7ed;
+  --back-color-slider-active: #409eff;
+  --back-color-slider-block: white;
+  --border-color-slider-block: #409eff;
+  --back-color-slider-value: rgba(0, 0, 0);
+  --border-color-slider-value: rgba(0, 0, 0);
+  --font-color-slider-value: white;
+
+  /* input中的颜色 */
+  --font-color-input: #606266;
+  --font-color-input-title: #606366;
+  --back-color-input: #ffffff;
+  --back-color-input-title: #f1f2f3;
+  --border-color-input: rgb(220, 223, 230);
+  --border-color-input-active: #409eff;
+  --back-color-input-list: #ffffff;
+  --border-color-input-list: #e5e7eb;
+  --back-color-input-list-active: #f5f7fa;
+  --font-color-input-list-active: #409eff;
+
+  /* checkBox中的颜色 */
+  --border-color-check-box: rgb(200, 200, 200);
+  --font-color-check-box: rgb(50, 50, 50);
+  --border-color-check-box-active: rgb(255, 192, 203);
+  --font-color-check-box-disabled: #c0c4cc;
+  --back-color-check-box: #409eff;
+  --font-color-check-box-border: white;
+
+  /* menu中的颜色 */
+  --font-color-menu: rgb(48, 49, 51);
+  --back-color-menu: #fff;
+  --font-color-menu-header: rgb(48, 49, 51);
+  --back-color-menu-hover: rgb(236, 245, 255);
+  --font-color-menu-disabled: #c0c4cc;
+  --back-color-menu-disabled: #f5f7fa;
+  --font-color-menu-active: rgb(64, 158, 255);
+
+  /* collapse中的颜色 */
+  --back-color-collapse: rgba(200, 200, 200, 0.6);
+  --font-color-collapse: rgb(50, 50, 50);
+  --border-color-collapse: #90939955;
+  --font-color-collapse-active: rgb(64, 158, 255);
+
+  /* skeleton中的颜色 */
+  --back-color-skeleton: #f2f2f2;
+  --back-color-skeleton-to: #e6e6e6;
+  --fill-color-skeleton-svg: #dcdde0;
+
+  /* breadcrumb中的颜色 */
+  --font-color-breadcrumb: rgb(50, 50, 50);
+  --font-color-breadcrumb-hover: rgb(64, 158, 255);
+  --back-color-breadcrumb-icon: rgb(200, 200, 200);
+
+  /* message中的颜色 */
+  --shadow-color-message: rgba(0, 0, 0, 0.1);
+  --font-color-message: #c0c4cc;
+
+  /* notification中的颜色 */
+  --shadow-color-notification: rgba(0, 0, 0, 0.1);
+  --font-color-notification: #606266;
+  --font-color-notification-title: rgb(48, 49, 51);
+  --back-color-notification: rgb(255, 255, 255);
+  --border-color-notification: rgb(200, 200, 200, 0.8);
+
+  /* tooltip中的颜色 */
+  --back-color-tooltip: #fafbfc;
+  --font-color-tooltip: #61666d;
+  --border-color-tooltip: white;
+  --back-color-hover-tooltip: #e3e5e7;
+  --shadow-color-tooltip: rgba(0, 0, 0, 0.1);
+
+  /* cascader中的颜色 */
+  --font-color-cascader: #61666d;
+  --back-color-cascader-active: rgb(255, 192, 203);
+  --back-color-cascader: white;
+  --border-color-cascader: #c1c2c3;
+  --border-color-cascader-active: rgb(255, 192, 203);
+  --shadow-color-cascader: rgba(0, 0, 0, 0.1);
+
+  /* dataPicker中的颜色 */
+  --font-color-dataPicker: #61666d;
+  --border-color-dataPicker: #e5e7eb;
+  --border-color-dataPicker-active: #409eff;
+  --shadow-color-dataPicker: rgba(0, 0, 0, 0.1);
+
+  /* inputNumber中的颜色 */
+  --back-color-input-number: #f1f2f3;
+  --font-color-input-number: #2a2b2a;
+  --font-color-input-number-active: #409eff;
+  --border-color-input-number: #e1e2e3;
+  --back-color-input-number-disabled: #a1a2a3;
+  --border-color-input-number-active: #409eff;
+
+  /* upload中的颜色 */
+  --back-color-upload: #f1f2f3;
+  --font-color-upload: #2a2b2a;
+  --font-color-upload-active: rgb(255, 192, 203);
+  --border-color-upload: #e1e2e3;
+  --font-color-upload-list: #a1a2a3;
+
+  /* timeline中的颜色 */
+  --back-color-timeline: #fff;
+  --back-color-timeline-content: #fff;
+  --font-color-timeline-time: #303133;
+  --back-color-timeline-active: #409eff;
+  --shadow-color-timeline: rgba(0, 0, 0, 0.1);
+  --font-color-timeline-time: #909399;
+  --border-color-timeline: #e5e7eb;
+}

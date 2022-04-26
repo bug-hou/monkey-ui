@@ -1,0 +1,42 @@
+@import url(./reset.css);
+@import url(./theme.css);
+@import url(./animation.css);
+@import url(./scroll.css);
+/* @import url(//at.alicdn.com/t/font_3064120_ngwe45foyw.css); */
+@import url(../font/iconfont.css);
+
+/* @font-face {
+	font-family: bg;
+	src: url(../fonts/bg.ttf);
+}
+
+@font-face {
+	font-family: gil;
+	src: url(../fonts/gil.TTF);
+}
+
+@font-face {
+	font-family: mash;
+	src: url(../fonts/mash.ttc);
+}
+
+@font-face {
+	font-family: masy;
+	src: url(../fonts/masy.ttc);
+}
+
+@font-face {
+	font-family: sim;
+	src: url(../fonts/sim.TTF);
+}
+
+body {
+	font-family: masy, bg, gil, mash, sim, "Franklin Gothic Medium",
+		"Arial Narrow", Arial, sans-serif;
+} */
+
+/* .disabled {
+	color: #c0c4cc !important;
+	background-color: #f5f7fa !important;
+	cursor: not-allowed !important;
+} */

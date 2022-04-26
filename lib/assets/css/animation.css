@@ -1,0 +1,158 @@
+/* 
+列表从上到下，透明度从0~1变化
+*/
+.listPositionOpacity-leave-from,
+.listPositionOpacity-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.listPositionOpacity-enter-active,
+.listPositionOpacity-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.listPositionOpacity-enter-from,
+.listPositionOpacity-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.listPositionOpacity-leave-active {
+  position: absolute !important;
+}
+.listPositionOpacity-move {
+  transition: all 0.5s linear;
+}
+/* 
+列表从下到上
+*/
+.listPositionBottomOpacity-leave-from,
+.listPositionBottomOpacity-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+.listPositionBottomOpacity-enter-active,
+.listPositionBottomOpacity-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.listPositionBottomOpacity-enter-from,
+.listPositionBottomOpacity-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.listPositionBottomOpacity-move {
+  transition: all 0.5s linear;
+}
+
+/* 
+列表从左到右移动，透明度从0~1
+*/
+/* 
+列表从上到下，透明度从0~1变化
+*/
+.listPositionLeftOpacity-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.listPositionLeftOpacity-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.listPositionLeftOpacity-enter-active,
+.listPositionLeftOpacity-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.listPositionLeftOpacity-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.listPositionLeftOpacity-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
+.listPositionLeftOpacity-leave-active {
+  position: absolute;
+}
+.listPositionLeftOpacity-move {
+  transition: transform 0.5s linear;
+}
+/* 
+从左向右平移和显示
+*/
+.lefttranslateXOpacity-leave-from,
+.lefttranslateXOpacity-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.lefttranslateXOpacity-enter-active,
+.lefttranslateXOpacity-leave-active {
+  transition: opacity 0.8s, transform 0.8s;
+}
+.lefttranslateXOpacity-enter-from,
+.lefttranslateXOpacity-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+/* 
+从左向右平移和显示
+*/
+.righttranslateOpacity-leave-from,
+.righttranslateOpacity-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.righttranslateOpacity-enter-active,
+.righttranslateOpacity-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.righttranslateOpacity-enter-from,
+.righttranslateOpacity-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* 
+从左向右平移和显示
+*/
+.Opacity-leave-from,
+.Opacity-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.Opacity-enter-active,
+.Opacity-leave-active {
+  transition: opacity 0.8s, transform 0.8s;
+}
+.Opacity-enter-from,
+.Opacity-leave-to {
+  opacity: 0;
+  transform: translateX(-10%);
+}
+
+.backTop-enter-to {
+  opacity: 1;
+}
+.backTop-leave-active {
+  transition: opacity 0.3s;
+  animation: move 0.3s ease-out;
+}
+.backTop-leave-to {
+  opacity: 0;
+}
+
+@keyframes move {
+  30% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes bg-skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
