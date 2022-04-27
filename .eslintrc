@@ -11,12 +11,6 @@
     "no-param-reassign": [0],
     "func-names": [0],
     "import/no-extraneous-dependencies": [0],
-    "import/no-unresolved": [
-      2,
-      {
-        "ignore": ["moodJs"]
-      }
-    ],
     "import/extensions": [2, "never"]
   }
 }

@@ -5,6 +5,16 @@
 /* @import url(//at.alicdn.com/t/font_3064120_ngwe45foyw.css); */
 @import url(../font/iconfont.css);
 
+html {
+  font-size: 10px;
+}
+
+@media screen and (max-height: 750px) {
+  html {
+    font-size: 5px;
+  }
+}
+
 /* @font-face {
 	font-family: bg;
 	src: url(../fonts/bg.ttf);

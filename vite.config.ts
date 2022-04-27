@@ -6,12 +6,13 @@ import { resolve } from "path";
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const returnObj: UserConfigExport = {
-    plugins: [vue({ include: [] })],
+    plugins: [vue()],
     resolve: {
       alias: {
         "@": resolve(__dirname, "src"),
         lib: resolve(__dirname, "lib"),
-        packages: "lib/packages"
+        packages: "lib/packages",
+        hooks: "lib/hooks"
       },
       extensions: [
         ".mjs",
@@ -21,7 +22,8 @@ export default defineConfig(({ command, mode }) => {
         ".tsx",
         ".json",
         ".png",
-        "jpeg"
+        "jpeg",
+        ".vue"
       ]
     },
     build: {
@@ -43,6 +45,9 @@ export default defineConfig(({ command, mode }) => {
           })
         ]
       }
+    },
+    server: {
+      port: 8080
     }
   };
   if (command === "serve") {
