@@ -3,6 +3,7 @@
   <button
     @click="handleClick"
     @touchend="handleTouch"
+    @keydown=""
     :class="[size, shape, disabled && 'disabled']"
     :style="[
       {
@@ -14,7 +15,7 @@
       { ['--border']: borderColor },
       { ['--hover-color']: hoverColor },
       {
-        ['--hover-backgroundColor']: hoverBackgroundColor
+        ['--hover-back']: hoverBackgroundColor
       }
     ]"
   >
@@ -25,9 +26,9 @@
   </button>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="mButton">
 // 从下载的组件中导入函数
-import { defineEmits, defineProps, withDefaults, defineExpose } from "vue";
+import { defineEmits, defineProps, withDefaults } from "vue";
 
 import { useInject } from "../../../hooks";
 
@@ -58,8 +59,6 @@ interface ButtonProps {
   backgroundColor?: string;
   hoverBackgroundColor?: string;
 }
-
-const name = "mButton";
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   type: "default",
@@ -99,10 +98,6 @@ const hoverBackgroundColor = useInject(
   theme.hoverBackgroundColor
 );
 const borderColor = useInject(props.borderColor, "border", theme.borderColor);
-
-defineExpose({
-  name
-});
 </script>
 <style scoped lang="less">
 @keyframes rotate {
@@ -114,7 +109,7 @@ defineExpose({
   }
 }
 button {
-  display: flex;
+  display: inline-flex;
   padding: 2px 10px;
   font-size: 18px;
   justify-content: center;
@@ -126,7 +121,7 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
   &:hover {
-    background: var(--hover-background);
+    background: var(--hover-back);
     color: var(--hover-color);
   }
   &.disabled {
@@ -159,7 +154,7 @@ button {
 .rect {
   border-radius: 0;
 }
-.smallArc {
+.round {
   border-radius: 10px;
 }
 .arc {

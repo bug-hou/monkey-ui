@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
+import index from "../views/index/index.vue"
+
 const routers: RouteRecordRaw[] = [
   {
     redirect: "/index",
@@ -8,7 +10,12 @@ const routers: RouteRecordRaw[] = [
   {
     path: "/index",
     name: "index",
-    component: () => import("../views/index/index.vue")
+    component: index
+  },
+  {
+    path: "/component",
+    name: "component",
+    component: () => import("../views/main/main.vue")
   }
 ];
 

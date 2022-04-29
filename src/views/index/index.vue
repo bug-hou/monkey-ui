@@ -19,7 +19,11 @@
         <h1>Monkey UI</h1>
         <p>一个vue3 UI组件库</p>
         <p>这里的UI只有你想不到的</p>
-        <button>开始使用</button>
+        <p>
+          <m-button @mClick="$router.push('/main')" type="success" shape="round"
+            >开始使用</m-button
+          >
+        </p>
       </div>
       <div class="right">
         <template v-for="(item, index) in rHeights" :key="item">
@@ -41,8 +45,8 @@
 // 从下载的组件中导入函数
 import { getRandom } from "../../utils";
 const name = "index";
-const lHeights = getRandom(5, 90);
-const rHeights = getRandom(5, 90);
+const lHeights = getRandom(5, 50).map((item) => item + 50);
+const rHeights = getRandom(5, 50).map((item) => item + 50);
 const lColors = ["#67c23a", "#909399", "#faaca8", "#3ac5dc", "#f56c6c"];
 const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
 </script>
@@ -119,6 +123,9 @@ const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
         font-size: 2rem;
         letter-spacing: 2px;
         cursor: pointer;
+      }
+      p {
+        margin-top: 5px;
       }
     }
   }
