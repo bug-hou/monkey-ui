@@ -1,4 +1,3 @@
-import type button from "./button.vue";
 
 export type ButtonType =
   | "success"
@@ -26,4 +25,3 @@ export interface ButtonProps {
   hoverBackgroundColor?: string;
 }
 
-export type ButtonInstance = InstanceType<typeof button>;

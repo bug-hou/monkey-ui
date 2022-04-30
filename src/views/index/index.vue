@@ -16,11 +16,16 @@
         </template>
       </div>
       <div class="main">
-        <h1>Monkey UI</h1>
+        <h1>Monkeys UI</h1>
         <p>一个vue3 UI组件库</p>
         <p>这里的UI只有你想不到的</p>
         <p>
-          <m-button @mClick="$router.push('/main')" type="success" shape="round"
+          <m-button
+            @mClick="$router.push('/component')"
+            type="success"
+            shape="round"
+            size="medium"
+            :plain="false"
             >开始使用</m-button
           >
         </p>

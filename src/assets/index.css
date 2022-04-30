@@ -9,3 +9,10 @@ html {
     font-size: 10px;
   }
 }
+code {
+  background-color: rgb(244, 244, 248);
+  padding: 1px 5px;
+  letter-spacing: 0;
+  border-radius: 5px;
+  font-size: 0.8rem;
+}

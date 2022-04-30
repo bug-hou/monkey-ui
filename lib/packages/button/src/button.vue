@@ -34,6 +34,8 @@ import { useInject } from "../../../hooks";
 
 import { LightTheme } from "../../../common/style";
 
+import { getLightColor } from "../../../utils/index";
+
 type ButtonType =
   | "success"
   | "error"
@@ -91,12 +93,16 @@ const backgroundColor = useInject(
   "backgroundColor",
   theme.backgroundColor
 );
-const hoverColor = useInject(props.hoverColor, "hoverColor", theme.hoverColor);
-const hoverBackgroundColor = useInject(
-  props.hoverBackgroundColor,
-  "hoverBackgroundColor",
-  theme.hoverBackgroundColor
-);
+const hoverColor =
+  useInject(props.hoverColor, "hoverColor", theme.hoverColor) ??
+  (!props.plain && getLightColor(props.color, 0.5));
+const hoverBackgroundColor =
+  useInject(
+    props.hoverBackgroundColor,
+    "hoverBackgroundColor",
+    theme.hoverBackgroundColor
+  ) ??
+  (!props.plain && getLightColor(props.backgroundColor, 0.5));
 const borderColor = useInject(props.borderColor, "border", theme.borderColor);
 </script>
 <style scoped lang="less">

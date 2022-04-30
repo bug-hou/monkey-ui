@@ -15,7 +15,13 @@ const routers: RouteRecordRaw[] = [
   {
     path: "/component",
     name: "component",
-    component: () => import("../views/main/main.vue")
+    component: () => import("../views/main/main.vue"),
+    children: [
+      {
+        path: "button",
+        component: () => import("../views/main/button/index.vue"),
+      }
+    ]
   }
 ];
 

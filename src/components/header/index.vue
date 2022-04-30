@@ -3,7 +3,7 @@
     <li v-for="item in props.barList">
       <slot v-if="!!item.self" :name="item.slotName"></slot>
       <span
-        :class="$route.path === item.path && 'active'"
+        :class="$route.path.includes(item.path) && 'active'"
         @click="clickHandler(item)"
         v-else
         >{{ item.name }}</span
