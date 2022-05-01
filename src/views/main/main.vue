@@ -22,7 +22,8 @@ import navListVue from "../../components/navList/navList.vue";
 const baseTitle = "基本组件";
 const base = [
   { name: "按钮button", path: "/button" },
-  { name: "输入框input", path: "/input" }
+  { name: "输入框input", path: "/input" },
+  { name: "图标icon", path: "/icon" }
 ];
 </script>
 <style scoped lang="less">

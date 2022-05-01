@@ -36,17 +36,11 @@ import { LightTheme } from "../../../common/style";
 
 import { getLightColor } from "../../../utils/index";
 
-type ButtonType =
-  | "success"
-  | "error"
-  | "info"
-  | "primary"
-  | "warning"
-  | "default";
-
-type ButtonShape = "rect" | "round" | "arc" | "circle";
-
-type ButtonSize = "medium" | "small" | "mini";
+import type {
+  Size as ButtonSize,
+  Type as ButtonType,
+  Shape as ButtonShape
+} from "../../../type/index.type";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -63,10 +57,7 @@ interface ButtonProps {
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  disabled: false,
-  loading: false,
-  plain: true,
-  size: "small"
+  plain: undefined
 });
 
 const emits = defineEmits(["mClick", "mTouch"]);
@@ -84,6 +75,11 @@ const handleTouch = (event: TouchEvent) => {
 };
 const type = useInject(props.type, "type", "default");
 const shape = useInject(props.shape, "shape", "rect");
+const size = useInject(props.size, "size", "small");
+console.log(props.plain);
+const plain = useInject(props.plain, "plain", true);
+const loading = useInject(props.loading, "loading", false);
+const disabled = useInject(props.disabled, "disabled", false);
 
 const theme = LightTheme[type];
 
@@ -148,14 +144,30 @@ button {
 .mini {
   padding: 2px 8px;
   font-size: 12px;
+  &.circle {
+    width: 20px;
+    height: 20px;
+  }
 }
 .small {
   padding: 5px 15px;
   font-size: 14px;
+  &.circle {
+    width: 30px;
+    height: 30px;
+  }
 }
 .medium {
   padding: 10px 20px;
   font-size: 16px;
+  &.circle {
+    width: 40px;
+    height: 40px;
+  }
+}
+.big {
+  font-size: 18px;
+  padding: 12px 25px;
 }
 .rect {
   border-radius: 0;
@@ -167,8 +179,8 @@ button {
   border-radius: 50px;
 }
 .circle {
-  min-width: 30px;
-  min-height: 30px;
+  overflow: hidden;
+  text-align: center;
   border-radius: 50%;
   padding: 0;
 }

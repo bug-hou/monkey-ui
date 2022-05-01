@@ -13,138 +13,134 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-huojian:before {
+.rocket:before {
   content: "\e6ab";
 }
 
-.icon-fengefu:before {
+.separator:before {
   content: "\e670";
 }
 
-.icon-shoucang:before {
+.collection:before {
   content: "\e600";
 }
 
-.icon-shangchuan:before {
+.upload:before {
   content: "\e666";
 }
 
-.icon-wenjianguanli:before {
+.file:before {
   content: "\e615";
 }
 
-.icon-icon:before {
+.calendar:before {
   content: "\e65f";
 }
 
-.icon-cuowu1:before {
+.error:before {
   content: "\e70d";
 }
 
-.icon-jinggao:before {
+.warning:before {
   content: "\e604";
 }
 
-.icon-chenggong1:before {
+.success:before {
   content: "\e644";
 }
 
-.icon-a-xinxiyuyinxinxitishixinxi-06:before {
+.info:before {
   content: "\e915";
 }
 
-.icon-warning:before {
+.warning-empty:before {
   content: "\e60c";
 }
 
-.icon-xinxi:before {
+.info-empty:before {
   content: "\e649";
 }
 
-.icon-chenggong:before {
+.success-empty:before {
   content: "\e618";
 }
 
-.icon-cuowu:before {
+.error-empty:before {
   content: "\e61c";
 }
 
-.icon-cha:before {
+.wrong:before {
   content: "\e612";
 }
 
-.icon-shang:before {
+.top:before {
   content: "\e654";
 }
 
-.icon-B:before {
-  content: "\e6cb";
-}
-
-.icon-jiahao:before {
+.plus:before {
   content: "\e616";
 }
 
-.icon-jianhao:before {
+.reduce:before {
   content: "\e617";
 }
 
-.icon-shenglvehao:before {
+.ellipsis:before {
   content: "\e708";
 }
 
-.icon-yinle:before {
+.music:before {
   content: "\e60d";
 }
 
-.icon-xingxing:before {
+.star:before {
   content: "\e639";
 }
 
-.icon-xuanze:before {
+.select:before {
   content: "\e63e";
 }
 
-.icon-fangkuang:before {
+.rect:before {
   content: "\e641";
 }
 
-.icon-xiangzuo:before {
+.left:before {
   content: "\e63c";
 }
 
-.icon-xiangzuo-copy:before {
+.right:before {
   content: "\e6e8";
 }
 
-.icon-jiazai:before {
+.loading:before {
   content: "\e699";
 }
 
-.icon-shanchu:before {
+.delete:before {
   content: "\e643";
 }
 
-.icon-xianshimima:before {
+.show:before {
   content: "\e653";
 }
 
-.icon-xianghou1-copy:before {
+.aafter:before {
   content: "\e6e6";
 }
 
-.icon-xianghou-copy:before {
+.after:before {
   content: "\e6e7";
 }
 
-.icon-xianghou:before {
+.front:before {
   content: "\e6e5";
 }
 
-.icon-xianghou1:before {
+.ffront:before {
   content: "\e665";
 }
 
-.icon-loader:before {
+.loader:before {
   content: "\e6a2";
 }

@@ -56,6 +56,6 @@ export const LightTheme: Theme = {
     backgroundColor: "white",
     hoverColor: "#409eff",
     hoverBackgroundColor: "white",
-    borderColor: "black"
+    borderColor: "rgb(239, 239, 245)"
   }
 };
