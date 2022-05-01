@@ -61,5 +61,7 @@ provide("hoverBackgroundColor", props.hoverBackgroundColor);
 .mButtonGroup {
   display: flex;
   justify-content: space-evenly;
+  padding: 10px;
+  box-sizing: border-box;
 }
 </style>

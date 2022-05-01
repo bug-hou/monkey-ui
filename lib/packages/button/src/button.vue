@@ -63,10 +63,8 @@ interface ButtonProps {
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  type: "default",
   disabled: false,
   loading: false,
-  shape: "rect",
   plain: true,
   size: "small"
 });
@@ -84,8 +82,10 @@ const handleTouch = (event: TouchEvent) => {
     emits("mClick", event);
   }
 };
+const type = useInject(props.type, "type", "default");
+const shape = useInject(props.shape, "shape", "rect");
 
-const theme = LightTheme[props.type];
+const theme = LightTheme[type];
 
 const color = useInject(props.color, "color", theme.color);
 const backgroundColor = useInject(

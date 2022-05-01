@@ -4,9 +4,9 @@
       <nav-list-vue :title="baseTitle" :list="base"></nav-list-vue>
     </nav>
     <main>
-      <router-view></router-view>
+      <router-view class="view"></router-view>
+      <aside></aside>
     </main>
-    <aside></aside>
   </div>
 </template>
 
@@ -30,18 +30,23 @@ const base = [
   display: flex;
   main {
     flex: 1;
+    display: flex;
     box-sizing: border-box;
-    padding: 1.6rem 1.2rem 2.8rem 2.8rem;
+    overflow: auto;
+    .view {
+      padding: 1.6rem 1.2rem 2.8rem 2.8rem;
+      flex: 1;
+    }
+    aside {
+      width: 5rem;
+      background-color: pink;
+    }
   }
   nav {
     overflow: auto;
     width: 10rem;
     border-right: 1px solid rgb(239, 239, 245);
     box-sizing: border-box;
-  }
-  aside {
-    width: 5rem;
-    background-color: pink;
   }
 }
 </style>

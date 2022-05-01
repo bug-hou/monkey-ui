@@ -3,11 +3,19 @@ import App from "./App.vue";
 import router from "./router/index";
 import "monkeys-ui/lib/assets/css/index.css"
 import "./assets/index.css";
+//导入代码高亮文件
+import hljs from 'highlight.js'
+//导入代码高亮样式
+import 'highlight.js/styles/base16/atelier-cave.css' // 导入代码高亮样式
 
-import { mButton, mButtonGroup } from "../lib/packages/button"
+import { mButton, mButtonGroup } from "../lib"
 
 const app = createApp(App).use(router);
-console.log(mButtonGroup.name)
+app.directive("highlight", (el: HTMLElement, binding) => {
+  const { value } = binding;
+  const html = hljs.highlight(value, { language: 'xml' }).value;
+  el.innerHTML = html;
+})
 app.component(mButton.name, mButton);
 app.component(mButtonGroup.name, mButtonGroup);
 app.mount("#app");

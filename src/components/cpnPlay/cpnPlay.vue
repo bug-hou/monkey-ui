@@ -66,5 +66,8 @@ const vDescription: Directive = {
     box-sizing: border-box;
     padding: 15px;
   }
+  footer{
+    border-top: 1px solid #dcdfe6;
+  }
 }
 </style>
