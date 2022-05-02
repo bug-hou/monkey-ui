@@ -1,9 +1,10 @@
 import { mButton, mButtonGroup } from "./packages/button";
 
-import { mIcon } from "./packages/icon"
+import { mIcon, mIconGroup } from "./packages/icon"
 
 export {
   mButton,
   mButtonGroup,
-  mIcon
+  mIcon,
+  mIconGroup
 }

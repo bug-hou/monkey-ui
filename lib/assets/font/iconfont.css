@@ -13,134 +13,134 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.rocket:before {
+.m-rocket:before {
   content: "\e6ab";
 }
 
-.separator:before {
+.m-separator:before {
   content: "\e670";
 }
 
-.collection:before {
+.m-collection:before {
   content: "\e600";
 }
 
-.upload:before {
+.m-upload:before {
   content: "\e666";
 }
 
-.file:before {
+.m-file:before {
   content: "\e615";
 }
 
-.calendar:before {
+.m-calendar:before {
   content: "\e65f";
 }
 
-.error:before {
+.m-error:before {
   content: "\e70d";
 }
 
-.warning:before {
+.m-warning:before {
   content: "\e604";
 }
 
-.success:before {
+.m-success:before {
   content: "\e644";
 }
 
-.info:before {
+.m-info:before {
   content: "\e915";
 }
 
-.warning-empty:before {
+.m-warning-empty:before {
   content: "\e60c";
 }
 
-.info-empty:before {
+.m-info-empty:before {
   content: "\e649";
 }
 
-.success-empty:before {
+.m-success-empty:before {
   content: "\e618";
 }
 
-.error-empty:before {
+.m-error-empty:before {
   content: "\e61c";
 }
 
-.wrong:before {
+.m-wrong:before {
   content: "\e612";
 }
 
-.top:before {
+.m-top:before {
   content: "\e654";
 }
 
-.plus:before {
+.m-plus:before {
   content: "\e616";
 }
 
-.reduce:before {
+.m-reduce:before {
   content: "\e617";
 }
 
-.ellipsis:before {
+.m-ellipsis:before {
   content: "\e708";
 }
 
-.music:before {
+.m-music:before {
   content: "\e60d";
 }
 
-.star:before {
+.m-star:before {
   content: "\e639";
 }
 
-.select:before {
+.m-select:before {
   content: "\e63e";
 }
 
-.rect:before {
+.m-rect:before {
   content: "\e641";
 }
 
-.left:before {
+.m-left:before {
   content: "\e63c";
 }
 
-.right:before {
+.m-right:before {
   content: "\e6e8";
 }
 
-.loading:before {
+.m-loading:before {
   content: "\e699";
 }
 
-.delete:before {
+.m-delete:before {
   content: "\e643";
 }
 
-.show:before {
+.m-show:before {
   content: "\e653";
 }
 
-.aafter:before {
+.m-aafter:before {
   content: "\e6e6";
 }
 
-.after:before {
+.m-after:before {
   content: "\e6e7";
 }
 
-.front:before {
+.m-front:before {
   content: "\e6e5";
 }
 
-.ffront:before {
+.m-ffront:before {
   content: "\e665";
 }
 
-.loader:before {
+.m-loader:before {
   content: "\e6a2";
 }

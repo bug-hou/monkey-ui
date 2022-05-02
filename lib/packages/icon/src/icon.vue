@@ -30,13 +30,12 @@ const props = withDefaults(
     plain?: boolean;
     type?: IconType;
   }>(),
-  {
-    size: "small",
-    plain: true,
-    type: "default"
-  }
+  {}
 );
-const theme = LightTheme[props.type];
+const type = useInject(props.type, "type", "default");
+const size = useInject(props.size, "size", "small");
+const plain = useInject(props.plain, "plain", true);
+const theme = LightTheme[type];
 const color = useInject(props.color, "color", theme.color);
 </script>
 <style scoped lang="less">
@@ -52,7 +51,7 @@ const color = useInject(props.color, "color", theme.color);
 }
 
 .mini {
-  font-size: 12px;
+  font-size: 14px;
   width: 15px;
   height: 15px;
   line-height: 15px;
@@ -60,7 +59,7 @@ const color = useInject(props.color, "color", theme.color);
   border-radius: 3px;
 }
 .small {
-  font-size: 14px;
+  font-size: 16px;
   width: 18px;
   height: 18px;
   line-height: 18px;
@@ -68,7 +67,7 @@ const color = useInject(props.color, "color", theme.color);
   border-radius: 6px;
 }
 .medium {
-  font-size: 16px;
+  font-size: 18px;
   width: 21px;
   height: 21px;
   line-height: 21px;
@@ -76,7 +75,7 @@ const color = useInject(props.color, "color", theme.color);
   border-radius: 9px;
 }
 .big {
-  font-size: 18px;
+  font-size: 20px;
   width: 24px;
   height: 24px;
   line-height: 24px;

@@ -18,7 +18,7 @@ const routers: RouteRecordRaw[] = [
     component: () => import("../views/main/main.vue"),
     children: [
       {
-        redirect: "/button",
+        redirect: "/component/button",
         path: ""
       },
       {
