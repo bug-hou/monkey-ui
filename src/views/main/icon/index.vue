@@ -9,7 +9,7 @@
       title="size"
       description="图标大小small(默认)，mini，medium，big"
     >
-      <div class="size">
+      <div class="size" style="margin-bottom: 20px">
         <m-icon name="m-upload" size="mini"></m-icon>
         <m-icon name="m-upload"></m-icon>
         <m-icon name="m-upload" size="medium"></m-icon>
@@ -65,19 +65,46 @@
         <m-icon name="m-upload" :plain="false" type="warning"></m-icon>
         <m-icon name="m-upload" :plain="false" type="error"></m-icon>
         <m-icon name="m-upload" :plain="false" type="primary"></m-icon>
-        <m-icon
-          name="upload"
-          :plain="false"
-          type="primary"
-          color="pink"
-        ></m-icon>
+        <m-icon name="m-upload" :plain="false" color="pink"></m-icon>
       </div>
       <template #code>
         <pre v-highlight="plainCode"></pre>
       </template>
     </cpn-play-vue>
-    <div class="icons">
-      <m-icon-group class="iconGroup" type="info">
+    <cpn-play-vue
+      title="shape"
+      description="有各种风格rect，round，circle(默认)，好像要设置plain属性为false才可以"
+    >
+      <div class="size">
+        <m-icon
+          name="m-upload"
+          shape="rect"
+          :plain="false"
+          type="error"
+        ></m-icon>
+        <m-icon
+          name="m-upload"
+          shape="round"
+          :plain="false"
+          type="success"
+        ></m-icon>
+        <m-icon
+          name="m-upload"
+          shape="circle"
+          :plain="false"
+          type="info"
+        ></m-icon>
+      </div>
+      <template #code>
+        <pre v-highlight="shapeCode"></pre>
+      </template>
+    </cpn-play-vue>
+    <cpn-play-vue
+      class="icons"
+      title="icons"
+      description="你可以直接使用iconfont中的图标，将name赋值给m-icon中的name，但是一定要在你的文件中引用该图标"
+    >
+      <m-icon-group class="iconGroup" type="success" :plain="false">
         <m-icon name="m-rocket"></m-icon>
         <m-icon name="m-upload"></m-icon>
         <m-icon name="m-separator"></m-icon>
@@ -93,8 +120,26 @@
         <m-icon name="m-warning-empty"></m-icon>
         <m-icon name="m-info-empty"></m-icon>
         <m-icon name="m-success-empty"></m-icon>
+        <m-icon name="m-wrong"></m-icon>
+        <m-icon name="m-plus"></m-icon>
+        <m-icon name="m-reduce"></m-icon>
+        <m-icon name="m-ellipsis"></m-icon>
+        <m-icon name="m-music"></m-icon>
+        <m-icon name="m-star"></m-icon>
+        <m-icon name="m-select"></m-icon>
+        <m-icon name="m-rect"></m-icon>
+        <m-icon name="m-left"></m-icon>
+        <m-icon name="m-right"></m-icon>
+        <m-icon name="m-loading"></m-icon>
+        <m-icon name="m-delete"></m-icon>
+        <m-icon name="m-show"></m-icon>
+        <m-icon name="m-aafter"></m-icon>
+        <m-icon name="m-after"></m-icon>
+        <m-icon name="m-front"></m-icon>
+        <m-icon name="m-ffront"></m-icon>
+        <m-icon name="m-loader"></m-icon>
       </m-icon-group>
-    </div>
+    </cpn-play-vue>
   </div>
 </template>
 
@@ -108,41 +153,7 @@
 import {} from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import cpnPlayVue from "../../../components/cpnPlay/cpnPlay.vue";
-const SizeCode = `<div class="size">
-  <m-icon name="upload" size="mini"></m-icon>
-  <m-icon name="upload"></m-icon>
-  <m-icon name="upload" size="medium"></m-icon>
-  <m-icon name="upload" size="big"></m-icon>
-</div>
-<div class="size">
-  <m-icon type="success" :plain="false" name="upload" size="mini"></m-icon>
-  <m-icon type="success" :plain="false" name="upload"></m-icon>
-  <m-icon type="success" :plain="false" name="upload" size="medium"></m-icon>
-  <m-icon type="success" :plain="false" name="upload" size="big"></m-icon>
-</div>`;
-const typeCode = `<div class="size">
-  <m-icon name="upload" type="default"></m-icon>
-  <m-icon name="upload" type="success"></m-icon>
-  <m-icon name="upload" type="info"></m-icon>
-  <m-icon name="upload" type="warning"></m-icon>
-  <m-icon name="upload" type="error"></m-icon>
-  <m-icon name="upload" type="primary"></m-icon>
-  <m-icon name="upload" type="primary" color="pink"></m-icon>
-</div>`;
-const plainCode = `<div class="size">
-  <m-icon name="upload" :plain="false" type="default"></m-icon>
-  <m-icon name="upload" :plain="false" type="success"></m-icon>
-  <m-icon name="upload" :plain="false" type="info"></m-icon>
-  <m-icon name="upload" :plain="false" type="warning"></m-icon>
-  <m-icon name="upload" :plain="false" type="error"></m-icon>
-  <m-icon name="upload" :plain="false" type="primary"></m-icon>
-  <m-icon
-    name="upload"
-    :plain="false"
-    type="primary"
-    color="pink"
-  ></m-icon>
-</div>`;
+import { SizeCode, plainCode, typeCode, shapeCode } from "./doc";
 </script>
 <style scoped lang="less">
 .cpnIcon {
@@ -158,10 +169,10 @@ const plainCode = `<div class="size">
     box-sizing: border-box;
     .iconGroup {
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
+      grid-template-columns: repeat(8, 1fr);
       justify-items: center;
       align-items: center;
-      grid-template-rows: repeat(2, 40px);
+      grid-template-rows: repeat(4, 40px);
     }
   }
 }

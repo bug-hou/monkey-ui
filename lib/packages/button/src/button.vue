@@ -158,7 +158,7 @@ button {
   }
 }
 .medium {
-  padding: 10px 20px;
+  padding: 8px 18px;
   font-size: 16px;
   &.circle {
     width: 40px;
@@ -167,7 +167,7 @@ button {
 }
 .big {
   font-size: 18px;
-  padding: 12px 25px;
+  padding: 10px 20px;
 }
 .rect {
   border-radius: 0;

@@ -14,7 +14,8 @@
 import { defineProps, withDefaults, provide } from "vue";
 import type {
   Size as IconSize,
-  Type as IconType
+  Type as IconType,
+  Shape as IconShape
 } from "../../../type/index.type";
 const props = withDefaults(
   defineProps<{
@@ -22,15 +23,21 @@ const props = withDefaults(
     color?: string;
     plain?: boolean;
     type?: IconType;
+    glass?: boolean;
+    shape?: IconShape;
   }>(),
   {
     size: "small",
     plain: true,
+    glass: false,
     type: "default"
   }
 );
 provide("size", props.size);
 provide("plain", props.plain);
 provide("type", props.type);
+provide("shape", props.shape);
+provide("glass", props.glass);
+provide("color", props.color);
 </script>
 <style scoped lang="less"></style>

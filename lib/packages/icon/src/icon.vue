@@ -1,7 +1,7 @@
 <template>
   <span
     class="icon iconfont"
-    :class="[name, size, !plain && 'plain']"
+    :class="[name, size, !plain && 'plain', glass && 'glass', shape]"
     :style="{
       ['--color']: color
     }"
@@ -20,7 +20,8 @@ import { LightTheme } from "../../../common/style";
 import { useInject } from "../../../hooks";
 import type {
   Size as IconSize,
-  Type as IconType
+  Type as IconType,
+  Shape as IconShape
 } from "../../../type/index.type";
 const props = withDefaults(
   defineProps<{
@@ -29,14 +30,21 @@ const props = withDefaults(
     color?: string;
     plain?: boolean;
     type?: IconType;
+    glass?: boolean;
+    shape?: IconShape;
   }>(),
-  {}
+  {
+    plain: undefined,
+    glass: true
+  }
 );
-const type = useInject(props.type, "type", "default");
+const type = useInject(props.type, "type", "info");
 const size = useInject(props.size, "size", "small");
 const plain = useInject(props.plain, "plain", true);
 const theme = LightTheme[type];
 const color = useInject(props.color, "color", theme.color);
+const glass = useInject(props.glass, "glass", false);
+const shape = useInject(props.shape, "shape", "circle");
 </script>
 <style scoped lang="less">
 .icon {
@@ -55,8 +63,7 @@ const color = useInject(props.color, "color", theme.color);
   width: 15px;
   height: 15px;
   line-height: 15px;
-  padding: 3px;
-  border-radius: 3px;
+  padding: 4px;
 }
 .small {
   font-size: 16px;
@@ -64,22 +71,31 @@ const color = useInject(props.color, "color", theme.color);
   height: 18px;
   line-height: 18px;
   padding: 6px;
-  border-radius: 6px;
 }
 .medium {
   font-size: 18px;
   width: 21px;
   height: 21px;
   line-height: 21px;
-  padding: 9px;
-  border-radius: 9px;
+  padding: 8px;
 }
 .big {
   font-size: 20px;
   width: 24px;
   height: 24px;
   line-height: 24px;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+}
+.rect {
+  border-radius: 0;
+}
+.circle {
+  border-radius: 50%;
+}
+.round {
+  border-radius: 25%;
+}
+.glass {
+  text-shadow: 0px 0px white;
 }
 </style>
