@@ -4,23 +4,25 @@
     @click="handleClick"
     @touchend="handleTouch"
     @keydown=""
-    :class="[size, shape, disabled && 'disabled']"
+    :class="[size, shape, disabled && 'disabled', !plain && 'plain']"
     :style="[
       {
-        ['--color']: plain ? hoverColor : color
+        ['--color']: plain ? textColor : plainTextColor
       },
       {
-        ['--back']: plain ? hoverBackgroundColor : backgroundColor
+        ['--back']: plain ? color : plainColor
       },
       { ['--border']: borderColor },
-      { ['--hover-color']: hoverColor },
+      { ['--hover-color']: textColor },
       {
-        ['--hover-back']: hoverBackgroundColor
+        ['--hover-back']: color
       }
     ]"
   >
     <div v-if="loading">
-      <slot name="icon"></slot>
+      <slot name="icon">
+        <loop-vue></loop-vue>
+      </slot>
     </div>
     <slot> </slot>
   </button>
@@ -28,7 +30,7 @@
 
 <script lang="ts" setup name="mButton">
 // 从下载的组件中导入函数
-import { defineEmits, defineProps, withDefaults } from "vue";
+import { defineEmits, defineProps, withDefaults, provide, ref } from "vue";
 
 import { useInject } from "../../../hooks";
 
@@ -36,11 +38,16 @@ import { LightTheme } from "../../../common/style";
 
 import { getLightColor } from "../../../utils/index";
 
+import ButtonNames from "../config";
+import IconNames from "../../icon/config";
+
 import type {
   Size as ButtonSize,
   Type as ButtonType,
   Shape as ButtonShape
 } from "../../../type/index.type";
+
+import loopVue from "../../../common/loading/loop.vue";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -50,15 +57,45 @@ interface ButtonProps {
   plain?: boolean;
   size?: ButtonSize;
   color?: string;
-  hoverColor?: string;
   borderColor?: string;
-  backgroundColor?: string;
-  hoverBackgroundColor?: string;
+  textColor?: string;
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  plain: undefined
+  plain: undefined,
+  loading: false
 });
+
+const {
+  TEXT_COLOR,
+  TYPE,
+  SHAPE,
+  SIZE,
+  LOADING,
+  DISABLED,
+  BORDER_COLOR,
+  COLOR,
+  PLAIN
+} = ButtonNames;
+const type = useInject(props.type, TYPE, "default");
+const shape = useInject(props.shape, SHAPE, "rect");
+const size = useInject(props.size, SIZE, "small");
+const plain = useInject(props.plain, PLAIN, true);
+const loading = useInject(props.loading, LOADING, false);
+const disabled = useInject(props.disabled, DISABLED, false);
+
+const theme = LightTheme[type];
+
+const color = useInject(props.color, COLOR, theme);
+const plainColor = getLightColor(color, 0.8);
+const textColor = useInject(props.textColor, TEXT_COLOR, "#fff");
+const plainTextColor = color;
+const borderColor = useInject(props.borderColor, BORDER_COLOR, theme);
+
+const iconColor = ref(color);
+
+provide(IconNames.COLOR, color);
+provide(IconNames.HOVER_COLOR, textColor);
 
 const emits = defineEmits(["mClick", "mTouch"]);
 
@@ -73,43 +110,8 @@ const handleTouch = (event: TouchEvent) => {
     emits("mClick", event);
   }
 };
-const type = useInject(props.type, "type", "default");
-const shape = useInject(props.shape, "shape", "rect");
-const size = useInject(props.size, "size", "small");
-console.log(props.plain);
-const plain = useInject(props.plain, "plain", true);
-const loading = useInject(props.loading, "loading", false);
-const disabled = useInject(props.disabled, "disabled", false);
-
-const theme = LightTheme[type];
-
-const color = useInject(props.color, "color", theme.color);
-const backgroundColor = useInject(
-  props.backgroundColor,
-  "backgroundColor",
-  theme.backgroundColor
-);
-const hoverColor =
-  useInject(props.hoverColor, "hoverColor", theme.hoverColor) ??
-  (!props.plain && getLightColor(props.color, 0.5));
-const hoverBackgroundColor =
-  useInject(
-    props.hoverBackgroundColor,
-    "hoverBackgroundColor",
-    theme.hoverBackgroundColor
-  ) ??
-  (!props.plain && getLightColor(props.backgroundColor, 0.5));
-const borderColor = useInject(props.borderColor, "border", theme.borderColor);
 </script>
 <style scoped lang="less">
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 button {
   display: inline-flex;
   padding: 2px 10px;
@@ -122,10 +124,6 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  &:hover {
-    background: var(--hover-back);
-    color: var(--hover-color);
-  }
   &.disabled {
     cursor: not-allowed;
     &:hover {
@@ -139,6 +137,12 @@ button {
     }
     font-size: inherit;
     margin-right: 3px;
+  }
+}
+.plain {
+  &:hover {
+    background: var(--hover-back);
+    color: var(--hover-color);
   }
 }
 .mini {
@@ -170,7 +174,7 @@ button {
   padding: 10px 20px;
 }
 .rect {
-  border-radius: 0;
+  border-radius: 0px;
 }
 .round {
   border-radius: 10px;

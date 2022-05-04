@@ -2,7 +2,7 @@
 function HexToRgb(str: string) {
   str = str.replace("#", "");
   // 划分为连个为一组
-  let hxs = str.match(/[0-9A-F]{2}/ig).map((item) => parseInt(item, 16));
+  let hxs = (str.match(/[0-9A-F]{2}/ig) as any).map((item: any) => parseInt(item, 16));
   return hxs;
 }
 
@@ -16,14 +16,17 @@ export function getLightColor(color: string, level: number = 0.7) {
 }
 
 function processColor(color: string, level: number, processFn: (num: number, level: number) => number) {
-  if (color) {
-    return;
+  if (typeof color !== "string") {
+    return "";
+  }
+  if (!(color.startsWith("#") || color.startsWith("rgb("))) {
+    return "";
   }
   let lightColor = "#";
   let colors: number[];
   if (color.startsWith("rgb")) {
-    const reg = /rgb\((\d{3}),(\d{3}),(\d{3})\)/;
-    const match = reg.exec(color);
+    const reg = /rgb\((\d{1,3}),\s*?(\d{1,3}),\s*?(\d{1,3})\)/ig;
+    const match = reg.exec(color) as any;
     colors = [+match["1"], +match["2"], +match["3"]]
   } else {
     colors = HexToRgb(color);

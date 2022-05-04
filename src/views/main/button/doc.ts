@@ -51,12 +51,5 @@ export const plainCode = `<m-button-group :plain="false">
   <m-button type="primary">primary</m-button>
   <m-button type="info">info</m-button>
   <m-button type="warning">warning</m-button>
-  <m-button
-    backgroundColor="#04fafb"
-    hoverBackgroundColor="#10fdfe"
-    hoverColor="white"
-    color="black"
-    borderColor="pink"
-    >warning</m-button
-  >
+  <m-button color="#40fafa" borderColor="#40fafa">warning</m-button>
 </m-button-group>`

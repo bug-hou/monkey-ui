@@ -17,6 +17,7 @@ import type {
   Type as IconType,
   Shape as IconShape
 } from "../../../type/index.type";
+import IconNames from "../config";
 const props = withDefaults(
   defineProps<{
     size?: IconSize;
@@ -33,11 +34,12 @@ const props = withDefaults(
     type: "default"
   }
 );
-provide("size", props.size);
-provide("plain", props.plain);
-provide("type", props.type);
-provide("shape", props.shape);
+const { SHAPE, SIZE, TYPE, COLOR, PLAIN } = IconNames;
+provide(SIZE, props.size);
+provide(PLAIN, props.plain);
+provide(TYPE, props.type);
+provide(SHAPE, props.shape);
 provide("glass", props.glass);
-provide("color", props.color);
+provide(COLOR, props.color);
 </script>
 <style scoped lang="less"></style>

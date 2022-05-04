@@ -3,7 +3,8 @@
     class="icon iconfont"
     :class="[name, size, !plain && 'plain', glass && 'glass', shape]"
     :style="{
-      ['--color']: color
+      ['--color']: color,
+      ['--hover']: hoverColor
     }"
   ></span>
 </template>
@@ -18,6 +19,7 @@
 import { defineProps, withDefaults } from "vue";
 import { LightTheme } from "../../../common/style";
 import { useInject } from "../../../hooks";
+import IconNames from "../config";
 import type {
   Size as IconSize,
   Type as IconType,
@@ -38,13 +40,14 @@ const props = withDefaults(
     glass: true
   }
 );
-const type = useInject(props.type, "type", "info");
-const size = useInject(props.size, "size", "small");
-const plain = useInject(props.plain, "plain", true);
+const { TYPE, SHAPE, SIZE, PLAIN, COLOR, HOVER_COLOR } = IconNames;
+const type = useInject(props.type, TYPE, "info");
+const size = useInject(props.size, SIZE, "small");
+const plain = useInject(props.plain, PLAIN, true);
 const theme = LightTheme[type];
-const color = useInject(props.color, "color", theme.color);
-const glass = useInject(props.glass, "glass", false);
-const shape = useInject(props.shape, "shape", "circle");
+const color = useInject(props.color, COLOR, theme);
+const shape = useInject(props.shape, SHAPE, "circle");
+const hoverColor = useInject(undefined, HOVER_COLOR, color);
 </script>
 <style scoped lang="less">
 .icon {
@@ -52,10 +55,16 @@ const shape = useInject(props.shape, "shape", "circle");
   color: var(--color);
   cursor: pointer;
   text-align: center;
+  &:hover {
+    color: var(--hover);
+  }
 }
 .plain {
   background-color: var(--color);
   color: white;
+  &:hover {
+    color: white;
+  }
 }
 
 .mini {

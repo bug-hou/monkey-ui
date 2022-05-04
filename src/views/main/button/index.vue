@@ -86,23 +86,25 @@
         <m-button type="primary">primary</m-button>
         <m-button type="info">info</m-button>
         <m-button type="warning">warning</m-button>
-        <m-button
-          backgroundColor="#04fafb"
-          hoverBackgroundColor="#10fdfe"
-          hoverColor="white"
-          color="black"
-          borderColor="pink"
-          >warning</m-button
-        >
+        <m-button color="#40fafa" borderColor="#40fafa">warning</m-button>
       </m-button-group>
       <template #code>
         <pre v-highlight="plainCode"></pre>
       </template>
     </cpn-play-vue>
     <cpn-play-vue title="icon" description="当button遇到icon发送的火花">
-      <m-button-group shape="circle" :plain="false">
-        <m-button :plain="false">
-          <m-icon name="m-upload" type="success"></m-icon>
+      <m-button-group shape="circle">
+        <m-button :plain="false" type="success">
+          <m-icon name="m-upload" color="pink"></m-icon>
+        </m-button>
+        <m-button :plain="false" type="error">
+          <m-icon name="m-upload"></m-icon>
+        </m-button>
+        <m-button :plain="false" type="info">
+          <m-icon name="m-upload"></m-icon>
+        </m-button>
+        <m-button :plain="false" type="success">
+          <m-icon name="m-upload"></m-icon>
         </m-button>
       </m-button-group>
     </cpn-play-vue>

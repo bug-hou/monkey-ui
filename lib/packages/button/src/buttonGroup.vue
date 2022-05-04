@@ -12,17 +12,8 @@
  */
 // 从下载的组件中导入函数
 import { defineProps, provide } from "vue";
-type ButtonType =
-  | "success"
-  | "error"
-  | "info"
-  | "primary"
-  | "warning"
-  | "default";
-
-type ButtonShape = "rect" | "round" | "arc" | "circle";
-
-type ButtonSize = "medium" | "small" | "mini";
+import type { ButtonType, ButtonShape, ButtonSize } from "./button";
+import ButtonNames from "../config";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -32,10 +23,8 @@ interface ButtonProps {
   plain?: boolean;
   size?: ButtonSize;
   color?: string;
-  hoverColor?: string;
+  textColor?: string;
   borderColor?: string;
-  backgroundColor?: string;
-  hoverBackgroundColor?: string;
 }
 const props = withDefaults(defineProps<ButtonProps>(), {
   type: "default",
@@ -45,17 +34,26 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   plain: true,
   size: "small"
 });
-provide("type", props.type);
-provide("disabled", props.disabled);
-provide("loading", props.loading);
-provide("shape", props.shape);
-provide("plain", props.plain);
-provide("size", props.size);
-provide("color", props.color);
-provide("hoverColor", props.hoverColor);
-provide("borderColor", props.borderColor);
-provide("backgroundColor", props.backgroundColor);
-provide("hoverBackgroundColor", props.hoverBackgroundColor);
+const {
+  TEXT_COLOR,
+  TYPE,
+  SHAPE,
+  SIZE,
+  LOADING,
+  DISABLED,
+  BORDER_COLOR,
+  COLOR,
+  PLAIN
+} = ButtonNames;
+provide(TYPE, props.type);
+provide(DISABLED, props.disabled);
+provide(LOADING, props.loading);
+provide(SHAPE, props.shape);
+provide(PLAIN, props.plain);
+provide(SIZE, props.size);
+provide(COLOR, props.color);
+provide(BORDER_COLOR, props.borderColor);
+provide(TEXT_COLOR, props.textColor);
 </script>
 <style scoped lang="less">
 .mButtonGroup {
