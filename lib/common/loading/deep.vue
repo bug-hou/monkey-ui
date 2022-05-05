@@ -2,8 +2,8 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="24px"
-    height="30px"
+    :width="processMetaData(width)"
+    :height="processMetaData(height)"
     viewBox="0 0 24 30"
     style="enable-background: new 0 0 50 50"
     xml:space="preserve"
@@ -13,7 +13,7 @@
       y="0"
       width="4"
       height="10"
-      fill="#FF6700"
+      :fill="color"
       transform="translate(0 9.4336)"
     >
       <animateTransform
@@ -22,7 +22,7 @@
         type="translate"
         values="0 0; 0 20; 0 0"
         begin="0"
-        dur="0.6s"
+        :dur="duration + 's'"
         repeatCount="indefinite"
       ></animateTransform>
     </rect>
@@ -31,7 +31,7 @@
       y="0"
       width="4"
       height="10"
-      fill="#FF6700"
+      :fill="color"
       transform="translate(0 17.2331)"
     >
       <animateTransform
@@ -72,9 +72,25 @@
  * @Description: 创建一个deep组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
-</script>
-<style scoped lang="less">
-.deep {
+import { withDefaults, defineProps } from "vue";
+type MetaData = number | string;
+const props = withDefaults(
+  defineProps<{
+    color?: string;
+    width?: MetaData;
+    height?: MetaData;
+    duration?: number;
+    opacity?: number;
+  }>(),
+  {
+    color: "#0ff",
+    width: 24,
+    height: 30,
+    opacity: 0.2,
+    duration: 0.5
+  }
+);
+function processMetaData(data: MetaData) {
+  return typeof data === "string" ? data : data + "px";
 }
-</style>
+</script>

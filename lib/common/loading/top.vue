@@ -2,8 +2,8 @@
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    width="30px"
-    height="30px"
+    :width="processMetaData(width)"
+    :height="processMetaData(height)"
     viewBox="0 0 24 24"
     style="enable-background: new 0 0 50 50"
     xml:space="preserve"
@@ -13,7 +13,7 @@
       y="0"
       width="4"
       height="7"
-      fill="#FF6700"
+      :fill="color"
       transform="scale(1 1.94336)"
     >
       <animateTransform
@@ -22,7 +22,7 @@
         type="scale"
         values="1,1; 1,3; 1,1"
         begin="0s"
-        dur="0.6s"
+        :dur="duration + 's'"
         repeatCount="indefinite"
       ></animateTransform>
     </rect>
@@ -31,7 +31,7 @@
       y="0"
       width="4"
       height="7"
-      fill="#FF6700"
+      :fill="color"
       transform="scale(1 2.72331)"
     >
       <animateTransform
@@ -40,7 +40,7 @@
         type="scale"
         values="1,1; 1,3; 1,1"
         begin="0.2s"
-        dur="0.6s"
+        :dur="duration + 's'"
         repeatCount="indefinite"
       ></animateTransform>
     </rect>
@@ -49,7 +49,7 @@
       y="0"
       width="4"
       height="7"
-      fill="#FF6700"
+      :fill="color"
       transform="scale(1 1.38997)"
     >
       <animateTransform
@@ -58,7 +58,7 @@
         type="scale"
         values="1,1; 1,3; 1,1"
         begin="0.4s"
-        dur="0.6s"
+        :dur="duration + 's'"
         repeatCount="indefinite"
       ></animateTransform>
     </rect>
@@ -72,9 +72,25 @@
  * @Description: 创建一个top组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
-</script>
-<style scoped lang="less">
-.top {
+import { withDefaults, defineProps } from "vue";
+type MetaData = number | string;
+const props = withDefaults(
+  defineProps<{
+    color?: string;
+    width?: MetaData;
+    height?: MetaData;
+    duration?: number;
+    opacity?: number;
+  }>(),
+  {
+    color: "#0ff",
+    width: 24,
+    height: 24,
+    opacity: 0.2,
+    duration: 0.5
+  }
+);
+function processMetaData(data: MetaData) {
+  return typeof data === "string" ? data : data + "px";
 }
-</style>
+</script>

@@ -3,6 +3,8 @@
   <button
     @click="handleClick"
     @touchend="handleTouch"
+    @mouseenter="handleEnter"
+    @mouseleave="handleLeave"
     @keydown=""
     :class="[size, shape, disabled && 'disabled', !plain && 'plain']"
     :style="[
@@ -19,11 +21,10 @@
       }
     ]"
   >
-    <div v-if="loading">
-      <slot name="icon">
-        <loop-vue></loop-vue>
-      </slot>
+    <div class="loading" v-if="loading">
+      <component :is="loadingMap[loadingName]"></component>
     </div>
+    <slot name="icon" v-else> </slot>
     <slot> </slot>
   </button>
 </template>
@@ -38,6 +39,16 @@ import { LightTheme } from "../../../common/style";
 
 import { getLightColor } from "../../../utils/index";
 
+import {
+  ShortLoadingVue,
+  SlowLoadingVue,
+  TopLoadingVue,
+  LongLoadingVue,
+  GrowLoadingVue,
+  DeepLoadingVue,
+  LoopLoadingVue
+} from "../../../common/loading";
+
 import ButtonNames from "../config";
 import IconNames from "../../icon/config";
 
@@ -47,7 +58,24 @@ import type {
   Shape as ButtonShape
 } from "../../../type/index.type";
 
-import loopVue from "../../../common/loading/loop.vue";
+const loadingMap = {
+  short: ShortLoadingVue,
+  loop: LoopLoadingVue,
+  grow: GrowLoadingVue,
+  slow: SlowLoadingVue,
+  deep: DeepLoadingVue,
+  long: LongLoadingVue,
+  top: TopLoadingVue
+};
+
+type LoadingNames =
+  | "short"
+  | "loop"
+  | "top"
+  | "grow"
+  | "slow"
+  | "deep"
+  | "long";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -59,29 +87,21 @@ interface ButtonProps {
   color?: string;
   borderColor?: string;
   textColor?: string;
+  loadingName?: LoadingNames;
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   plain: undefined,
-  loading: false
+  loading: false,
+  loadingName: "short"
 });
 
-const {
-  TEXT_COLOR,
-  TYPE,
-  SHAPE,
-  SIZE,
-  LOADING,
-  DISABLED,
-  BORDER_COLOR,
-  COLOR,
-  PLAIN
-} = ButtonNames;
+const { TEXT_COLOR, TYPE, SHAPE, SIZE, DISABLED, BORDER_COLOR, COLOR, PLAIN } =
+  ButtonNames;
 const type = useInject(props.type, TYPE, "default");
 const shape = useInject(props.shape, SHAPE, "rect");
 const size = useInject(props.size, SIZE, "small");
 const plain = useInject(props.plain, PLAIN, true);
-const loading = useInject(props.loading, LOADING, false);
 const disabled = useInject(props.disabled, DISABLED, false);
 
 const theme = LightTheme[type];
@@ -94,8 +114,7 @@ const borderColor = useInject(props.borderColor, BORDER_COLOR, theme);
 
 const iconColor = ref(color);
 
-provide(IconNames.COLOR, color);
-provide(IconNames.HOVER_COLOR, textColor);
+provide(IconNames.HOVER_COLOR, iconColor);
 
 const emits = defineEmits(["mClick", "mTouch"]);
 
@@ -110,6 +129,12 @@ const handleTouch = (event: TouchEvent) => {
     emits("mClick", event);
   }
 };
+function handleEnter() {
+  iconColor.value = textColor;
+}
+function handleLeave() {
+  iconColor.value = color;
+}
 </script>
 <style scoped lang="less">
 button {
@@ -131,12 +156,9 @@ button {
       background: var(--back);
     }
   }
-  > div {
-    p {
-      animation: rotate 3s linear infinite;
-    }
-    font-size: inherit;
-    margin-right: 3px;
+  .loading {
+    display: inline-flex;
+    align-items: center;
   }
 }
 .plain {
@@ -180,7 +202,7 @@ button {
   border-radius: 10px;
 }
 .arc {
-  border-radius: 50px;
+  border-radius: 20px;
 }
 .circle {
   overflow: hidden;

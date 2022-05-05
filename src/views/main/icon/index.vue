@@ -15,27 +15,6 @@
         <m-icon name="m-upload" size="medium"></m-icon>
         <m-icon name="m-upload" size="big"></m-icon>
       </div>
-      <div class="size">
-        <m-icon
-          type="success"
-          :plain="false"
-          name="m-upload"
-          size="mini"
-        ></m-icon>
-        <m-icon type="success" :plain="false" name="m-upload"></m-icon>
-        <m-icon
-          type="success"
-          :plain="false"
-          name="m-upload"
-          size="medium"
-        ></m-icon>
-        <m-icon
-          type="success"
-          :plain="false"
-          name="m-upload"
-          size="big"
-        ></m-icon>
-      </div>
       <template #code>
         <pre v-highlight="SizeCode"></pre>
       </template>
@@ -57,54 +36,12 @@
         <pre v-highlight="typeCode"></pre>
       </template>
     </cpn-play-vue>
-    <cpn-play-vue title="plain" description="图标透明，但是有背景哦">
-      <div class="size">
-        <m-icon name="m-upload" :plain="false" type="default"></m-icon>
-        <m-icon name="m-upload" :plain="false" type="success"></m-icon>
-        <m-icon name="m-upload" :plain="false" type="info"></m-icon>
-        <m-icon name="m-upload" :plain="false" type="warning"></m-icon>
-        <m-icon name="m-upload" :plain="false" type="error"></m-icon>
-        <m-icon name="m-upload" :plain="false" type="primary"></m-icon>
-        <m-icon name="m-upload" :plain="false" color="pink"></m-icon>
-      </div>
-      <template #code>
-        <pre v-highlight="plainCode"></pre>
-      </template>
-    </cpn-play-vue>
-    <cpn-play-vue
-      title="shape"
-      description="有各种风格rect，round，circle(默认)，好像要设置plain属性为false才可以"
-    >
-      <div class="size">
-        <m-icon
-          name="m-upload"
-          shape="rect"
-          :plain="false"
-          type="error"
-        ></m-icon>
-        <m-icon
-          name="m-upload"
-          shape="round"
-          :plain="false"
-          type="success"
-        ></m-icon>
-        <m-icon
-          name="m-upload"
-          shape="circle"
-          :plain="false"
-          type="info"
-        ></m-icon>
-      </div>
-      <template #code>
-        <pre v-highlight="shapeCode"></pre>
-      </template>
-    </cpn-play-vue>
     <cpn-play-vue
       class="icons"
       title="icons"
       description="你可以直接使用iconfont中的图标，将name赋值给m-icon中的name，但是一定要在你的文件中引用该图标"
     >
-      <m-icon-group class="iconGroup" type="success" :plain="false">
+      <m-icon-group class="iconGroup">
         <m-icon name="m-rocket"></m-icon>
         <m-icon name="m-upload"></m-icon>
         <m-icon name="m-separator"></m-icon>
@@ -153,7 +90,7 @@
 import {} from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import cpnPlayVue from "../../../components/cpnPlay/cpnPlay.vue";
-import { SizeCode, plainCode, typeCode, shapeCode } from "./doc";
+import { SizeCode, typeCode } from "./doc";
 </script>
 <style scoped lang="less">
 .cpnIcon {

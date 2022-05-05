@@ -53,3 +53,40 @@ export const plainCode = `<m-button-group :plain="false">
   <m-button type="warning">warning</m-button>
   <m-button color="#40fafa" borderColor="#40fafa">warning</m-button>
 </m-button-group>`
+export const iconCode = `<m-button-group :plain="false">
+  <m-button type="success" shape="rect">
+    <m-icon name="m-upload"></m-icon>
+    成功的上传
+  </m-button>
+  <m-button type="info" shape="round">
+    <m-icon name="m-upload"></m-icon>
+    上传信息哦
+  </m-button>
+  <m-button type="warning" shape="arc">
+    <m-icon name="m-upload"></m-icon>
+    是一个警告
+  </m-button>
+  <m-button type="error" shape="circle">
+    <m-icon name="m-upload"></m-icon>
+  </m-button>
+</m-button-group>`
+export const loadingCode = `<m-button-group :plain="false" shape="round">
+  <m-button @click="handleClick" :loading="loading">点一下才有</m-button>
+  <m-button @click="handleClick" :loading="loading" type="error">
+    点我也可以
+  </m-button>
+  <m-button @click="handleClick" :loading="loading" type="primary">
+    也可以点我
+  </m-button>
+  <m-button @click="handleClick" :loading="loading" type="success">
+    两秒就没有了
+  </m-button>
+</m-button-group>
+<script setup>
+  const loading = ref(false);
+  function handleClick() {
+    loading.value = true;
+    setTimeout(() => (loading.value = false), 1000);
+  }
+</script>
+`

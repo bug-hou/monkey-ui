@@ -92,19 +92,70 @@
         <pre v-highlight="plainCode"></pre>
       </template>
     </cpn-play-vue>
-    <cpn-play-vue title="icon" description="当button遇到icon发送的火花">
-      <m-button-group shape="circle">
-        <m-button :plain="false" type="success">
-          <m-icon name="m-upload" color="pink"></m-icon>
+    <cpn-play-vue title="icon" description="当button遇到icon是可以一起使用的哦">
+      <m-button-group :plain="false">
+        <m-button type="success" shape="rect">
+          <m-icon name="m-upload"></m-icon>
+          成功的上传
         </m-button>
-        <m-button :plain="false" type="error">
+        <m-button type="info" shape="round">
+          <m-icon name="m-upload"></m-icon>
+          上传信息哦
+        </m-button>
+        <m-button type="warning" shape="arc">
+          <m-icon name="m-upload"></m-icon>
+          是一个警告
+        </m-button>
+        <m-button type="error" shape="circle">
           <m-icon name="m-upload"></m-icon>
         </m-button>
-        <m-button :plain="false" type="info">
-          <m-icon name="m-upload"></m-icon>
+      </m-button-group>
+      <template #code>
+        <pre v-highlight="iconCode"></pre>
+      </template>
+    </cpn-play-vue>
+    <cpn-play-vue
+      title="loading"
+      description="一个好的button少不了loading状态，目前来说只有7种short，loop，top，grow，slow，deep，long，"
+    >
+      <m-button-group :plain="false" shape="round">
+        <m-button @click="handleClick" :loading="loading">点一下才有</m-button>
+        <m-button @click="handleClick" :loading="loading" type="error">
+          点我也可以
         </m-button>
-        <m-button :plain="false" type="success">
-          <m-icon name="m-upload"></m-icon>
+        <m-button @click="handleClick" :loading="loading" type="primary">
+          也可以点我
+        </m-button>
+        <m-button @click="handleClick" :loading="loading" type="success">
+          两秒就没有了
+        </m-button>
+      </m-button-group>
+      <template #code>
+        <pre v-highlight="loadingCode"></pre>
+      </template>
+    </cpn-play-vue>
+    <cpn-play-vue
+      title="icon插槽"
+      description="同时使用icon和loading此时要使用插槽(插槽名:icon)"
+    >
+      <m-button-group :plain="false" shape="round">
+        <m-button @click="handleClick" :loading="loading">
+          <template #icon>
+            <m-icon name="m-upload"></m-icon>
+          </template>
+          点一下才有
+        </m-button>
+        <m-button @click="handleClick" :loading="loading" type="error">
+          <template #icon>
+            <m-icon name="m-upload"></m-icon>
+          </template>
+          点我也可以
+        </m-button>
+        <m-button @click="handleClick" :loading="loading" type="primary">
+          <template #icon>
+            <m-icon name="m-upload"></m-icon>
+          </template>
+          也可以点我
         </m-button>
       </m-button-group>
     </cpn-play-vue>
@@ -118,10 +169,22 @@
  * @Description: 创建一个button组件
  */
 // 从下载的组件中导入函数
-import {} from "vue";
+import { ref } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import cpnPlayVue from "../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode, typeCode, shapeCode, plainCode } from "./doc";
+import {
+  sizeCode,
+  typeCode,
+  shapeCode,
+  plainCode,
+  iconCode,
+  loadingCode
+} from "./doc";
+const loading = ref(false);
+function handleClick() {
+  loading.value = true;
+  setTimeout(() => (loading.value = false), 1000);
+}
 </script>
 <style scoped lang="less">
 .button {

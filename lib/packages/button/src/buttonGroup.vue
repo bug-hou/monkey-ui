@@ -61,5 +61,6 @@ provide(TEXT_COLOR, props.textColor);
   justify-content: space-evenly;
   padding: 10px;
   box-sizing: border-box;
+  align-items: center;
 }
 </style>
