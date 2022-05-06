@@ -3,10 +3,16 @@
     <nav>
       <nav-list-vue :title="baseTitle" :list="base"></nav-list-vue>
     </nav>
-    <main>
+    <main class="scroll">
       <router-view class="view"></router-view>
-      <aside></aside>
     </main>
+    <aside>
+      <ul>
+        <li v-for="(item, index) in $route.meta.asides as any ?? []">
+          <a :href="item?.href">{{ item?.name }}</a>
+        </li>
+      </ul>
+    </aside>
   </div>
 </template>
 
@@ -34,13 +40,35 @@ const base = [
     display: flex;
     box-sizing: border-box;
     overflow: auto;
+    padding-right: 5rem;
     .view {
       padding: 1.6rem 1.2rem 2.8rem 2.8rem;
       flex: 1;
     }
-    aside {
-      width: 5rem;
-      background-color: pink;
+  }
+  aside {
+    width: 5rem;
+    padding-left: 1rem;
+    position: fixed;
+    right: 0;
+    top: 2rem;
+    bottom: 0;
+    z-index: 100;
+    border-left: 1px solid rgb(239, 239, 245);
+    ul {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      li{
+        margin: 0.5rem 0;
+      }
+    }
+    a {
+      font-size: 0.7rem;
+      &:hover {
+        color: aqua;
+      }
     }
   }
   nav {

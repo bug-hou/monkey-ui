@@ -1,17 +1,18 @@
-.gray::-webkit-scrollbar {
+.scroll::-webkit-scrollbar {
+  z-index: 1000;
   /*滚动条整体样式*/
   width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
   height: 5px;
   background-color: transparent;
-  scrollbar-arrow-color: red;
+  /* scrollbar-arrow-color: red; */
 }
-.gray::-webkit-scrollbar-thumb {
+.scroll::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.2);
-  scrollbar-arrow-color: red;
+  /* scrollbar-arrow-color: red; */
 }
-.gray::-webkit-scrollbar-track {
+.scroll::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
   border-radius: 5px;
   background-color: transparent;

@@ -53,7 +53,7 @@ const hoverColor = inject(HOVER_COLOR, color);
   font-size: 14px;
 }
 .medium {
-  font-size: 16px;
+  font-size: 20px;
 }
 .big {
   font-size: 28px;

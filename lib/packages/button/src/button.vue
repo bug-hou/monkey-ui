@@ -22,7 +22,7 @@
     ]"
   >
     <div class="loading" v-if="loading">
-      <component :is="loadingMap[loadingName]"></component>
+      <component :is="loadingMap[loadingName]" :color="iconColor"></component>
     </div>
     <slot name="icon" v-else> </slot>
     <slot> </slot>
@@ -112,28 +112,32 @@ const textColor = useInject(props.textColor, TEXT_COLOR, "#fff");
 const plainTextColor = color;
 const borderColor = useInject(props.borderColor, BORDER_COLOR, theme);
 
-const iconColor = ref(color);
+const iconColor = ref(plain ? textColor : color);
 
 provide(IconNames.HOVER_COLOR, iconColor);
 
 const emits = defineEmits(["mClick", "mTouch"]);
 
 const handleClick = (event: MouseEvent) => {
-  if (!props.disabled) {
+  if (!disabled) {
     emits("mClick", event);
   }
 };
 
 const handleTouch = (event: TouchEvent) => {
-  if (!props.disabled) {
+  if (!disabled) {
     emits("mClick", event);
   }
 };
 function handleEnter() {
-  iconColor.value = textColor;
+  if (!disabled && !plain) {
+    iconColor.value = textColor;
+  }
 }
 function handleLeave() {
-  iconColor.value = color;
+  if (!disabled && !plain) {
+    iconColor.value = color;
+  }
 }
 </script>
 <style scoped lang="less">

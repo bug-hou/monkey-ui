@@ -4,8 +4,8 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     :width="processMetaData(width)"
     :height="processMetaData(height)"
-    viewBox="0 0 24 30"
-    style="enable-background: new 0 0 50 50"
+    viewBox="0 0 24 24"
+    style="enable-background: new 0 0 24 24"
     xml:space="preserve"
   >
     <rect
@@ -49,7 +49,7 @@
       y="0"
       width="4"
       height="10"
-      fill="#FF6700"
+      :fill="color"
       transform="translate(0 3.89973)"
     >
       <animateTransform
@@ -73,6 +73,7 @@
  */
 // 从下载的组件中导入函数
 import { withDefaults, defineProps } from "vue";
+import configData from "./config";
 type MetaData = number | string;
 const props = withDefaults(
   defineProps<{
@@ -83,11 +84,7 @@ const props = withDefaults(
     opacity?: number;
   }>(),
   {
-    color: "#0ff",
-    width: 24,
-    height: 30,
-    opacity: 0.2,
-    duration: 0.5
+    ...configData
   }
 );
 function processMetaData(data: MetaData) {

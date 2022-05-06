@@ -2,29 +2,44 @@
 <template>
   <div class="base">
     <header>
-      <h1 :id="title">{{ initialCapital(title) }}属性</h1>
+      <h2 :id="title">{{ initialCapital(title) }}属性</h2>
       <div class="descriptor" v-description="description"></div>
+      <div class="operate">
+        <m-icon-group color="black" size="medium">
+          <m-icon name="icon-fuzhi" title="复制代码" @click="copyText"></m-icon>
+          <span class="gay"></span>
+          <m-icon
+            name="icon-code"
+            title="显示代码"
+            @click="handleClickCode"
+          ></m-icon>
+        </m-icon-group>
+      </div>
     </header>
     <main>
       <slot></slot>
     </main>
-    <footer>
-      <slot name="code"></slot>
+    <footer :class="showCode && 'show'" :style="{ ['--height']: height }">
+      <div ref="footerRef">
+        <pre v-highlight="code"></pre>
+      </div>
     </footer>
   </div>
 </template>
 
 <script lang="ts" setup>
 // 从下载的组件中导入函数
-import { withDefaults, defineProps, Directive } from "vue";
+import { withDefaults, defineProps, Directive, ref, onMounted } from "vue";
 import { initialCapital } from "../../utils";
 const props = withDefaults(
   defineProps<{
     title: string;
     description: string;
+    code: string;
   }>(),
   {}
 );
+const height = ref("0px");
 const vDescription: Directive = {
   mounted(el: HTMLElement, binding) {
     const reg = /[a-z]*/gi;
@@ -34,6 +49,28 @@ const vDescription: Directive = {
     );
   }
 };
+const showCode = ref(false);
+function handleClickCode() {
+  showCode.value = !showCode.value;
+}
+const footerRef = ref<InstanceType<typeof HTMLElement>>();
+onMounted(() => {
+  height.value = getComputedStyle(footerRef.value!).height;
+});
+function copyText() {
+  var text = props.code;
+  // 1. 创建并添加一个输入框元素(最后会销毁)
+  const textareaEle = document.createElement("textarea");
+  document.body.appendChild(textareaEle);
+  // 2. 将需要复制的文本传入输入框, 并调用 select 方法, 选中输入框中文本
+  textareaEle.value = text;
+  textareaEle.select();
+  textareaEle.readOnly = true;
+  // 3. 调用复制选中文本的方法
+  document.execCommand("copy");
+  // 4. 销毁输入框
+  document.body.removeChild(textareaEle);
+}
 </script>
 <style scoped lang="less">
 .base {
@@ -41,13 +78,23 @@ const vDescription: Directive = {
   border: 1px solid #dcdfe6;
   border-radius: 6px;
   width: 100%;
-  max-width: 35rem;
+  max-width: 40rem;
   header {
     width: 100%;
     border-bottom: 1px solid #dcdfe6;
     padding: 5px 10px;
     box-sizing: border-box;
-    h1 {
+    position: relative;
+    .operate {
+      position: absolute;
+      right: 20px;
+      top: 5px;
+      .gay {
+        display: inline-block;
+        padding: 0 5px;
+      }
+    }
+    h2 {
       font-size: 25px;
     }
     p {
@@ -66,8 +113,15 @@ const vDescription: Directive = {
     box-sizing: border-box;
     padding: 15px;
   }
-  footer{
-    border-top: 1px solid #dcdfe6;
+  footer {
+    transition: all 1s;
+    height: 0;
+    overflow: hidden;
+    transition: height 1s;
+    &.show {
+      border-top: 1px solid #dcdfe6;
+      height: var(--height);
+    }
   }
 }
 </style>

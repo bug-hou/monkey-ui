@@ -42,6 +42,7 @@
  */
 // 从下载的组件中导入函数
 import { withDefaults, defineProps } from "vue";
+import configData from "./config";
 type MetaData = number | string;
 const props = withDefaults(
   defineProps<{
@@ -52,11 +53,7 @@ const props = withDefaults(
     opacity?: number;
   }>(),
   {
-    color: "#0ff",
-    width: 40,
-    height: 40,
-    opacity: 0.2,
-    duration: 0.5
+    ...configData
   }
 );
 function processMetaData(data: MetaData) {

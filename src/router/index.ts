@@ -24,6 +24,36 @@ const routers: RouteRecordRaw[] = [
       {
         path: "button",
         component: () => import("../views/main/button/index.vue"),
+        meta: {
+          asides: [
+            {
+              name: "size大小",
+              href: "#size"
+            },
+            {
+              name: "type类型",
+              href: "#type"
+            }, {
+              name: "shape形状",
+              href: "#shape"
+            }, {
+              name: "plain朴素",
+              href: "#plain"
+            }, {
+              name: "disabled禁用",
+              href: "#disabled"
+            }, {
+              name: "icon图标",
+              href: "#icon"
+            }, {
+              name: "loading加载",
+              href: "#loading"
+            }, {
+              name: "slot插槽",
+              href: "#slot"
+            }
+          ]
+        }
       }, {
         path: "icon",
         component: () => import("../views/main/icon/index.vue")

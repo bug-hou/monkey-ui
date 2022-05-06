@@ -71,14 +71,55 @@ export const iconCode = `<m-button-group :plain="false">
   </m-button>
 </m-button-group>`
 export const loadingCode = `<m-button-group :plain="false" shape="round">
-  <m-button @click="handleClick" :loading="loading">点一下才有</m-button>
+  <m-button @click="handleClick" :loading="loading" loadingName="loop">
+    点一下才有
+  </m-button>
   <m-button @click="handleClick" :loading="loading" type="error">
     点我也可以
   </m-button>
-  <m-button @click="handleClick" :loading="loading" type="primary">
+  <m-button
+    @click="handleClick"
+    :loading="loading"
+    type="primary"
+    loadingName="grow"
+  >
     也可以点我
   </m-button>
-  <m-button @click="handleClick" :loading="loading" type="success">
+  <m-button
+    @click="handleClick"
+    :loading="loading"
+    type="success"
+    loadingName="slow"
+  >
+    两秒就没有了
+  </m-button>
+  </m-button-group>
+  <m-button-group :plain="false" shape="round">
+  <m-button @click="handleClick" :loading="loading" loadingName="deep"
+    >点一下才有</m-button
+  >
+  <m-button
+    @click="handleClick"
+    :loading="loading"
+    type="error"
+    loadingName="top"
+  >
+    点我也可以
+  </m-button>
+  <m-button
+    @click="handleClick"
+    :loading="loading"
+    type="primary"
+    loadingName="long"
+  >
+    也可以点我
+  </m-button>
+  <m-button
+    @click="handleClick"
+    :loading="loading"
+    type="success"
+    loadingName="short"
+  >
     两秒就没有了
   </m-button>
 </m-button-group>
@@ -90,3 +131,34 @@ export const loadingCode = `<m-button-group :plain="false" shape="round">
   }
 </script>
 `
+export const slotCode = `<m-button-group :plain="false" shape="round">
+  <m-button @click="handleClick" :loading="loading">
+    <template #icon>
+      <m-icon name="m-upload"></m-icon>
+    </template>
+    点一下才有
+  </m-button>
+  <m-button @click="handleClick" :loading="loading" type="error">
+    <template #icon>
+      <m-icon name="m-upload"></m-icon>
+    </template>
+    点我也可以
+  </m-button>
+  <m-button @click="handleClick" :loading="loading" type="primary">
+    <template #icon>
+      <m-icon name="m-upload"></m-icon>
+    </template>
+    也可以点我
+  </m-button>
+</m-button-group>
+<script setup>
+  const loading = ref(false);
+  function handleClick() {
+    loading.value = true;
+    setTimeout(() => (loading.value = false), 1000);
+  }
+</script>`
+export const disabledCode = `<m-button-group>
+  <m-button disabled>我不能点击</m-button>
+  <m-button disabled :plain="false">我不能点击</m-button>
+</m-button-group>`
