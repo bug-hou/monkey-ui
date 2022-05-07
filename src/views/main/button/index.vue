@@ -13,6 +13,7 @@
     <icon-vue></icon-vue>
     <loading-vue></loading-vue>
     <slot-vue></slot-vue>
+    <text-vue></text-vue>
   </div>
 </template>
 
@@ -33,6 +34,7 @@ import iconVue from "./cpn/icon.vue";
 import loadingVue from "./cpn/loading.vue";
 import slotVue from "./cpn/slot.vue";
 import disabledVue from "./cpn/disabled.vue";
+import textVue from "./cpn/text.vue";
 const loading = ref(false);
 function handleClick() {
   loading.value = true;

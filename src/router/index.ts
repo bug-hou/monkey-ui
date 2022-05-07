@@ -51,12 +51,18 @@ const routers: RouteRecordRaw[] = [
             }, {
               name: "slot插槽",
               href: "#slot"
+            }, {
+              name: "text文字",
+              href: "#text"
             }
           ]
         }
       }, {
         path: "icon",
         component: () => import("../views/main/icon/index.vue")
+      }, {
+        path: "input",
+        component: () => import("../views/main/input/index.vue")
       }
     ]
   }

@@ -7,5 +7,6 @@ export default {
   DISABLED: Symbol("disabled"),
   COLOR: Symbol("color"),
   BORDER_COLOR: Symbol("borderColor"),
-  TEXT_COLOR: Symbol("textColor")
+  TEXT_COLOR: Symbol("textColor"),
+  TEXT: Symbol("text")
 }

@@ -25,6 +25,7 @@ interface ButtonProps {
   color?: string;
   textColor?: string;
   borderColor?: string;
+  text?: boolean;
 }
 const props = withDefaults(defineProps<ButtonProps>(), {
   type: "default",
@@ -32,7 +33,8 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   loading: false,
   shape: "rect",
   plain: true,
-  size: "small"
+  size: "small",
+  text: false
 });
 const {
   TEXT_COLOR,
@@ -43,7 +45,8 @@ const {
   DISABLED,
   BORDER_COLOR,
   COLOR,
-  PLAIN
+  PLAIN,
+  TEXT
 } = ButtonNames;
 provide(TYPE, props.type);
 provide(DISABLED, props.disabled);
@@ -54,6 +57,7 @@ provide(SIZE, props.size);
 provide(COLOR, props.color);
 provide(BORDER_COLOR, props.borderColor);
 provide(TEXT_COLOR, props.textColor);
+provide(TEXT, props.text);
 </script>
 <style scoped lang="less">
 .mButtonGroup {

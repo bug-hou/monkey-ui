@@ -162,3 +162,30 @@ export const disabledCode = `<m-button-group>
   <m-button disabled>我不能点击</m-button>
   <m-button disabled :plain="false">我不能点击</m-button>
 </m-button-group>`
+export const textCode = `<m-button-group>
+  <m-button shape="round" :text="true" type="success" :textFixed="true">
+    点一下才有
+  </m-button>
+  <m-button shape="round" :text="true" type="error"> 点我也可以 </m-button>
+  <m-button shape="round" :text="true" type="primary">
+    也可以点我
+  </m-button>
+  <m-button
+    shape="round"
+    :text="true"
+    type="primary"
+    textColor="#0ff"
+    @click="handleClick"
+    :textFixed="click"
+  >
+    我点击以后颜色就不变了
+  </m-button>
+</m-button-group>
+<script setup>
+  import { ref, unref } from "vue";
+  const click = ref(false);
+  function handleClick() {
+    click.value = !unref(click);
+  }
+</script>
+`

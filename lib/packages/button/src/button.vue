@@ -6,7 +6,14 @@
     @mouseenter="handleEnter"
     @mouseleave="handleLeave"
     @keydown=""
-    :class="[size, shape, disabled && 'disabled', !plain && 'plain']"
+    :class="[
+      size,
+      shape,
+      disabled && 'disabled',
+      !plain && 'plain',
+      text && 'text',
+      textFixed && 'fixed'
+    ]"
     :style="[
       {
         ['--color']: plain ? textColor : plainTextColor
@@ -14,10 +21,17 @@
       {
         ['--back']: plain ? color : plainColor
       },
-      { ['--border']: borderColor },
-      { ['--hover-color']: textColor },
+      {
+        ['--border']: borderColor
+      },
+      {
+        ['--hover-color']: textColor
+      },
       {
         ['--hover-back']: color
+      },
+      {
+        ['--text']: textColor === '#fff' ? borderColor : textColor
       }
     ]"
   >
@@ -88,21 +102,35 @@ interface ButtonProps {
   borderColor?: string;
   textColor?: string;
   loadingName?: LoadingNames;
+  text?: boolean;
+  textFixed?: boolean;
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
   plain: undefined,
   loading: false,
-  loadingName: "short"
+  loadingName: "short",
+  text: undefined,
+  textFixed: false
 });
 
-const { TEXT_COLOR, TYPE, SHAPE, SIZE, DISABLED, BORDER_COLOR, COLOR, PLAIN } =
-  ButtonNames;
+const {
+  TEXT_COLOR,
+  TYPE,
+  SHAPE,
+  SIZE,
+  DISABLED,
+  BORDER_COLOR,
+  COLOR,
+  PLAIN,
+  TEXT
+} = ButtonNames;
 const type = useInject(props.type, TYPE, "default");
 const shape = useInject(props.shape, SHAPE, "rect");
 const size = useInject(props.size, SIZE, "small");
 const plain = useInject(props.plain, PLAIN, true);
 const disabled = useInject(props.disabled, DISABLED, false);
+const text = useInject(props.text, TEXT, false);
 
 const theme = LightTheme[type];
 
@@ -142,6 +170,7 @@ function handleLeave() {
 </script>
 <style scoped lang="less">
 button {
+  transition: all 0.3s;
   display: inline-flex;
   padding: 2px 10px;
   font-size: 18px;
@@ -164,11 +193,23 @@ button {
     display: inline-flex;
     align-items: center;
   }
-}
-.plain {
-  &:hover {
-    background: var(--hover-back);
-    color: var(--hover-color);
+  &.plain {
+    &:hover {
+      background: var(--hover-back);
+      color: var(--hover-color);
+    }
+  }
+  &.text {
+    border: none;
+    background-color: transparent;
+    color: #666;
+    font-weight: bold;
+    &.fixed {
+      color: var(--text);
+    }
+    &:hover {
+      color: var(--text);
+    }
   }
 }
 .mini {
