@@ -1,6 +1,11 @@
 <!-- base -->
 <template>
-  <div class="base">
+  <div
+    class="base"
+    :class="active && 'active'"
+    @click="handleClick"
+    @mouseleave="handleLeave"
+  >
     <header>
       <h2 :id="title">{{ initialCapital(title) }}属性</h2>
       <div class="descriptor" v-description="description"></div>
@@ -71,6 +76,13 @@ function copyText() {
   // 4. 销毁输入框
   document.body.removeChild(textareaEle);
 }
+const active = ref(false);
+function handleClick() {
+  active.value = true;
+}
+function handleLeave() {
+  active.value = false;
+}
 </script>
 <style scoped lang="less">
 .base {
@@ -79,6 +91,9 @@ function copyText() {
   border-radius: 6px;
   width: 100%;
   max-width: 40rem;
+  &.active {
+    border-color: #409eff;
+  }
   header {
     width: 100%;
     border-bottom: 1px solid #dcdfe6;

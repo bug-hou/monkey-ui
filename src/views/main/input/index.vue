@@ -8,6 +8,11 @@
     <base-vue></base-vue>
     <title-vue></title-vue>
     <clear-vue></clear-vue>
+    <disabled-vue></disabled-vue>
+    <limit-vue></limit-vue>
+    <loading-vue></loading-vue>
+    <round-vue></round-vue>
+    <list-vue></list-vue>
   </div>
 </template>
 
@@ -20,10 +25,11 @@
 // 从下载的组件中导入函数
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import baseVue from "./cpn/size.vue";
-import titleVue from "./cpn/title.vue";
+import titleVue from "./cpn/fix.vue";
 import clearVue from "./cpn/clear.vue";
+import disabledVue from "./cpn/disabled.vue";
+import limitVue from "./cpn/limit.vue";
+import loadingVue from "./cpn/loading.vue";
+import roundVue from "./cpn/round.vue";
+import listVue from "./cpn/list.vue";
 </script>
-<style scoped lang="less">
-.minput {
-}
-</style>

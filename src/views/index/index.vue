@@ -26,7 +26,7 @@
             shape="round"
             size="medium"
             :plain="false"
-            >开始使用</m-button
+            >这里看看文档吧</m-button
           >
         </p>
       </div>

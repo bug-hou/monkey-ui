@@ -2,14 +2,25 @@
   <cpn-play-vue
     title="clear"
     description="可能你需要一个一键删除功能只需将clear设置为true"
-    :code="sizeCode"
+    :code="clearCode"
   >
-    <m-input v-model="a" clear></m-input>
-    <m-input v-model="a" clear suffix prefix>
+    <m-input
+      v-model="a"
+      clear
+      placeholder="你要输入才显示clear按钮哦"
+    ></m-input>
+    <br />
+    <m-input v-model="a" clear suffix prefix placeholder="我是同时拥有的组件">
       <template #prefix> https:// </template>
       <template #suffix> .com </template>
     </m-input>
-    <m-input v-model="a" type="password" password></m-input>
+    <br />
+    <m-input
+      v-model="a"
+      type="password"
+      password
+      placeholder="同时设置了优先显示password"
+    ></m-input>
   </cpn-play-vue>
 </template>
 
@@ -21,7 +32,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
+import { clearCode } from "../doc";
 import { ref } from "vue";
 const a = ref("");
 </script>

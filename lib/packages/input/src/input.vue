@@ -1,45 +1,54 @@
 <!-- mInput -->
 <template>
-  <label
-    :class="['mInput', size, focus && 'focus', round && 'round']"
-    :style="{
-      ['--radius']: radius,
-      ['--pre-color']: prefixColor,
-      ['--pre-text-color']: prefixTextColor
-    }"
-  >
-    <div v-if="prefix" class="slot">
-      <slot name="prefix"> </slot>
-    </div>
-    <input
-      v-bind="$attrs"
-      :tabindex="index"
-      @input="changeValue"
-      :type="inputType"
-      v-model="value"
-      @keyup.enter="changeListShow"
-      @keyup.up="upHandler"
-      @keyup.down="downHandler"
-      @blur="blurHandler"
-      @focus="focusHandler"
-      ref="input"
-    />
-    <slot name="icon">
-      <p
-        v-if="(clear || password) && value"
-        @click="clickIcon"
-        :class="[
-          'iconfont',
-          clear ? 'icon-shanchu' : 'icon-xianshimima',
-          'bgicon'
-        ]"
-      >
-        <m-icon name="m-delete"></m-icon>
+  <div class="labelBox">
+    <label
+      :class="[
+        'mInput',
+        'input-' + size,
+        focus && 'focus',
+        round && 'round',
+        disabled && 'disabled'
+      ]"
+      :style="{
+        ['--radius']: radius,
+        ['--pre-color']: prefixColor,
+        ['--pre-text-color']: prefixTextColor,
+        ['--suf-color']: suffixColor,
+        ['--suf-text-color']: suffixTextColor
+      }"
+    >
+      <div v-if="prefix" class="slot">
+        <slot name="prefix">{{ prefix }} </slot>
+      </div>
+      <input
+        v-bind="$attrs"
+        :tabindex="index"
+        @input="changeValue"
+        :type="inputType"
+        v-model="value"
+        @keyup.enter="changeListShow"
+        @keyup.up="upHandler"
+        @keyup.down="downHandler"
+        @blur="blurHandler"
+        @focus="focusHandler"
+        :maxlength="maxLength"
+        ref="input"
+        :disabled="disabled"
+      />
+      <slot name="icon">
+        <p v-if="(clear || password) && value" @click="clickIcon" class="clear">
+          <m-icon v-if="password" name="m-show"></m-icon>
+          <m-icon v-else name="m-delete"></m-icon>
+        </p>
+      </slot>
+      <p v-if="maxLength" class="max-length">{{ len }}/{{ maxLength }}</p>
+      <p v-if="loading" class="loading">
+        <loop-loading-vue color="#409eff"></loop-loading-vue>
       </p>
-    </slot>
-    <div v-if="suffix" class="slot suffix">
-      <slot name="suffix"> </slot>
-    </div>
+      <div v-if="suffix" class="slot suffix">
+        <slot name="suffix">{{ suffix }} </slot>
+      </div>
+    </label>
     <ul
       v-if="
         list && Array.isArray(list) && list.length !== 0 && (isShow || isHover)
@@ -56,16 +65,19 @@
           :class="activeIndex == index && 'hover'"
           @mouseenter="itemEnterHandler(index)"
         >
-          {{ typeof item === "object" ? item.value : item }}
+          <slot name="list" :value="item">{{
+            typeof item === "object" ? item.value : item
+          }}</slot>
         </li>
       </transition-group>
     </ul>
-  </label>
+  </div>
 </template>
 
 <script lang="ts" setup :inheritAttrs="false">
 // 从下载的组件中导入函数
 import { defineEmits, ref, watch, withDefaults, defineProps } from "vue";
+import { LoopLoadingVue } from "../../../common/loading/index";
 
 import type {
   Size as InputSize,
@@ -81,18 +93,23 @@ const emits = defineEmits(["update:modelValue", "liClick", "focus", "blur"]);
 const props = withDefaults(
   defineProps<{
     size?: InputSize;
-    suffix?: boolean;
+    suffix?: boolean | string;
     type?: InputType;
     modelValue?: InputBase;
     clear?: boolean;
     password?: boolean;
     list?: any[];
-    prefix?: boolean;
+    prefix?: boolean | string;
     index?: number | string;
     radius?: number | string;
     round?: boolean;
     prefixColor?: string;
     prefixTextColor?: string;
+    suffixColor?: string;
+    suffixTextColor?: string;
+    disabled?: boolean;
+    maxLength?: number;
+    loading?: boolean;
   }>(),
   {
     size: "small",
@@ -102,7 +119,10 @@ const props = withDefaults(
     radius: "10px",
     round: false,
     prefixColor: "#f1f2f3",
-    prefixTextColor: "#606366"
+    prefixTextColor: "#606366",
+    suffixColor: "#f1f2f3",
+    suffixTextColor: "#606366",
+    disabled: false
   }
 );
 const value = ref<InputBase>(
@@ -111,22 +131,25 @@ const value = ref<InputBase>(
     : JSON.stringify(props.modelValue)
 );
 const inputType = ref(props.type);
-const isShow = ref(true);
-const isHover = ref(true);
-const input = ref(null);
+const isShow = ref(false);
+const isHover = ref(false);
+const input = ref<InstanceType<typeof HTMLInputElement>>();
 const activeIndex = ref(undefined);
 const focus = ref(false);
+const len = ref(String(value.value).length);
 
 watch(
   () => props.modelValue,
   (newValue) => {
     value.value = newValue;
+    len.value = String(value.value).length;
   }
 );
 
 // 发送input中变量(v-model)
 var changeValue = (event: any) => {
   value.value = event.target.value;
+  len.value = String(value.value).length;
   isShow.value = true;
   emits("update:modelValue", event.target?.value);
 };
@@ -143,7 +166,7 @@ const clickIcon = () => {
 
 // 点击list中的item
 const clickListItem = (item, index: number) => {
-  value.value = item;
+  value.value = item.value ?? item;
   isShow.value = false;
   isHover.value = false;
   emits("update:modelValue", item);
@@ -168,6 +191,7 @@ const blurHandler = (e) => {
 
 const focusHandler = (e) => {
   focus.value = true;
+  isShow.value = true;
   emits("focus", e);
 };
 
@@ -200,25 +224,54 @@ const upHandler = () => {
 };
 </script>
 <style scoped lang="less">
+.labelBox {
+  color: var(--font-color-input);
+  position: relative;
+}
 .mInput {
-  // overflow: hidden;
   height: 30px;
   display: flex;
   border-radius: var(--radius);
   position: relative;
-  color: var(--font-color-input);
   border: 1px solid var(--border-color-input);
+  .max-length {
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 0 2px;
+  }
+  .loading {
+    display: flex;
+    align-items: center;
+    padding-right: 5px;
+  }
   &.focus {
     border: 1px solid var(--border-color-input-active);
   }
   &.round {
     border-radius: 50px;
+    div {
+      border-radius: 50px 0 0 50px;
+    }
+    .suffix {
+      border-radius: 0 50px 50px 0;
+    }
   }
-  > p {
-    position: absolute;
+  &.disabled {
+    cursor: not-allowed;
+    background-color: rgb(250, 250, 252);
+    border: 1px solid rgb(224, 224, 230);
+    div {
+      cursor: not-allowed;
+    }
+    input {
+      cursor: not-allowed;
+    }
+  }
+  .clear {
     right: 20px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateX(-10px);
+    // transform: translateY(-50%);
     font-size: inherit;
     color: inherit;
   }
@@ -248,50 +301,54 @@ const upHandler = () => {
   }
   .suffix {
     border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--suf-color);
+    color: var(--suf-text-color);
   }
-  .list {
-    padding: 5px;
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    right: 0;
-    height: auto;
-    background: var(--back-color-input-list);
-    z-index: 100;
-    border: 1px solid var(--border-color-input-list);
-    border-radius: 5px;
-    li {
-      transition: all 0.3s;
-      font-size: inherit;
-      width: 100%;
-      padding-left: 5px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      &.hover {
-        padding-left: 10px;
-        cursor: pointer;
-        background: var(--back-color-input-list-active);
-        color: var(--font-color-input-list-active);
-        font-weight: bold;
-      }
+}
+.list {
+  font-size: 14px;
+  line-height: 32px;
+  padding: 5px;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  height: auto;
+  background: var(--back-color-input-list);
+  z-index: 100;
+  border: 1px solid var(--border-color-input-list);
+  border-radius: 5px;
+  li {
+    transition: all 0.3s;
+    font-size: inherit;
+    width: 100%;
+    padding-left: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    &.hover {
+      padding-left: 10px;
+      cursor: pointer;
+      background: var(--back-color-input-list-active);
+      color: var(--font-color-input-list-active);
+      font-weight: bold;
     }
   }
 }
-.mini {
-  width: 220px;
+.input-mini {
+  min-width: 220px;
   height: 28px;
   line-height: 30px;
   font-size: 14px;
 }
-.small {
-  width: 280px;
+.input-small {
+  min-width: 280px;
   height: 32px;
   font-size: 14px;
   line-height: 32px;
 }
-.medium {
-  width: 380px;
+.input-medium {
+  min-width: 380px;
   height: 38px;
   font-size: 16px;
   line-height: 35px;
