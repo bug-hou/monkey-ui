@@ -6,6 +6,8 @@ import { mInput, mInputGroup } from "./packages/input"
 
 import { mAvatar } from "./packages/avatar";
 
+import { mGradient } from "./packages/gradient"
+
 export {
   mButton,
   mButtonGroup,
@@ -13,5 +15,6 @@ export {
   mIconGroup,
   mInput,
   mInputGroup,
-  mAvatar
+  mAvatar,
+  mGradient
 }

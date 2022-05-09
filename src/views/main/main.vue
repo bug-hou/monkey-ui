@@ -30,7 +30,8 @@ const base = [
   { name: "按钮button", path: "/button" },
   { name: "输入框input", path: "/input" },
   { name: "图标icon", path: "/icon" },
-  { name: "头像avatar", path: "/avatar" }
+  { name: "头像avatar", path: "/avatar" },
+  { name: "渐变gradient", path: "/gradient" }
 ];
 </script>
 <style scoped lang="less">

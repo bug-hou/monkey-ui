@@ -1,5 +1,5 @@
 <template>
-  <div class="m-gradient">
+  <div class="m-gradient" :style="{ backgroundImage: gradient }">
     <slot></slot>
   </div>
 </template>
@@ -16,28 +16,26 @@ import { defineProps, withDefaults } from "vue";
 const props = withDefaults(
   defineProps<{
     deg?: string;
-    to?: string;
-    from?: string;
     colors?: string[];
-    style?: "linear" | "radial";
   }>(),
   {
-    style: "linear",
-    colors: () => [],
+    colors: () => ["#ee9ca7", "#ffdde1"],
     deg: "90deg"
   }
 );
 const gradient = processStyle(
-  props.style + "gradient(" + props.deg + ",",
+  "linear" + "-gradient(" + props.deg + ",",
   ")",
   ",",
   props.colors
 );
+console.log(gradient);
 </script>
 <style scoped lang="less">
 .m-gradient {
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
+  display: inline-block;
 }
 </style>
