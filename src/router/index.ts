@@ -62,7 +62,19 @@ const routers: RouteRecordRaw[] = [
         component: () => import("../views/main/icon/index.vue")
       }, {
         path: "input",
-        component: () => import("../views/main/input/index.vue")
+        component: () => import("../views/main/input/index.vue"),
+        meta: {
+          aside: []
+        }
+      }, {
+        path: "avatar",
+        component: () => import("../views/main/avatar/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

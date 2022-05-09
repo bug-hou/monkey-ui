@@ -5,10 +5,10 @@
     description="以下四种供军选择mini，small(默认)，medium，big，当然你可以自定义css样式"
   >
     <m-button-group class="size">
-      <m-button size="mini" type="success">小小按钮</m-button>
-      <m-button size="small" type="error">小按钮</m-button>
-      <m-button size="medium" type="primary">中等按钮</m-button>
-      <m-button size="big" type="info">大大的按钮</m-button>
+      <m-button shape="round" size="mini" type="success">小小按钮</m-button>
+      <m-button shape="round" size="small" type="error">小按钮</m-button>
+      <m-button shape="round" size="medium" type="primary">中等按钮</m-button>
+      <m-button shape="round" size="big" type="info">大大的按钮</m-button>
     </m-button-group>
   </cpn-play-vue>
 </template>

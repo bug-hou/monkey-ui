@@ -7,15 +7,14 @@ import "./assets/index.css";
 import hljs from 'highlight.js'
 //导入代码高亮样式
 import 'highlight.js/styles/base16/atelier-cave.css' // 导入代码高亮样式
+import { register } from "./config/register"
 
-import { mButton, mButtonGroup, mIcon, mIconGroup, mInput } from "../lib"
 
-const app = createApp(App).use(router).use(mIcon).use(mIconGroup).use(mInput);
+const app = createApp(App).use(router);
+register(app);
 app.directive("highlight", (el: HTMLElement, binding) => {
   const { value } = binding;
   const html = hljs.highlight(value, { language: 'xml' }).value;
   el.innerHTML = html;
 })
-app.component(mButton.name, mButton);
-app.component(mButtonGroup.name, mButtonGroup);
 app.mount("#app");

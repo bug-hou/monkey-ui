@@ -7,13 +7,29 @@
     <m-input v-model="a" placeholder="我可以定义前缀哦" prefix="http">
     </m-input>
     <br />
-    <m-input v-model="a" placeholder="后缀和前缀" prefix="你的名字" suffix>
-      <template #suffix> 你的名字 </template>
+    <m-input
+      v-model="a"
+      placeholder="后缀和前缀"
+      prefix="你的名字"
+      suffix="你的名字"
+    >
     </m-input>
     <br />
     <m-input
       v-model="a"
       placeholder="红色配绿色绝配"
+      prefix="红色前缀"
+      prefixColor="red"
+      prefixTextColor="white"
+      suffix="绿色后缀"
+      suffixColor="green"
+      suffixTextColor="white"
+    >
+    </m-input>
+    <br />
+    <m-input
+      v-model="a"
+      placeholder="button加上input的火花"
       prefix
       prefixColor="red"
       prefixTextColor="white"
@@ -21,8 +37,12 @@
       suffixColor="green"
       suffixTextColor="white"
     >
-      <template #prefix> 红色前缀 </template>
-      <template #suffix> 绿色后缀 </template>
+      <template #prefix>
+        <m-button type="success">前缀</m-button>
+      </template>
+      <template #suffix>
+        <m-button color="rgb(48, 170, 105)">后缀</m-button>
+      </template>
     </m-input>
   </cpn-play-vue>
 </template>

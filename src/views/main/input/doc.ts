@@ -23,31 +23,46 @@ import {ref} from "vue"
 const a = ref('');
 </script>
 `
-export const fixCode = `<m-input v-model="a" placeholder="我可以定义前缀哦" prefix>
-<template #prefix>
-  <p>http</p>
-</template>
-</m-input>
-<br />
-<m-input v-model="a" placeholder="后缀和前缀" prefix suffix>
-<template #prefix>
-  <p>你的名字</p>
-</template>
-<template #suffix> 你的名字 </template>
+export const fixCode = `<m-input v-model="a" placeholder="我可以定义前缀哦" prefix="http">
 </m-input>
 <br />
 <m-input
-v-model="a"
-placeholder="红色配绿色绝配"
-prefix
-prefixColor="red"
-prefixTextColor="white"
-suffix
-suffixColor="green"
-suffixTextColor="white"
+  v-model="a"
+  placeholder="后缀和前缀"
+  prefix="你的名字"
+  suffix="你的名字"
 >
-<template #prefix> 红色前缀 </template>
-<template #suffix> 绿色后缀 </template>
+</m-input>
+<br />
+<m-input
+  v-model="a"
+  placeholder="红色配绿色绝配"
+  prefix="红色前缀"
+  prefixColor="red"
+  prefixTextColor="white"
+  suffix="绿色后缀"
+  suffixColor="green"
+  suffixTextColor="white"
+>
+</m-input>
+<br />
+<m-input
+  v-model="a"
+  placeholder="button加上input的火花"
+  prefix
+  prefixColor="red"
+  prefixTextColor="white"
+  suffix
+  suffixColor="green"
+  suffixTextColor="white"
+>
+  <template #prefix>
+    <m-button type="success">前缀</m-button>
+  </template>
+  <template #suffix>
+    <m-button color="rgb(48, 170, 105)">后缀</m-button>
+  </template>
+</m-input>
 </m-input>
 <script setup>
 import {ref} from "vue"
@@ -60,9 +75,13 @@ clear
 placeholder="你要输入才显示clear按钮哦"
 ></m-input>
 <br />
-<m-input v-model="a" clear suffix prefix placeholder="我是同时拥有的组件">
-<template #prefix> https:// </template>
-<template #suffix> .com </template>
+<m-input
+v-model="a"
+clear
+prefix=" https://"
+suffix=".com"
+placeholder="我是同时拥有的组件"
+>
 </m-input>
 <br />
 <m-input

@@ -29,7 +29,8 @@ const baseTitle = "基本组件";
 const base = [
   { name: "按钮button", path: "/button" },
   { name: "输入框input", path: "/input" },
-  { name: "图标icon", path: "/icon" }
+  { name: "图标icon", path: "/icon" },
+  { name: "头像avatar", path: "/avatar" }
 ];
 </script>
 <style scoped lang="less">
@@ -60,7 +61,7 @@ const base = [
       display: flex;
       flex-direction: column;
       justify-content: center;
-      li{
+      li {
         margin: 0.5rem 0;
       }
     }

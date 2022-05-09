@@ -1,9 +1,9 @@
 <template>
   <span
-    class="icon iconfont"
-    :class="[name, size]"
+    class="m-icon iconfont"
+    :class="[name, 'icon-' + size]"
     :style="{
-      ['--color']: hoverColor
+      ['--icon-color']: color
     }"
   ></span>
 </template>
@@ -15,47 +15,36 @@
  * @Description: 创建一个icon组件
  */
 // 从下载的组件中导入函数
-import { defineProps, inject, withDefaults } from "vue";
-import { LightTheme } from "../../../common/style";
-import { useInject } from "../../../hooks";
-import IconNames from "../config";
-import type {
-  Size as IconSize,
-  Type as IconType
-} from "../../../type/index.type";
+import { defineProps, withDefaults } from "vue";
+import type { Size as IconSize } from "../../../type/index.type";
 const props = withDefaults(
   defineProps<{
     name: string;
     size?: IconSize;
     color?: string;
-    type?: IconType;
   }>(),
-  {}
+  {
+    size: "small"
+  }
 );
-const { TYPE, SIZE, COLOR, HOVER_COLOR } = IconNames;
-const type = useInject(props.type, TYPE, "info");
-const size = useInject(props.size, SIZE, "small");
-const theme = LightTheme[type];
-const color = useInject(props.color, COLOR, theme);
-const hoverColor = inject(HOVER_COLOR, color);
 </script>
 <style scoped lang="less">
-.icon {
+.m-icon {
   display: inline-block;
-  color: var(--color);
+  color: var(--icon-color);
   cursor: pointer;
   text-align: center;
 }
-.mini {
+.icon-mini {
   font-size: 12px;
 }
-.small {
+.icon-small {
   font-size: 14px;
 }
-.medium {
+.icon-medium {
   font-size: 20px;
 }
-.big {
+.icon-big {
   font-size: 28px;
 }
 </style>

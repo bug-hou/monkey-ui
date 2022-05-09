@@ -1,12 +1,12 @@
-import mButton from "./src/button.vue";
-import mButtonGroup from "./src/buttonGroup.vue";
+import button from "./src/button.vue";
+import buttonGroup from "./src/buttonGroup.vue";
 import { withInstall } from "../../utils/withInstall"
 
-mButton.name = "mButton";
-mButtonGroup.name = "mButtonGroup";
+button.name = "mButton";
+buttonGroup.name = "mButtonGroup";
 
-withInstall(mButton)
-withInstall(mButtonGroup)
+const mButton = withInstall(button);
+const mButtonGroup = withInstall(buttonGroup);
 
 export {
   mButton,

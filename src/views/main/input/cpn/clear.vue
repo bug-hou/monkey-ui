@@ -10,9 +10,13 @@
       placeholder="你要输入才显示clear按钮哦"
     ></m-input>
     <br />
-    <m-input v-model="a" clear suffix prefix placeholder="我是同时拥有的组件">
-      <template #prefix> https:// </template>
-      <template #suffix> .com </template>
+    <m-input
+      v-model="a"
+      clear
+      prefix=" https://"
+      suffix=".com"
+      placeholder="我是同时拥有的组件"
+    >
     </m-input>
     <br />
     <m-input
@@ -36,7 +40,3 @@ import { clearCode } from "../doc";
 import { ref } from "vue";
 const a = ref("");
 </script>
-<style scoped lang="less">
-.clear {
-}
-</style>

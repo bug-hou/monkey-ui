@@ -1,8 +1,8 @@
 export const sizeCode = `<m-button-group>
-  <m-button size="mini" type="success">小小按钮</m-button>
-  <m-button size="small" type="error">小按钮</m-button>
-  <m-button size="medium" type="primary">中等按钮</m-button>
-  <m-button size="big" type="info">大大的按钮</m-button>
+  <m-button shape="round" size="mini" type="success">小小按钮</m-button>
+  <m-button shape="round" size="small" type="error">小按钮</m-button>
+  <m-button shape="round" size="medium" type="primary">中等按钮</m-button>
+  <m-button shape="round" size="big" type="info">大大的按钮</m-button>
 </m-button-group>`
 export const typeCode = `<m-button-group class="type">
   <m-button>default</m-button>
@@ -51,7 +51,7 @@ export const plainCode = `<m-button-group :plain="false">
   <m-button type="primary">primary</m-button>
   <m-button type="info">info</m-button>
   <m-button type="warning">warning</m-button>
-  <m-button color="#40fafa" borderColor="#40fafa">warning</m-button>
+  <m-button color="rgb(48, 170, 105)" borderColor="rgb(48, 170, 105)">warning</m-button>
 </m-button-group>`
 export const iconCode = `<m-button-group :plain="false">
   <m-button type="success" shape="rect">

@@ -6,9 +6,10 @@
     @mouseenter="handleEnter"
     @mouseleave="handleLeave"
     @keydown=""
+    class="m-button"
     :class="[
-      size,
-      shape,
+      'button-' + size,
+      'button-' + shape,
       disabled && 'disabled',
       !plain && 'plain',
       text && 'text',
@@ -138,11 +139,9 @@ const color = useInject(props.color, COLOR, theme);
 const plainColor = getLightColor(color, 0.8);
 const textColor = useInject(props.textColor, TEXT_COLOR, "#fff");
 const plainTextColor = color;
-const borderColor = useInject(props.borderColor, BORDER_COLOR, theme);
+const borderColor = useInject(props.borderColor, BORDER_COLOR, color);
 
 const iconColor = ref(plain ? textColor : color);
-
-provide(IconNames.HOVER_COLOR, iconColor);
 
 const emits = defineEmits(["mClick", "mTouch"]);
 
@@ -169,7 +168,7 @@ function handleLeave() {
 }
 </script>
 <style scoped lang="less">
-button {
+.m-button {
   transition: all 0.3s;
   display: inline-flex;
   padding: 2px 10px;
@@ -182,13 +181,6 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  &.disabled {
-    cursor: not-allowed;
-    &:hover {
-      color: var(--color);
-      background: var(--back);
-    }
-  }
   .loading {
     display: inline-flex;
     align-items: center;
@@ -211,45 +203,52 @@ button {
       color: var(--text);
     }
   }
+  &.disabled {
+    cursor: not-allowed;
+    &:hover {
+      color: var(--color);
+      background: var(--back);
+    }
+  }
 }
-.mini {
+.button-mini {
   padding: 2px 8px;
   font-size: 12px;
-  &.circle {
+  &.button-circle {
     width: 20px;
     height: 20px;
   }
 }
-.small {
+.button-small {
   padding: 5px 15px;
   font-size: 14px;
-  &.circle {
+  &.button-circle {
     width: 30px;
     height: 30px;
   }
 }
-.medium {
+.button-medium {
   padding: 8px 18px;
   font-size: 16px;
-  &.circle {
+  &.button-circle {
     width: 40px;
     height: 40px;
   }
 }
-.big {
+.button-big {
   font-size: 18px;
   padding: 10px 20px;
 }
-.rect {
+.button-rect {
   border-radius: 0px;
 }
-.round {
+.button-round {
   border-radius: 10px;
 }
-.arc {
+.button-arc {
   border-radius: 20px;
 }
-.circle {
+.button-circle {
   overflow: hidden;
   text-align: center;
   border-radius: 50%;

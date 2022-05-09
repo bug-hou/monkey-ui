@@ -4,11 +4,14 @@ import { mIcon, mIconGroup } from "./packages/icon";
 
 import { mInput, mInputGroup } from "./packages/input"
 
+import { mAvatar } from "./packages/avatar";
+
 export {
   mButton,
   mButtonGroup,
   mIcon,
   mIconGroup,
   mInput,
-  mInputGroup
+  mInputGroup,
+  mAvatar
 }

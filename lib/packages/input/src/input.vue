@@ -17,8 +17,10 @@
         ['--suf-text-color']: suffixTextColor
       }"
     >
-      <div v-if="prefix" class="slot">
-        <slot name="prefix">{{ prefix }} </slot>
+      <div v-if="prefix">
+        <slot name="prefix">
+          <p class="slot">{{ prefix }}</p>
+        </slot>
       </div>
       <input
         v-bind="$attrs"
@@ -45,8 +47,10 @@
       <p v-if="loading" class="loading">
         <loop-loading-vue color="#409eff"></loop-loading-vue>
       </p>
-      <div v-if="suffix" class="slot suffix">
-        <slot name="suffix">{{ suffix }} </slot>
+      <div v-if="suffix" class="suffix">
+        <slot name="suffix">
+          <p class="slot">{{ suffix }}</p>
+        </slot>
       </div>
     </label>
     <ul
@@ -229,6 +233,7 @@ const upHandler = () => {
   position: relative;
 }
 .mInput {
+  overflow: hidden;
   height: 30px;
   display: flex;
   border-radius: var(--radius);
@@ -282,10 +287,12 @@ const upHandler = () => {
     background: var(--pre-color);
     color: var(--pre-text-color);
     white-space: nowrap;
-    padding: 0 5px;
     box-sizing: border-box;
     border-radius: var(--radius) 0 0 var(--radius);
     cursor: pointer;
+    .slot {
+      padding: 0 5px;
+    }
   }
   div + input {
     border-radius: 0 5px 5px 0;
