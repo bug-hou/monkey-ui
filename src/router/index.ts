@@ -84,6 +84,15 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "backTop",
+        component: () => import("../views/main/backTop/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

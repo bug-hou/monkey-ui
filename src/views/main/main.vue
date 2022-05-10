@@ -31,7 +31,8 @@ const base = [
   { name: "输入框input", path: "/input" },
   { name: "图标icon", path: "/icon" },
   { name: "头像avatar", path: "/avatar" },
-  { name: "渐变gradient", path: "/gradient" }
+  { name: "渐变gradient", path: "/gradient" },
+  { name: "回到顶部backTop", path: "/backTop" },
 ];
 </script>
 <style scoped lang="less">

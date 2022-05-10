@@ -70,7 +70,7 @@ const barList = [
 </script>
 <style scoped lang="less">
 @color: (rgb(239, 239, 245));
-@import url(//at.alicdn.com/t/font_3380914_5ejepne9dy8.css);
+@import url(//at.alicdn.com/t/font_3380914_iwt9ve1j8g.css);
 .app {
   header {
     box-sizing: border-box;

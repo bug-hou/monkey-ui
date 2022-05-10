@@ -14,6 +14,6 @@ export const LightTheme: Theme = {
   primary: "#409eff",
   warning: "#faaca8",
   error: "#f56c6c",
-  default: "#bababa"
+  default: "rgb(48, 170, 105)"
 }
 
