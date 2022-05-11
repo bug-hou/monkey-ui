@@ -10,11 +10,13 @@
         disabled && 'disabled'
       ]"
       :style="{
-        ['--radius']: radius,
-        ['--pre-color']: prefixColor,
-        ['--pre-text-color']: prefixTextColor,
-        ['--suf-color']: suffixColor,
-        ['--suf-text-color']: suffixTextColor
+        ['--input-radius']: radius,
+        ['--input-pre-color']: prefixColor,
+        ['--input-pre-text-color']: prefixTextColor,
+        ['--input-suf-color']: suffixColor,
+        ['--input-suf-text-color']: suffixTextColor,
+        ['--input-color']: color ? color : 'rgb(220, 223, 230)',
+        ['--input-back-color']: backColor
       }"
     >
       <div v-if="prefix">
@@ -80,8 +82,10 @@
 
 <script lang="ts" setup :inheritAttrs="false">
 // 从下载的组件中导入函数
+import { tr } from "date-fns/locale";
 import { defineEmits, ref, watch, withDefaults, defineProps } from "vue";
 import { LoopLoadingVue } from "../../../common/loading/index";
+import { getLightColor } from "../../../utils";
 
 import type {
   Size as InputSize,
@@ -105,7 +109,7 @@ const props = withDefaults(
     list?: any[];
     prefix?: boolean | string;
     index?: number | string;
-    radius?: number | string;
+    radius?: string;
     round?: boolean;
     prefixColor?: string;
     prefixTextColor?: string;
@@ -114,6 +118,7 @@ const props = withDefaults(
     disabled?: boolean;
     maxLength?: number;
     loading?: boolean;
+    color?: string;
   }>(),
   {
     size: "small",
@@ -141,6 +146,18 @@ const input = ref<InstanceType<typeof HTMLInputElement>>();
 const activeIndex = ref(undefined);
 const focus = ref(false);
 const len = ref(String(value.value).length);
+
+let backColor = ref("white");
+
+watch(
+  () => props.color,
+  (newColor) => {
+    backColor.value = getLightColor(newColor);
+  },
+  {
+    immediate: true
+  }
+);
 
 watch(
   () => props.modelValue,
@@ -236,9 +253,10 @@ const upHandler = () => {
   overflow: hidden;
   height: 30px;
   display: flex;
-  border-radius: var(--radius);
+  border-radius: var(--input-radius);
   position: relative;
-  border: 1px solid var(--border-color-input);
+  border: 1px solid var(--input-color);
+  background-color: var(--input-back-color);
   .max-length {
     font-size: 14px;
     letter-spacing: 1px;
@@ -284,11 +302,11 @@ const upHandler = () => {
     height: 100%;
   }
   div {
-    background: var(--pre-color);
-    color: var(--pre-text-color);
+    background: var(--input-pre-color);
+    color: var(--input-pre-text-color);
     white-space: nowrap;
     box-sizing: border-box;
-    border-radius: var(--radius) 0 0 var(--radius);
+    border-radius: var(--input-radius) 0 0 var(--input-radius);
     cursor: pointer;
     .slot {
       padding: 0 5px;
@@ -307,9 +325,9 @@ const upHandler = () => {
     border-radius: 5px;
   }
   .suffix {
-    border-radius: 0 var(--radius) var(--radius) 0;
-    background: var(--suf-color);
-    color: var(--suf-text-color);
+    border-radius: 0 var(--input-radius) var(--input-radius) 0;
+    background: var(--input-suf-color);
+    color: var(--input-suf-text-color);
   }
 }
 .list {

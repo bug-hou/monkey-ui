@@ -6,9 +6,11 @@
       description="你可能需要一个装照片的容器"
     >
     </cpn-header-vue>
-    <size-vue></size-vue>
-    <error-vue></error-vue>
-    <round-vue></round-vue>
+    <div class="layout">
+      <size-vue></size-vue>
+      <error-vue></error-vue>
+      <round-vue></round-vue>
+    </div>
   </div>
 </template>
 

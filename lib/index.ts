@@ -8,7 +8,11 @@ import { mAvatar } from "./packages/avatar";
 
 import { mGradient } from "./packages/gradient"
 
-import { mBackTop } from "./packages/backtop"
+import { mBackTop } from "./packages/backtop";
+
+import { mCard } from "./packages/card";
+
+import { mDivider } from "./packages/divider"
 
 export {
   mButton,
@@ -19,5 +23,7 @@ export {
   mInputGroup,
   mAvatar,
   mGradient,
-  mBackTop
+  mBackTop,
+  mCard,
+  mDivider
 }

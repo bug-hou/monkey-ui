@@ -6,8 +6,10 @@
       description="你可以将文字变得五彩缤纷"
     >
     </cpn-header-vue>
-    <color-vue></color-vue>
-    <deg-vue></deg-vue>
+    <div class="layout">
+      <color-vue></color-vue>
+      <deg-vue></deg-vue>
+    </div>
   </div>
 </template>
 

@@ -1,34 +1,40 @@
 <!-- base -->
 <template>
-  <div
-    class="base"
-    :class="active && 'active'"
-    @click="handleClick"
-    @mouseleave="handleLeave"
-  >
-    <header>
-      <h2 :id="title">{{ initialCapital(title) }}属性</h2>
-      <div class="descriptor" v-description="description"></div>
-      <div class="operate">
-        <m-icon-group color="black" size="medium">
-          <m-icon name="icon-fuzhi" title="复制代码" @click="copyText"></m-icon>
-          <span class="gay"></span>
-          <m-icon
-            name="icon-code"
-            title="显示代码"
-            @click="handleClickCode"
-          ></m-icon>
-        </m-icon-group>
-      </div>
-    </header>
-    <main>
-      <slot></slot>
-    </main>
-    <footer :class="showCode && 'show'" :style="{ ['--height']: height }">
-      <div ref="footerRef">
-        <pre v-highlight="code"></pre>
-      </div>
-    </footer>
+  <div>
+    <div
+      class="base"
+      :class="active && 'active'"
+      @click="handleClick"
+      @mouseleave="handleLeave"
+    >
+      <header>
+        <h2 :id="title">{{ initialCapital(title) }}属性</h2>
+        <div class="descriptor" v-description="description"></div>
+        <div class="operate">
+          <m-icon-group color="black" size="medium">
+            <m-icon
+              name="icon-fuzhi"
+              title="复制代码"
+              @click="copyText"
+            ></m-icon>
+            <span class="gay"></span>
+            <m-icon
+              name="icon-code"
+              title="显示代码"
+              @click="handleClickCode"
+            ></m-icon>
+          </m-icon-group>
+        </div>
+      </header>
+      <main>
+        <slot></slot>
+      </main>
+      <footer :class="showCode && 'show'" :style="{ ['--height']: height }">
+        <div ref="footerRef">
+          <pre v-highlight="code"></pre>
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
 
@@ -90,7 +96,6 @@ function handleLeave() {
   border: 1px solid #dcdfe6;
   border-radius: 6px;
   width: 100%;
-  max-width: 40rem;
   &.active {
     border-color: #409eff;
   }

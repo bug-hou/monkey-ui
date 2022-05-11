@@ -25,7 +25,3 @@
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { typeCode } from "../doc";
 </script>
-<style scoped lang="less">
-.buttonType {
-}
-</style>

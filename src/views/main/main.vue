@@ -33,6 +33,8 @@ const base = [
   { name: "头像avatar", path: "/avatar" },
   { name: "渐变gradient", path: "/gradient" },
   { name: "回到顶部backTop", path: "/backTop" },
+  { name: "卡片card", path: "/card" },
+  { name: "分隔线divider", path: "/divider" }
 ];
 </script>
 <style scoped lang="less">
@@ -47,6 +49,7 @@ const base = [
     .view {
       padding: 1.6rem 1.2rem 2.8rem 2.8rem;
       flex: 1;
+      width: 100%;
     }
   }
   aside {

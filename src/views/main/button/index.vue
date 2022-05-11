@@ -5,15 +5,17 @@
       name="按钮"
       description="用来做按钮点击"
     ></cpn-header-vue>
-    <size-vue></size-vue>
-    <type-vue></type-vue>
-    <shape-vue></shape-vue>
-    <plain-vue></plain-vue>
-    <disabled-vue></disabled-vue>
-    <icon-vue></icon-vue>
-    <loading-vue></loading-vue>
-    <slot-vue></slot-vue>
-    <text-vue></text-vue>
+    <div class="layout">
+      <size-vue></size-vue>
+      <type-vue></type-vue>
+      <shape-vue></shape-vue>
+      <plain-vue></plain-vue>
+      <disabled-vue></disabled-vue>
+      <icon-vue></icon-vue>
+      <loading-vue></loading-vue>
+      <slot-vue></slot-vue>
+      <text-vue></text-vue>
+    </div>
   </div>
 </template>
 
@@ -43,6 +45,7 @@ function handleClick() {
 </script>
 <style scoped lang="less">
 .button {
+  width: 100%;
   .size {
     display: inline-block;
     > * {

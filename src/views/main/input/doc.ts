@@ -212,3 +212,31 @@ watch(a, () => {
 }
 </style>
 `
+export const colorCode = `<m-input
+v-model="a"
+:color="color"
+placeholder="当你输入monkeysUI就对了"
+></m-input>
+<br />
+<m-input v-model="a" color="#f56c6c" placeholder="我背景是红色的">
+</m-input>
+<br />
+<m-input
+v-model="a"
+color="rgb(48, 170, 105)"
+type="password"
+placeholder="我的背景是不是很好看"
+></m-input>
+<script>
+import { ref, watch } from "vue";
+const a = ref("");
+const color = ref("");
+watch(a, () => {
+  if (a.value !== "monkeysUI") {
+    color.value = "#f56c6c";
+  } else {
+    color.value = "rgb(48, 170, 105)";
+  }
+});
+</script>
+`

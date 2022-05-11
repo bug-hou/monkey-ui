@@ -22,3 +22,19 @@ pre {
   padding: 0.5rem 2rem;
   user-select: text;
 }
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(2, 48%);
+  justify-content: space-evenly;
+}
+@media screen and (max-width: 2000px) {
+  .layout {
+    grid-template-columns: repeat(auto, 700px);
+  }
+}
+@media screen and (max-width: 700) {
+  .layout {
+    grid-template-columns: repeat(1, 90%);
+  }
+}

@@ -5,14 +5,17 @@
       name="输入框"
       description="用来做文字的输入"
     ></cpn-header-vue>
-    <base-vue></base-vue>
-    <title-vue></title-vue>
-    <clear-vue></clear-vue>
-    <disabled-vue></disabled-vue>
-    <limit-vue></limit-vue>
-    <loading-vue></loading-vue>
-    <round-vue></round-vue>
-    <list-vue></list-vue>
+    <div class="layout">
+      <base-vue></base-vue>
+      <title-vue></title-vue>
+      <clear-vue></clear-vue>
+      <disabled-vue></disabled-vue>
+      <limit-vue></limit-vue>
+      <loading-vue></loading-vue>
+      <round-vue></round-vue>
+      <list-vue></list-vue>
+      <color-vue></color-vue>
+    </div>
   </div>
 </template>
 
@@ -32,4 +35,5 @@ import limitVue from "./cpn/limit.vue";
 import loadingVue from "./cpn/loading.vue";
 import roundVue from "./cpn/round.vue";
 import listVue from "./cpn/list.vue";
+import colorVue from "./cpn/color.vue";
 </script>
