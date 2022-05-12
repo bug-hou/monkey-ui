@@ -111,6 +111,15 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "collapse",
+        component: () => import("../views/main/collapse/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

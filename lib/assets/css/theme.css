@@ -150,8 +150,8 @@
 
   /* collapse中的颜色 */
   --back-color-collapse: rgba(200, 200, 200, 0.6);
-  --font-color-collapse: rgb(50, 50, 50);
-  --border-color-collapse: #90939955;
+  --font-color-collapse: rgb(31, 34, 37);
+  --border-color-collapse: rgb(239, 239, 245);
   --font-color-collapse-active: rgb(64, 158, 255);
 
   /* skeleton中的颜色 */

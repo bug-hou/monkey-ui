@@ -1,7 +1,7 @@
 @import url(./reset.css);
 
 html {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 @media screen and (max-width: 750px) {

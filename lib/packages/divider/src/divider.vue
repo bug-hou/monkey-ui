@@ -4,7 +4,8 @@
     :class="vertical && 'm-divider-vertical'"
     :style="[
       { ['--m-divider-color']: color },
-      { ['--m-divider-shape']: shape }
+      { ['--m-divider-shape']: shape },
+      { ['--m-divider-width']: width }
     ]"
   >
     <p
@@ -33,11 +34,13 @@ const props = withDefaults(
     shape?: "solid" | "dashed" | "dotted";
     color?: string;
     titlePlacement?: "left" | "center" | "right";
+    width?: string;
   }>(),
   {
     color: "rgb(229, 229, 225)",
     shape: "solid",
-    titlePlacement: "center"
+    titlePlacement: "center",
+    width: "1px"
   }
 );
 </script>
@@ -50,10 +53,9 @@ const props = withDefaults(
   color: rgb(31, 34, 37);
   justify-content: center;
   .m-divider-common {
-    border-bottom: 1px var(--m-divider-shape) var(--m-divider-color);
-    // flex: 1;
+    border-bottom: var(--m-divider-width) var(--m-divider-shape)
+      var(--m-divider-color);
     width: 100%;
-    height: 1px;
   }
   .m-divider-left,
   .m-divider-right {
@@ -69,6 +71,27 @@ const props = withDefaults(
   }
 }
 .m-divider-vertical {
-  height: 100%;
+  height: 1em;
+  margin: 0 8px;
+  vertical-align: middle;
+  width: auto;
+  flex-direction: column;
+  .m-divider-common {
+    bottom: none;
+    border-left: var(--m-divider-width) var(--m-divider-shape)
+      var(--m-divider-color);
+    height: 100%;
+  }
+  .m-divider-left,
+  .m-divider-right {
+    height: 30px;
+  }
+  .m-divider-slot {
+    flex: 1;
+    padding: 10px 1px;
+  }
+  .m-divider-slot:empty {
+    padding: 0;
+  }
 }
 </style>

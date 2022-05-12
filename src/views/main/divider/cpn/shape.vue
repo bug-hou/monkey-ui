@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="shape"
     description="分隔线还有很多样式solid(默认)实线，dashed虚线，dotted点线"
-    code=""
+    :code="shapeCode"
   >
     <m-divider> 实线 </m-divider>
     <br />
@@ -20,10 +20,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { colorCode } from "../doc";
+import { shapeCode } from "../doc";
 </script>
-<style scoped lang="less">
-.card {
-  width: 300px;
-}
-</style>

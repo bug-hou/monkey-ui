@@ -34,7 +34,8 @@ const base = [
   { name: "渐变gradient", path: "/gradient" },
   { name: "回到顶部backTop", path: "/backTop" },
   { name: "卡片card", path: "/card" },
-  { name: "分隔线divider", path: "/divider" }
+  { name: "分隔线divider", path: "/divider" },
+  { name: "折叠面板collapse", path: "/collapse" }
 ];
 </script>
 <style scoped lang="less">

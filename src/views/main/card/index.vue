@@ -10,6 +10,7 @@
       <type-vue></type-vue>
       <image-vue></image-vue>
       <footer-vue></footer-vue>
+      <custom-vue></custom-vue>
     </div>
   </div>
 </template>
@@ -25,5 +26,6 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import typeVue from "./cpn/type.vue";
 import imageVue from "./cpn/image.vue";
 import footerVue from "./cpn/footer.vue";
+import customVue from "./cpn/custom.vue";
 </script>
 <style scoped lang="less"></style>

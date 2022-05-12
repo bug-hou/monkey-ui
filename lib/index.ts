@@ -12,7 +12,9 @@ import { mBackTop } from "./packages/backtop";
 
 import { mCard } from "./packages/card";
 
-import { mDivider } from "./packages/divider"
+import { mDivider } from "./packages/divider";
+
+import { mCollapse, mCollapseItem } from "./packages/collapse";
 
 export {
   mButton,
@@ -25,5 +27,7 @@ export {
   mGradient,
   mBackTop,
   mCard,
-  mDivider
+  mDivider,
+  mCollapse,
+  mCollapseItem
 }

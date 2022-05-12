@@ -1,9 +1,10 @@
 <template>
-  <cpn-play-vue title="base" description="全部使用默认属性" code="">
+  <cpn-play-vue title="base" description="全部使用默认属性" :code="baseCode">
     <p>我什么也没设置</p>
     <m-divider> </m-divider>
     <p>十分的朴实无华</p>
     <m-divider> </m-divider>
+    <p>当然你可以添加属性让他变的好看</p>
   </cpn-play-vue>
 </template>
 
@@ -15,10 +16,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { colorCode } from "../doc";
+import { baseCode } from "../doc";
 </script>
-<style scoped lang="less">
-.card {
-  width: 300px;
-}
-</style>

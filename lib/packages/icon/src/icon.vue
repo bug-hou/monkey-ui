@@ -30,5 +30,6 @@ const props = withDefaults(
   color: var(--icon-color);
   cursor: pointer;
   text-align: center;
+  font-size: inherit;
 }
 </style>

@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="titlePlacement"
     description="你可以把文字放在你喜欢的文字left，center(默认)，right"
-    code=""
+    :code="titlePlacementCode"
   >
     <m-divider titlePlacement="center"> 中间 </m-divider>
     <br />
@@ -20,11 +20,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { colorCode } from "../doc";
+import { titlePlacementCode } from "../doc";
 </script>
-<style scoped lang="less">
-.card {
-  width: 300px;
-}
-</style>
-
