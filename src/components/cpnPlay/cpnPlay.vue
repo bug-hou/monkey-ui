@@ -105,6 +105,7 @@ function handleLeave() {
     padding: 5px 10px;
     box-sizing: border-box;
     position: relative;
+    color: #606266;
     .operate {
       position: absolute;
       right: 20px;

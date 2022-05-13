@@ -1,0 +1,33 @@
+<template>
+  <cpn-play-vue
+    title="size"
+    description="只有大小不一样，当然你也可以自定义，支持mini，small，medium"
+    code="sizeCode"
+  >
+    <div class="size">
+      <m-input-number v-model="a" size="mini"></m-input-number>
+      <m-input-number v-model="a" size="small"></m-input-number>
+      <m-input-number v-model="a" size="medium"></m-input-number>
+    </div>
+  </cpn-play-vue>
+</template>
+
+<script lang="ts" setup name="baseVue">
+/*
+ * @Author: bughou
+ * @Date: 2022-05-07 17:10:36
+ * @Description: 创建一个baseVue组件
+ */
+// 从下载的组件中导入函数
+import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
+// import { sizeCode } from "../doc";
+import { ref } from "vue";
+const a = ref(1);
+</script>
+<style scoped lang="less">
+.size {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+</style>

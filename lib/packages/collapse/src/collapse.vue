@@ -1,6 +1,6 @@
 <!-- bg-collapse -->
 <template>
-  <div class="bgCollapse">
+  <div class="mCollapse">
     <collapse-title-vue class="title" :isExtension="false" :isHeader="true">
       <slot name="title">
         {{ title }}
@@ -22,7 +22,7 @@ const emits = defineEmits(["change"]);
 
 const props = withDefaults(
   defineProps<{
-    title: string;
+    title?: string;
     accordion?: boolean;
   }>(),
   { accordion: false }
@@ -42,11 +42,14 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="less">
-.bgCollapse {
-  width: 600px;
+.mCollapse {
+  width: 100%;
 }
 .title {
   font-size: 24px;
   font-weight: bold;
+  &:empty {
+    display: none;
+  }
 }
 </style>

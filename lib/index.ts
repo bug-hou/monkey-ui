@@ -16,6 +16,8 @@ import { mDivider } from "./packages/divider";
 
 import { mCollapse, mCollapseItem } from "./packages/collapse";
 
+import { mInputNumber } from "./packages/inputNumber"
+
 export {
   mButton,
   mButtonGroup,
@@ -29,5 +31,6 @@ export {
   mCard,
   mDivider,
   mCollapse,
-  mCollapseItem
+  mCollapseItem,
+  mInputNumber
 }

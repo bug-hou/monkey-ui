@@ -35,7 +35,8 @@ const base = [
   { name: "回到顶部backTop", path: "/backTop" },
   { name: "卡片card", path: "/card" },
   { name: "分隔线divider", path: "/divider" },
-  { name: "折叠面板collapse", path: "/collapse" }
+  { name: "折叠面板collapse", path: "/collapse" },
+  { name: "数字输入框inputNumber", path: "/inputNumber" }
 ];
 </script>
 <style scoped lang="less">

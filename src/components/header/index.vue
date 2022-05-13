@@ -51,7 +51,7 @@ const clickHandler = (item: BarList) => {
   width: 70%;
   justify-content: space-evenly;
   li {
-    font-size: 0.8rem;
+    font-size: 1rem;
     cursor: pointer;
     span {
       text-align: center;

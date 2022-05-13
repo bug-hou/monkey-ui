@@ -7,14 +7,10 @@
     >
     </cpn-header-vue>
     <div class="layout">
-      <m-collapse>
-        <template #title> 你好 </template>
-        <m-collapse-item title="今天">
-          <div>
-            我是最帅的
-          </div>
-        </m-collapse-item>
-      </m-collapse>
+      <base-vue></base-vue>
+      <title-vue></title-vue>
+      <accordion-vue></accordion-vue>
+      <extension-vue></extension-vue>
     </div>
   </div>
 </template>
@@ -27,5 +23,9 @@
  */
 // 从下载的组件中导入函数
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import baseVue from "./cpn/base.vue";
+import titleVue from "./cpn/title.vue";
+import accordionVue from "./cpn/accordion.vue";
+import extensionVue from "./cpn/extension.vue";
 </script>
 <style scoped lang="less"></style>

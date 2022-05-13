@@ -62,6 +62,7 @@ const titleClick = () => {
       transform: rotate(0);
       margin-right: 10px;
       transition: all 0.5s;
+      opacity: 0.5;
     }
     .extension {
       transform: rotate(90deg);

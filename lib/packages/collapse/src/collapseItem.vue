@@ -21,15 +21,7 @@
 
 <script lang="ts" setup>
 // 从下载的组件中导入函数
-import {
-  inject,
-  nextTick,
-  onDeactivated,
-  onMounted,
-  onUnmounted,
-  ref,
-  watch
-} from "vue";
+import { inject, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 
 // 自定义方法引入
 import { collapseMitt } from "../../../utils";
@@ -39,13 +31,13 @@ import collapseTitleVue from "./collapseTitle.vue";
 
 const props = withDefaults(
   defineProps<{
-    index: any;
-    isExtension?: boolean;
+    index?: any;
+    extension?: boolean;
     content?: string;
     title?: string;
   }>(),
   {
-    isExtension: false
+    extension: false
   }
 );
 
@@ -53,7 +45,7 @@ const emits = defineEmits(["open", "close"]);
 
 const height = ref(0);
 const contentDiv = ref<HTMLElement>();
-const extension = ref(props.isExtension);
+const extension = ref(props.extension);
 const accordion = inject("accordion", false);
 const changeExtension = (value) => {
   if (value) {
@@ -78,12 +70,9 @@ if (accordion) {
   onUnmounted(() => {
     collapseMitt.off("*");
   });
-  onDeactivated(() => {
-    collapseMitt.off("*");
-  });
 }
 watch(
-  () => props.isExtension,
+  () => props.extension,
   (newValue) => {
     if (newValue) {
       emits("open", props.index);
@@ -103,7 +92,7 @@ onMounted(() => {
 .bgCollpaseItem {
   width: 100%;
   border-bottom: 1px solid var(--border-color-collapse);
-  transition: height 1s;
+  transition: height 0.5s;
   height: 40px;
   overflow: hidden;
   &.extension {
@@ -113,7 +102,7 @@ onMounted(() => {
   .content {
     width: 100%;
     font-size: 14px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
   }
 }
 </style>

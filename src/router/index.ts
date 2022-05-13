@@ -120,6 +120,15 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "inputNumber",
+        component: () => import("../views/main/inputNumber/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

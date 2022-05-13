@@ -76,7 +76,7 @@ const barList = [
     box-sizing: border-box;
     border-bottom: 1px solid @color;
     display: flex;
-    height: 2rem;
+    height: 3rem;
     justify-content: space-around;
     align-items: center;
     .logo {
@@ -86,7 +86,7 @@ const barList = [
         width: 2rem;
         height: 2rem;
         vertical-align: middle;
-        margin-right: 0.5rem;
+        margin-right: 0.8rem;
       }
       p {
         line-height: 2rem;
@@ -102,7 +102,7 @@ const barList = [
   }
   .view {
     width: 100%;
-    height: calc(100vh - 2rem);
+    height: calc(100vh - 3rem);
   }
 }
 </style>
