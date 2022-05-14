@@ -5,9 +5,11 @@
       :class="[
         'mInput',
         'input-' + size,
-        focus && 'focus',
-        round && 'round',
-        disabled && 'disabled'
+        focus && 'm-input-focus',
+        round && 'm-input-round',
+        disabled && 'm-input-disabled',
+        useBorder && 'm-input-border',
+        center && 'm-input-center'
       ]"
       :style="{
         ['--input-radius']: radius,
@@ -82,7 +84,6 @@
 
 <script lang="ts" setup :inheritAttrs="false">
 // 从下载的组件中导入函数
-import { tr } from "date-fns/locale";
 import { defineEmits, ref, watch, withDefaults, defineProps } from "vue";
 import { LoopLoadingVue } from "../../../common/loading/index";
 import { getLightColor } from "../../../utils";
@@ -119,6 +120,8 @@ const props = withDefaults(
     maxLength?: number;
     loading?: boolean;
     color?: string;
+    useBorder?: boolean;
+    center?: boolean;
   }>(),
   {
     size: "small",
@@ -131,7 +134,9 @@ const props = withDefaults(
     prefixTextColor: "#606366",
     suffixColor: "#f1f2f3",
     suffixTextColor: "#606366",
-    disabled: false
+    disabled: false,
+    useBorder: true,
+    center: false
   }
 );
 const value = ref<InputBase>(
@@ -257,6 +262,12 @@ const upHandler = () => {
   position: relative;
   border: 1px solid var(--input-color);
   background-color: var(--input-back-color);
+  &.m-input-center {
+    input {
+      text-align: center;
+      padding: 0;
+    }
+  }
   .max-length {
     font-size: 14px;
     letter-spacing: 1px;
@@ -267,10 +278,10 @@ const upHandler = () => {
     align-items: center;
     padding-right: 5px;
   }
-  &.focus {
+  &.m-input-border.m-input-focus {
     border: 1px solid var(--border-color-input-active);
   }
-  &.round {
+  &.m-input-round {
     border-radius: 50px;
     div {
       border-radius: 50px 0 0 50px;
@@ -279,7 +290,7 @@ const upHandler = () => {
       border-radius: 0 50px 50px 0;
     }
   }
-  &.disabled {
+  &.m-input-disabled {
     cursor: not-allowed;
     background-color: rgb(250, 250, 252);
     border: 1px solid rgb(224, 224, 230);
@@ -361,21 +372,25 @@ const upHandler = () => {
   }
 }
 .input-mini {
-  min-width: 220px;
-  height: 28px;
+  height: 30px;
   line-height: 30px;
   font-size: 14px;
 }
 .input-small {
-  min-width: 280px;
-  height: 32px;
+  height: 34px;
   font-size: 14px;
-  line-height: 32px;
+  line-height: 34px;
 }
 .input-medium {
-  min-width: 380px;
   height: 38px;
   font-size: 16px;
-  line-height: 35px;
+  line-height: 38px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>

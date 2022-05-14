@@ -1,6 +1,6 @@
 <template>
   <cpn-play-vue
-    title="prefix"
+    title="prefix/Suffix"
     description="设置前缀/后缀将你要显示值通过prefix传递(前缀)suffix(后缀)，当然也可以添加具名插槽suffix或者prefix实现插槽"
     :code="fixCode"
   >
@@ -31,11 +31,7 @@
       v-model="a"
       placeholder="button加上input的火花"
       prefix
-      prefixColor="red"
-      prefixTextColor="white"
       suffix
-      suffixColor="green"
-      suffixTextColor="white"
     >
       <template #prefix>
         <m-button type="success">前缀</m-button>
@@ -59,7 +55,3 @@ import { fixCode } from "../doc";
 import { ref } from "vue";
 const a = ref("");
 </script>
-<style scoped lang="less">
-.base {
-}
-</style>

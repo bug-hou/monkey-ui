@@ -1,13 +1,18 @@
 <template>
   <cpn-play-vue
-    title="size"
-    description="只有大小不一样，当然你也可以自定义，支持mini，small，medium"
-    code="sizeCode"
+    title="max/Min"
+    description="max设置最大值，min设置最小值"
+    code="maxMinCode"
   >
     <div class="size">
-      <m-input-number class="common" v-model="a" size="mini"></m-input-number>
-      <m-input-number class="common" v-model="a" size="small"></m-input-number>
-      <m-input-number class="common" v-model="a" size="medium"></m-input-number>
+      <m-input-number class="common" v-model="a" :max="10"></m-input-number>
+      <m-input-number class="common" :min="1" v-model="b"></m-input-number>
+      <m-input-number
+        class="common"
+        v-model="c"
+        :max="10"
+        :min="1"
+      ></m-input-number>
     </div>
   </cpn-play-vue>
 </template>
@@ -22,7 +27,9 @@
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 // import { sizeCode } from "../doc";
 import { ref } from "vue";
-const a = ref(1);
+const a = ref(0);
+const b = ref(0);
+const c = ref(0);
 </script>
 <style scoped lang="less">
 .size {

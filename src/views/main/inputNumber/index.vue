@@ -7,6 +7,9 @@
     ></cpn-header-vue>
     <div class="layout">
       <size-vue></size-vue>
+      <max-min-vue></max-min-vue>
+      <position-vue></position-vue>
+      <fixed-vue></fixed-vue>
     </div>
   </div>
 </template>
@@ -20,4 +23,7 @@
 // 从下载的组件中导入函数
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import sizeVue from "./cpn/size.vue";
+import maxMinVue from "./cpn/maxMin.vue";
+import positionVue from "./cpn/position.vue";
+import fixedVue from "./cpn/fixed.vue";
 </script>

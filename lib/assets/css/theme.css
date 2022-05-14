@@ -197,11 +197,11 @@
   --shadow-color-dataPicker: rgba(0, 0, 0, 0.1);
 
   /* inputNumber中的颜色 */
-  --back-color-input-number: #0001;
+  --back-color-input-number: #f5f7fa;
   --font-color-input-number: #2a2b2a;
   --font-color-input-number-active: #409eff;
   --border-color-input-number: #e1e2e3;
-  --back-color-input-number-disabled: #0003;
+  --back-color-input-number-disabled: #0001;
   --border-color-input-number-active: #0003;
 
   /* upload中的颜色 */
