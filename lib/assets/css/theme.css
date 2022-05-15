@@ -132,9 +132,10 @@
   --font-color-input-list-active: #409eff;
 
   /* checkBox中的颜色 */
-  --border-color-check-box: rgb(200, 200, 200);
-  --font-color-check-box: rgb(50, 50, 50);
-  --border-color-check-box-active: rgb(255, 192, 203);
+  --border-color-check-box: rgb(239, 239, 245);
+  --font-color-check-box: rgb(51, 54, 57);
+  --border-color-check-box-active: #409eff;
+  --shadow-color-check-box: #409effbd;
   --font-color-check-box-disabled: #c0c4cc;
   --back-color-check-box: #409eff;
   --font-color-check-box-border: white;

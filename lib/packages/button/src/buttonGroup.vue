@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   type: "default",
   disabled: false,
   loading: false,
-  shape: "rect",
+  shape: "round",
   plain: true,
   size: "small",
   text: false

@@ -17,12 +17,16 @@
       v-bind="$attrs"
       :center="controlsPosition === 'between'"
       :disabled="disabled"
+      :max="max"
+      :min="min"
+      :step="step"
       radius="5px"
+      :inputDisabled="inputDisabled"
     >
       <template #prefix>
         <div
           v-if="controlsPosition === 'between'"
-          :class="value == min && 'disabled'"
+          :class="(value == min || disabled) && 'disabled'"
           class="input-number-common"
           @mousedown="continuousDecrement"
           @mouseup="stopDecrement"
@@ -34,7 +38,7 @@
           class="m-input-common-left"
         >
           <div
-            :class="value == max && 'disabled'"
+            :class="(value == max || disabled) && 'disabled'"
             class="m-input-left-child"
             @mousedown="continuousIncrement"
             @mouseup="stopIncrement"
@@ -43,7 +47,7 @@
           </div>
           <mDivider></mDivider>
           <div
-            :class="value == min && 'disabled'"
+            :class="(value == min || disabled) && 'disabled'"
             class="m-input-left-child"
             @mousedown="continuousDecrement"
             @mouseup="stopDecrement"
@@ -55,7 +59,7 @@
       <template #suffix>
         <div
           v-if="controlsPosition === 'between'"
-          :class="value == max && 'disabled'"
+          :class="(value == max || disabled) && 'disabled'"
           class="input-number-common"
           @mousedown="continuousIncrement"
           @mouseup="stopIncrement"
@@ -67,7 +71,7 @@
           class="m-input-common-left"
         >
           <div
-            :class="value == max && 'disabled'"
+            :class="(value == max || disabled) && 'disabled'"
             class="m-input-left-child"
             @mousedown="continuousIncrement"
             @mouseup="stopIncrement"
@@ -76,7 +80,7 @@
           </div>
           <mDivider></mDivider>
           <div
-            :class="value == min && 'disabled'"
+            :class="(value == min || disabled) && 'disabled'"
             class="m-input-left-child"
             @mousedown="continuousDecrement"
             @mouseup="stopDecrement"
@@ -109,6 +113,7 @@ const props = withDefaults(
     modelValue: number | string;
     controlsPosition?: "between" | "left" | "right";
     disabled?: boolean;
+    inputDisabled?: boolean;
   }>(),
   {
     size: "small",
@@ -117,7 +122,8 @@ const props = withDefaults(
     fixed: 0,
     step: 1,
     controlsPosition: "between",
-    disabled: false
+    disabled: false,
+    inputDisabled: false
   }
 );
 const emits = defineEmits(["update:modelValue"]);
@@ -137,19 +143,21 @@ watch(
 );
 const hover = ref(false);
 const inputHandler = (event) => {
-  const userInput = processFiexd(+event.target.value, props.fixed);
-  if (!isNaN(Number(userInput))) {
-    if (+userInput > props.max) {
-      value.value = processFiexd(props.max, props.fixed);
-    } else if (+userInput < props.min) {
-      value.value = processFiexd(props.min, props.fixed);
+  if (event.target.value !== "") {
+    const userInput = processFiexd(+event.target.value, props.fixed);
+    if (!isNaN(Number(userInput))) {
+      if (+userInput > props.max) {
+        value.value = processFiexd(props.max, props.fixed);
+      } else if (+userInput < props.min) {
+        value.value = processFiexd(props.min, props.fixed);
+      } else {
+        value.value = userInput;
+      }
     } else {
-      value.value = userInput;
+      value.value = undefined;
     }
-  } else {
-    value.value = undefined;
+    emits("update:modelValue", value.value);
   }
-  emits("update:modelValue", value.value);
 };
 const decrement = () => {
   value.value =
@@ -175,24 +183,30 @@ function continuousDecrement() {
   processContinuous(decrement);
 }
 function stopIncrement() {
-  increment();
-  mouseUp = true;
+  if (!props.disabled) {
+    increment();
+    mouseUp = true;
+  }
 }
 function stopDecrement() {
-  decrement();
-  mouseUp = true;
+  if (!props.disabled) {
+    decrement();
+    mouseUp = true;
+  }
 }
 function processContinuous(execFn: Function) {
-  mouseUp = false;
-  setTimeout(() => {
-    let timer = setInterval(() => {
-      if (!mouseUp) {
-        execFn();
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
-  }, 300);
+  if (!props.disabled) {
+    mouseUp = false;
+    setTimeout(() => {
+      let timer = setInterval(() => {
+        if (!mouseUp) {
+          execFn();
+        } else {
+          clearInterval(timer);
+        }
+      }, 100);
+    }, 300);
+  }
 }
 
 function processFiexd(num: any, fixed: number) {

@@ -10,6 +10,9 @@
       <max-min-vue></max-min-vue>
       <position-vue></position-vue>
       <fixed-vue></fixed-vue>
+      <disabled-vue></disabled-vue>
+      <step-vue></step-vue>
+      <input-disabled-vue></input-disabled-vue>
     </div>
   </div>
 </template>
@@ -26,4 +29,7 @@ import sizeVue from "./cpn/size.vue";
 import maxMinVue from "./cpn/maxMin.vue";
 import positionVue from "./cpn/position.vue";
 import fixedVue from "./cpn/fixed.vue";
+import disabledVue from "./cpn/disabled.vue";
+import stepVue from "./cpn/step.vue";
+import inputDisabledVue from "./cpn/inputDisabled.vue";
 </script>

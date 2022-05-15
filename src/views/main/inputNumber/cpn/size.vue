@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="size"
     description="只有大小不一样，当然你也可以自定义，支持mini，small，medium"
-    code="sizeCode"
+    :code="sizeCode"
   >
     <div class="size">
       <m-input-number class="common" v-model="a" size="mini"></m-input-number>
@@ -20,12 +20,13 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { sizeCode } from "../doc";
 import { ref } from "vue";
 const a = ref(1);
 </script>
 <style scoped lang="less">
 .size {
+  display: flex;
   .common {
     margin-right: 20px;
   }

@@ -39,7 +39,7 @@
         @focus="focusHandler"
         :maxlength="maxLength"
         ref="input"
-        :disabled="disabled"
+        :disabled="disabled || inputDisabled"
       />
       <slot name="icon">
         <p v-if="(clear || password) && value" @click="clickIcon" class="clear">
@@ -122,6 +122,7 @@ const props = withDefaults(
     color?: string;
     useBorder?: boolean;
     center?: boolean;
+    inputDisabled?: boolean;
   }>(),
   {
     size: "small",
@@ -136,7 +137,8 @@ const props = withDefaults(
     suffixTextColor: "#606366",
     disabled: false,
     useBorder: true,
-    center: false
+    center: false,
+    inputDisabled: false
   }
 );
 const value = ref<InputBase>(
