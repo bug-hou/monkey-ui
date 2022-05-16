@@ -37,7 +37,8 @@ const base = [
   { name: "分隔线divider", path: "/divider" },
   { name: "折叠面板collapse", path: "/collapse" },
   { name: "数字输入inputNumber", path: "/inputNumber" },
-  { name: "多选checkBox", path: "/checkBox" }
+  { name: "多选checkBox", path: "/checkBox" },
+  { name: "多选radio", path: "/radio" }
 ];
 </script>
 <style scoped lang="less">

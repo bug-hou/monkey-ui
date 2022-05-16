@@ -3,25 +3,20 @@
   <label
     :class="[
       bgSize,
-      bgDisabled && 'disabled',
+      (disabled || (!isChecked && !isSelect)) && 'disabled',
       isButton && 'labelBorder',
-      hasBorder && 'hasBorder'
+      hasBorder && 'hasBorder',
+      'm-check-box'
     ]"
-    :style="[
-      { cursor: bgDisabled && 'not-allowed' }
-      // !bgDisabled && {
-      //   color: check === value || check.includes(value) ? bgSelectColor : ''
-      // }
-    ]"
+    :style="[{ cursor: disabled && 'not-allowed' }]"
   >
     <input
       v-model="check"
       :type="isRadio ? 'radio' : 'checkbox'"
       :name="name"
-      :disabled="disabled || isSelect"
+      :disabled="disabled || (!isChecked && !isSelect)"
       :class="isButton && 'noMarge'"
       :value="value"
-      checked
     />
     <p v-if="!isButton" :class="isRadio && 'radio'"></p>
     <div v-if="isButton" class="border"></div>
@@ -33,19 +28,20 @@
 
 <script setup lang="ts">
 // 从下载的组件中导入函数
-import { watch, withDefaults, defineProps, defineEmits, onMounted } from "vue";
+import { radioConfig } from "../config";
+import { watch, withDefaults, defineProps, defineEmits, ref } from "vue";
 import { useInject } from "../../../hooks";
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string;
+    modelValue?: any;
     disabled?: boolean;
     name?: string;
     value: any;
     isRadio?: boolean;
     size?: string;
-    button?: boolean;
     border?: boolean;
+    button?: boolean;
   }>(),
   {
     button: undefined,
@@ -56,18 +52,33 @@ const props = withDefaults(
 );
 
 const emits = defineEmits(["update:modelValue"]);
-
-const check = useInject(props.modelValue, "modelValue");
+const check = useInject(props.modelValue, radioConfig.modelValue);
 const hasBorder = useInject(props.border, "border", false);
-const isButton = useInject(props.button, "button", false);
-const bgSize = useInject(props.size, "size", "small");
-const bgDisabled = useInject(props.disabled, "disabled", false);
+const isButton = useInject(props.button, radioConfig.button, false);
+const bgSize = useInject(props.size, radioConfig.size, "small");
+const disabled = useInject(props.disabled, radioConfig.disabled, false);
 
-const isSelect = useInject(undefined, "isSelect");
+const isSelect = useInject(undefined, radioConfig.select);
 
-watch(check, (newValue) => {
-  emits("update:modelValue", newValue);
-});
+let isChecked = props.isRadio
+  ? ref(true)
+  : ref(check.value.includes(props.value));
+watch(
+  () => check,
+  (newValue) => {
+    if (props.isRadio) {
+      console.log("fdjslkf");
+      emits("update:modelValue", newValue);
+    } else {
+      if (newValue.includes(props.value)) {
+        isChecked.value = true;
+        emits("update:modelValue", newValue);
+      } else {
+        isChecked.value = false;
+      }
+    }
+  }
+);
 </script>
 <style scoped lang="less">
 label {
@@ -89,6 +100,7 @@ label {
   }
   &.disabled {
     opacity: 0.5;
+    cursor: not-allowed;
   }
   .border {
     transition: all 0.3s;
@@ -125,7 +137,7 @@ input + p {
   border: 2px solid var(--border-color-check-box);
   width: 16px;
   height: 16px;
-  border-radius: 5px;
+  border-radius: 50%;
   padding: 1px;
   text-align: center;
   &.radio {
@@ -147,6 +159,7 @@ input:checked + p {
     height: 8px;
     background-color: var(--back-color-check-box);
     transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 3px 1px var(--shadow-color-check-box);
   }
   &.radio::after {
     border-radius: 50%;
@@ -159,7 +172,7 @@ input:checked + div {
   visibility: hidden;
 }
 .mini {
-  font-size: 16px;
+  font-size: 14px;
   input {
     margin-left: 5px;
   }
@@ -168,7 +181,7 @@ input:checked + div {
   }
 }
 .small {
-  font-size: 18px;
+  font-size: 16px;
   input {
     margin-left: 8px;
   }
@@ -177,7 +190,7 @@ input:checked + div {
   }
 }
 .medium {
-  font-size: 20px;
+  font-size: 18px;
   input {
     margin-left: 10px;
   }

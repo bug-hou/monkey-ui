@@ -18,7 +18,8 @@ import { mCollapse, mCollapseItem } from "./packages/collapse";
 
 import { mInputNumber } from "./packages/inputNumber";
 
-// import { mRadio, mRadioGroup } from "./packages/radio"
+import { mRadio, mRadioGroup } from "./packages/radio";
+
 import { mCheckBox, mCheckBoxGroup } from "./packages/checkbox"
 
 export {
@@ -37,7 +38,7 @@ export {
   mCollapseItem,
   mInputNumber,
   mCheckBox,
-  mCheckBoxGroup
-  // mRadio,
-  // mRadioGroup
+  mCheckBoxGroup,
+  mRadio,
+  mRadioGroup
 }
