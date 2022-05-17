@@ -20,7 +20,9 @@ import { mInputNumber } from "./packages/inputNumber";
 
 import { mRadio, mRadioGroup } from "./packages/radio";
 
-import { mCheckBox, mCheckBoxGroup } from "./packages/checkbox"
+import { mCheckBox, mCheckBoxGroup } from "./packages/checkbox";
+
+import { mSelect } from "./packages/select"
 
 export {
   mButton,
@@ -40,5 +42,6 @@ export {
   mCheckBox,
   mCheckBoxGroup,
   mRadio,
-  mRadioGroup
+  mRadioGroup,
+  mSelect
 }

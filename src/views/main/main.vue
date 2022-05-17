@@ -38,7 +38,8 @@ const base = [
   { name: "折叠面板collapse", path: "/collapse" },
   { name: "数字输入inputNumber", path: "/inputNumber" },
   { name: "多选checkBox", path: "/checkBox" },
-  { name: "多选radio", path: "/radio" }
+  { name: "多选radio", path: "/radio" },
+  { name: "选择Select", path: "/select" }
 ];
 </script>
 <style scoped lang="less">

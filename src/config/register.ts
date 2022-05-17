@@ -3,10 +3,10 @@ import {
   mButton, mButtonGroup, mIcon, mIconGroup,
   mInput, mAvatar, mGradient, mBackTop, mCard, mDivider,
   mCollapse, mCollapseItem, mInputNumber, mCheckBox, mCheckBoxGroup,
-  mRadio, mRadioGroup
+  mRadio, mRadioGroup, mSelect
 } from "../../lib";
 
-const cpns = [mAvatar, mButton, mButtonGroup, mIcon, mIconGroup, mInput, mAvatar, mGradient, mBackTop, mCard, mDivider, mCollapse, mCollapseItem, mInputNumber, mCheckBox, mCheckBoxGroup, mRadio, mRadioGroup]
+const cpns = [mAvatar, mButton, mButtonGroup, mIcon, mIconGroup, mInput, mAvatar, mGradient, mBackTop, mCard, mDivider, mCollapse, mCollapseItem, mInputNumber, mCheckBox, mCheckBoxGroup, mRadio, mRadioGroup, mSelect]
 
 export function register(app: App) {
   cpns.forEach(item => {

@@ -7,3 +7,5 @@ export * from "./scroll";
 export * from "./processStyle";
 
 export * from "./eventBus";
+
+export * from "./computePosition"
