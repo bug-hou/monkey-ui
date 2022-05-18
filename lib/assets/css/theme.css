@@ -97,13 +97,13 @@
 
   /* select中的颜色 */
   --border-color-select: #e5e7eb;
-  --font-color-select: #606266;
+  --font-color-select: rgb(50, 50, 50);
   --back-color-select: #f6f9fa;
   --font-color-select-active: #409eff;
   --border-color-select-active: #409eff;
-  --font-color-select-multiple: #909399;
-  --border-color-select-multiple: #909399;
-  --back-color-select-multiple: #f0f2f5;
+  --font-color-select-multiple: rgb(50, 50, 50);
+  --border-color-select-multiple: #f1f3f6;
+  --back-color-select-multiple: #fafcfe;
 
   /* switch中的颜色 */
   --back-color-switch: #dcdfe6;

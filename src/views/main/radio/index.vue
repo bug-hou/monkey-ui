@@ -1,9 +1,9 @@
 <template>
   <div class="card">
     <cpn-header-vue
-      title="divider"
-      name="分隔线"
-      description="将两个内容分隔开来，为什么就不能在一起了"
+      title="radio"
+      name="单选器"
+      description="单选器只能选择一个，只能和mRadioGroup组件一起使用，使用v-model对值进行监听"
     >
     </cpn-header-vue>
     <div class="layout">
