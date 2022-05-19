@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="multiple"
     description="multiple为true我可以多选"
-    code="multipleCode"
+    :code="multipleCode"
   >
     <m-card>
       当前你的选择:{{
@@ -28,9 +28,8 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { multipleCode } from "../doc";
 import { ref } from "vue";
 const options = ["腾讯", "字节", "斗鱼", "北盛", "京东", "阿里", "B站"];
 const selectValue = ref<string[]>([]);
 </script>
-

@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="disabled"
     description="disabled为true选择器禁止，当options属性中包含disabled为true属性值也可以禁止"
-    code="multipleCode"
+    :code="disabledCode"
   >
     <m-card>
       当前你的选择:{{
@@ -37,7 +37,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { disabledCode } from "../doc";
 import { ref } from "vue";
 const options = [
   {

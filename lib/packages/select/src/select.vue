@@ -16,7 +16,7 @@
             <span>{{ item.value ?? item }}</span>
             <span
               class="m-select-list-delete"
-              @click="deleteClickHandle(index)"
+              @click.stop="deleteClickHandle(index)"
             >
               <m-icon name="m-cha"></m-icon>
             </span>
@@ -35,14 +35,22 @@
           name="m-delete"
           @click="deleteClickHandle(null)"
         ></m-icon>
-        <m-icon v-else name="m-right"></m-icon>
+        <m-icon
+          v-else
+          name="m-right"
+          @click.stop="changeShowStatusHandle"
+        ></m-icon>
       </p>
     </div>
     <main
-      :class="['m-select-scrollContain', isShowList && 'm-select-show-list']"
+      :class="[
+        'm-select-scrollContain',
+        isShowList && 'm-select-show-list',
+        'm-select-show-' + position
+      ]"
       ref="listRef"
     >
-      <ul :class="['m-select-list', position]">
+      <ul class="m-select-list">
         <li
           v-for="(item, index) in options"
           :key="item.value ?? item"
@@ -57,6 +65,18 @@
             {{ item.label ?? item }}
           </slot>
         </li>
+        <m-divider v-if="more"></m-divider>
+        <li
+          :class="[
+            'm-select-list-more',
+            !loading && 'm-select-list-more-after'
+          ]"
+          v-if="more"
+          @click.stop="showLoadingHandle"
+        >
+          <slot name="more" v-if="!loading"> 显示更多 </slot>
+          <long-vue v-else color="#0005"></long-vue>
+        </li>
       </ul>
     </main>
   </div>
@@ -64,9 +84,19 @@
 
 <script lang="ts" setup>
 // 从下载的组件中导入函数
-import { reactive, ref, withDefaults, defineProps, onMounted } from "vue";
+import {
+  reactive,
+  ref,
+  withDefaults,
+  defineProps,
+  onMounted,
+  watch,
+  nextTick
+} from "vue";
 import { computedPosition } from "../../../utils";
 import { useScroll } from "../../../hooks";
+import mDivider from "../../divider/src/divider.vue";
+import longVue from "../../../common/loading/long.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -78,15 +108,17 @@ const props = withDefaults(
     placeholder?: string;
     autoPosition?: boolean;
     delete?: boolean;
+    more?: boolean;
   }>(),
   {
     size: "small",
     multiple: false,
-    delete: false
+    delete: false,
+    more: false
   }
 );
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "loading"]);
 
 // 自定义方法引
 // 自定义组件引入
@@ -96,6 +128,7 @@ let selectItem = reactive([]);
 const position = ref<"bottom" | "top">("bottom");
 const listRef = ref<HTMLElement>(null);
 let bscroll = null;
+const loading = ref(false);
 
 function clickHandler(item) {
   const value = item.label ?? item;
@@ -116,14 +149,35 @@ function clickHandler(item) {
   emits("update:modelValue", selectItem);
 }
 
+watch(
+  () => props.options,
+  () => {
+    nextTick(() => {
+      bscroll.refresh();
+      loading.value = false;
+    });
+  },
+  {
+    deep: true
+  }
+);
+
+function changeShowStatusHandle() {
+  if (props.disabled) {
+    return;
+  }
+  isShowList.value = !isShowList.value;
+}
+
 const showListClickHandle = (event) => {
-  if (!props.disabled) {
-    if (event.target.nodeName === "DIV") {
-      isShowList.value = true;
-    }
+  if (!props.disabled && !isShowList.value) {
+    // if (event.target.nodeName === "DIV") {
+    position.value = computedPosition(listRef.value);
+    isShowList.value = true;
+    // }
     setTimeout(() => {
       bscroll.refresh();
-    }, 300);
+    }, 500);
     addEventListener("click", windowHandle);
     function windowHandle(event) {
       if (!event.target.dataset.name) {
@@ -143,6 +197,11 @@ const deleteClickHandle = (index?: number) => {
     selectItem.pop();
   }
 };
+
+function showLoadingHandle() {
+  loading.value = true;
+  emits("loading");
+}
 
 window.onresize = () => {
   position.value = computedPosition(listRef.value);
@@ -246,14 +305,39 @@ onMounted(() => {
     max-height: 0;
     border-radius: 5px;
     position: absolute;
+    &.m-select-show-top {
+      bottom: 100%;
+      top: auto;
+      margin-bottom: 10px;
+    }
     // box-shadow: 0px 0 10px 5px #0003;
     &.m-select-show-list {
-      max-height: 500px;
+      max-height: 300px;
       border: 1px solid var(--border-color-select);
     }
     .m-select-list {
       padding: 10px 0;
       width: 100%;
+      .m-select-list-more {
+        justify-content: center;
+        cursor: pointer;
+        &:hover {
+          background: inherit;
+          color: var(--font-color-select-active);
+          &.m-select-list-more-after::after {
+            border-top-color: var(--font-color-select-active);
+          }
+        }
+        &.m-select-list-more-after::after {
+          transition: all 0.3s;
+          margin-left: 10px;
+          content: "";
+          display: inline-block;
+          border: 8px solid transparent;
+          border-top-color: #0009;
+          transform: translateY(25%);
+        }
+      }
       .m-select-list-active {
         background: var(--back-color-select);
         color: var(--font-color-select-active);

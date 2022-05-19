@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="max"
     description="max设置最多可以选择的个数，默认为无穷"
-    :code="sizeCode"
+    :code="maxCode"
     class="max"
   >
     <m-check-box-group name="mini" v-model="checks1" button :max="3">
@@ -34,7 +34,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
+import { maxCode } from "../doc";
 import { ref } from "vue";
 const checks1 = ref([]);
 const checks2 = ref([]);

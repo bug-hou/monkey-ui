@@ -5,13 +5,13 @@ export function useScroll(el: HTMLElement, options?: Options) {
     click: true,
     bounce: true,
     probeType: 3,
-    mouseWheel: {
-      speed: 20,
-      invert: false,
-      easeTime: 300
-    },
+    mouseWheel: true,
     scrollY: true,
-    scrollbar: true
+    scrollbar: {
+      fade: false,
+      interactive: true,
+      scrollbarTrackClickable: true
+    },
   }, options)
   return new BScroll(el, defaultOptions)
 }

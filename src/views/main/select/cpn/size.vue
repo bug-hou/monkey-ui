@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="size"
     description="只有大小不一样，size支持mini，small，medium"
-    code="sizeCode"
+    :code="sizeCode"
   >
     <m-select
       :options="options"
@@ -35,7 +35,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { sizeCode } from "../doc";
 import { ref } from "vue";
 const options = ["腾讯", "字节", "斗鱼", "北盛", "京东", "阿里", "B站"];
 const selectValue1 = ref<string[]>([]);

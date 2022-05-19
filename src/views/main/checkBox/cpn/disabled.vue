@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="disabled"
     description="disabled为true将某些选择框禁用,可以给group组件设置，或者单独设置"
-    :code="sizeCode"
+    :code="disabledCode"
   >
     <m-check-box-group name="mini" v-model="checks1">
       <m-check-box value="m1">腾讯</m-check-box>
@@ -35,7 +35,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
+import { disabledCode } from "../doc";
 import { ref } from "vue";
 const checks1 = ref(["m1", "m4"]);
 const checks2 = ref(["lol", "dnf"]);

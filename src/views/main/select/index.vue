@@ -10,6 +10,7 @@
       <size-vue></size-vue>
       <multiple-vue></multiple-vue>
       <disabled-vue></disabled-vue>
+      <more-vue></more-vue>
     </div>
   </div>
 </template>
@@ -27,5 +28,6 @@ import sizeVue from "./cpn/size.vue";
 import multipleVue from "./cpn/multiple.vue";
 import disabledVue from "./cpn/disabled.vue";
 // import buttonVue from "./cpn/button.vue";
+import moreVue from "./cpn/more.vue";
 </script>
 <style scoped lang="less"></style>

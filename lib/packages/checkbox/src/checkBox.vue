@@ -60,14 +60,12 @@ const disabled = useInject(props.disabled, radioConfig.disabled, false);
 
 const isSelect = useInject(undefined, radioConfig.select);
 
-let isChecked = props.isRadio
-  ? ref(true)
-  : ref(check.value.includes(props.value));
+let isChecked = ref(props.isRadio ? true : check.value.includes(props.value));
+
 watch(
-  () => check,
+  check,
   (newValue) => {
     if (props.isRadio) {
-      console.log("fdjslkf");
       emits("update:modelValue", newValue);
     } else {
       if (newValue.includes(props.value)) {
@@ -77,6 +75,9 @@ watch(
         isChecked.value = false;
       }
     }
+  },
+  {
+    deep: true
   }
 );
 </script>
