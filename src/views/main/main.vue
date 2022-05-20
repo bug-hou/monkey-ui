@@ -39,7 +39,8 @@ const base = [
   { name: "数字输入inputNumber", path: "/inputNumber" },
   { name: "多选checkBox", path: "/checkBox" },
   { name: "多选radio", path: "/radio" },
-  { name: "选择Select", path: "/select" }
+  { name: "选择Select", path: "/select" },
+  { name: "开关Switch", path: "/switch" },
 ];
 </script>
 <style scoped lang="less">

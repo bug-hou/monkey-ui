@@ -22,7 +22,9 @@ import { mRadio, mRadioGroup } from "./packages/radio";
 
 import { mCheckBox, mCheckBoxGroup } from "./packages/checkbox";
 
-import { mSelect } from "./packages/select"
+import { mSelect } from "./packages/select";
+
+import { mSwitch } from "./packages/switch";
 
 export {
   mButton,
@@ -43,5 +45,6 @@ export {
   mCheckBoxGroup,
   mRadio,
   mRadioGroup,
-  mSelect
+  mSelect,
+  mSwitch
 }

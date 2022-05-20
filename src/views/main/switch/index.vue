@@ -1,6 +1,10 @@
 <template>
   <div class="card">
-    <cpn-header-vue title="switch" name="开关" description="点击关闭">
+    <cpn-header-vue
+      title="select"
+      name="选择器"
+      description="select选择器在多个选项中选择多个或者一个，"
+    >
     </cpn-header-vue>
     <div class="layout">
       <m-switch></m-switch>
