@@ -1,16 +1,43 @@
 <!-- bgSwitch -->
 <template>
   <div
-    :class="['m-switch', size]"
-    :style="[{ background: isCheck ? checkColor : unCheckColor }, { color }]"
+    :class="[
+      'm-switch',
+      'm-switch-' + size,
+      isChangeCheck && 'm-switch-slider-big'
+    ]"
+    :style="[
+      { background: isCheck ? checkColor : unCheckColor },
+      { color },
+      { ['--m-switch-max-width']: maxWidth + 'px' },
+      { ['--m-switch-shadow-color']: isCheck ? checkColor : unCheckColor },
+      { ['--m-switch-box-radius']: boxRadius + 'px' }
+    ]"
   >
-    <div class="m-switch-button" :class="isCheck && 'm-switch-check'">
-      <p v-if="isCheck">
-        <slot name="checked"> bughou </slot>
+    <div
+      class="m-switch-button"
+      :class="isCheck && 'm-switch-check'"
+      @mousedown="mouseDownHandle"
+      @mouseup="mouseUpHandle"
+      @mouseleave="mouseLeaveHandle"
+    >
+      <p ref="checkRef">
+        <slot name="checked"> {{ checkValue }} </slot>
       </p>
-      <div class="m-switch-slider" @click="changeDirection"></div>
-      <p v-if="!isCheck">
-        <slot name="unChecked"> monkeysUI </slot>
+      <div class="m-switch-slider">
+        <div v-show="isCheck && checkIconName">
+          <slot name="checkIcon">
+            <m-icon :name="checkIconName"></m-icon>
+          </slot>
+        </div>
+        <div v-show="!isCheck && unCheckIconName">
+          <slot name="unCheckIcon">
+            <m-icon :name="unCheckIconName"></m-icon>
+          </slot>
+        </div>
+      </div>
+      <p ref="unCheckRef">
+        <slot name="unChecked"> {{ unCheckValue }} </slot>
       </p>
     </div>
   </div>
@@ -18,108 +45,160 @@
 
 <script setup lang="ts">
 // 从下载的组件中导入函数
-import { ref, withDefaults, defineProps } from "vue";
-
-// 自定义方法引入
+import { ref, withDefaults, defineProps, onMounted, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    ltValue: string;
-    rtValue: string;
-    ltIcon?: string;
-    rtIcon?: string;
+    checkValue?: string;
+    unCheckValue?: string;
+    checkIconName?: string;
+    unCheckIconName?: string;
     size?: string;
-    initial?: boolean;
+    modelValue: boolean;
     checkColor?: string;
     unCheckColor?: string;
-    color: string;
-    sliderColor: string;
-    position: "out" | "in";
+    color?: string;
+    sliderColor?: string;
+    radius?: number;
   }>(),
   {
     size: "small",
-    checkColor: "#409eff",
-    unCheckColor: "#dcdfe6",
+    checkColor: "#18a058",
+    unCheckColor: "#dbdbdb",
     color: "white",
-    initial: false,
-    ltValue: "fjldskfjlskd",
-    rtValue: "fjdsklfjsdklj",
-    position: "in"
+    radius: 10
   }
 );
-const emits = defineEmits(["check", "unCheck"]);
+const emits = defineEmits(["check", "unCheck", "update:modelValue"]);
 
-const left = ref("left");
-const right = ref("right");
-const isCheck = ref(props.initial);
-const changeDirection = () => {
-  isCheck.value = !isCheck.value;
-  if (isCheck.value) {
-    emits("check");
-  } else {
-    emits("unCheck");
-  }
+const mapSize = {
+  mini: 15,
+  small: 20,
+  medium: 30
 };
+
+const checkRef = ref<HTMLElement>();
+const unCheckRef = ref<HTMLElement>();
+
+const currentSize = mapSize[props.size];
+const boxRadius = Math.ceil((currentSize * props.radius) / 10);
+const maxWidth = ref(currentSize * 2);
+const isCheck = ref(props.modelValue);
+const isChangeCheck = ref(false);
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    isCheck.value = newValue;
+  }
+);
+
+function mouseDownHandle() {
+  isChangeCheck.value = true;
+}
+
+function mouseUpHandle() {
+  if (isChangeCheck.value) {
+    isCheck.value = !isCheck.value;
+    isChangeCheck.value = false;
+    emits("update:modelValue", isCheck.value);
+    if (isCheck.value) {
+      emits("check");
+    } else {
+      emits("unCheck");
+    }
+  }
+}
+
+function mouseLeaveHandle() {
+  isChangeCheck.value = false;
+}
+
+onMounted(() => {
+  const leftWidth = checkRef.value.clientWidth;
+  const rightWidth = unCheckRef.value.clientWidth;
+  maxWidth.value = Math.max(maxWidth.value, Math.max(leftWidth, rightWidth));
+  if (maxWidth.value === leftWidth) {
+    unCheckRef.value.style.width = maxWidth.value + "px";
+  } else if (maxWidth.value === rightWidth) {
+    checkRef.value.style.width = maxWidth.value + "px";
+  } else {
+    checkRef.value.style.width = maxWidth.value + "px";
+    unCheckRef.value.style.width = maxWidth.value + "px";
+  }
+});
 </script>
 <style scoped lang="less">
 .m-switch {
   background: var(--back-color-switch);
+  transition: box-shadow 0.5s;
   box-sizing: content-box;
-  color: var(--font-color-switch);
-  transition: all 0.5;
-  display: inline-block;
+  overflow: hidden;
+  display: inline-flex;
+  position: relative;
+  padding: 3px;
+  border-radius: var(--m-switch-box-radius);
+  &.m-switch-slider-big {
+    box-shadow: 0px 0px 5px 2px var(--m-switch-shadow-color);
+  }
   .m-switch-button {
-    &.m-switch-check {
-      left: 100%;
-    }
+    cursor: pointer;
+    position: absolute;
+    right: 3px;
+    transition: all 1s;
     display: flex;
-    transition: all 0.5s;
-    position: relative;
-    left: 2px;
-    top: 50%;
-    transform: translateY(-50%);
+    &.m-switch-check {
+      right: calc(-1 * var(--m-switch-max-width));
+    }
+    .m-switch-slider {
+      background-color: #fff;
+      margin: 0 5px;
+      transition: all 0.5s;
+      color: rgb(118, 124, 130);
+      text-align: center;
+    }
+    p {
+      height: 20px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
   }
 }
-.mini {
-  height: 18px;
-  border-radius: 18px;
+.m-switch-mini {
+  min-width: 45px;
+  height: 15px;
+  width: calc(var(--m-switch-max-width) + 22px);
+  font-size: 12px;
   .m-switch-slider {
     width: 15px;
     height: 15px;
-    font-size: 12px;
     line-height: 15px;
-    &.right {
-      left: calc(100% - 17px);
-    }
+    border-radius: 15px;
   }
 }
 
-.small {
-  height: 24px;
-  border-radius: 24px;
+.m-switch-small {
+  min-width: 60px;
+  height: 20px;
+  width: calc(var(--m-switch-max-width) + 27px);
+  font-size: 14px;
   .m-switch-slider {
     width: 20px;
     height: 20px;
-    font-size: 14px;
     line-height: 20px;
-    background-color: #0ff;
-    border-radius: 50%;
-    &.right {
-      left: calc(100% - 22px);
-    }
+    border-radius: 20px;
   }
 }
-.medium {
-  height: 34px;
-  border-radius: 34px;
+.m-switch-medium {
+  min-width: 90px;
+  height: 30px;
+  width: calc(var(--m-switch-max-width) + 37px);
+  font-size: 18px;
   .m-switch-slider {
     width: 30px;
     height: 30px;
-    font-size: 18px;
     line-height: 30px;
-    &.right {
-      left: calc(100% - 32px);
-    }
+    border-radius: 30px;
   }
 }
 </style>

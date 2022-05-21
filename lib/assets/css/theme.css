@@ -107,7 +107,7 @@
 
   /* switch中的颜色 */
   --back-color-switch: #dcdfe6;
-  --font-color-switch: #409eff;
+  --font-color-switch: #fff;
   --back-color-switch-active: white;
 
   /* slider中的颜色 */

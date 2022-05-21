@@ -7,7 +7,9 @@
     >
     </cpn-header-vue>
     <div class="layout">
-      <m-switch></m-switch>
+      <size-vue></size-vue>
+      <content-vue></content-vue>
+      <icon-vue></icon-vue>
     </div>
   </div>
 </template>
@@ -19,9 +21,10 @@
  * @Description: 创建一个card组件
  */
 // 从下载的组件中导入函数
-import { ref, watch } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
-// import sizeVue from "./cpn/size.vue";
+import sizeVue from "./cpn/size.vue";
+import contentVue from "./cpn/content.vue";
+import iconVue from "./cpn/icon.vue";
 // import multipleVue from "./cpn/multiple.vue";
 // import disabledVue from "./cpn/disabled.vue";
 // import buttonVue from "./cpn/button.vue";

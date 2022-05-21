@@ -21,7 +21,9 @@ const props = withDefaults(
     name: string;
     color?: string;
   }>(),
-  {}
+  {
+    color: "inherit"
+  }
 );
 </script>
 <style scoped lang="less">
