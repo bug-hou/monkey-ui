@@ -26,6 +26,8 @@ import { mSelect } from "./packages/select";
 
 import { mSwitch } from "./packages/switch";
 
+import { mPagination } from "./packages/pagination"
+
 export {
   mButton,
   mButtonGroup,
@@ -46,5 +48,6 @@ export {
   mRadio,
   mRadioGroup,
   mSelect,
-  mSwitch
+  mSwitch,
+  mPagination
 }

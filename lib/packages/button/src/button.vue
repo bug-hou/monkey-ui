@@ -65,7 +65,6 @@ import {
 } from "../../../common/loading";
 
 import ButtonNames from "../config";
-import IconNames from "../../icon/config";
 
 import type {
   Size as ButtonSize,

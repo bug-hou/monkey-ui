@@ -255,10 +255,11 @@ const upHandler = () => {
 .labelBox {
   color: var(--font-color-input);
   position: relative;
+  height: 30px;
 }
 .mInput {
   overflow: hidden;
-  height: 30px;
+  height: 100%;
   display: flex;
   border-radius: var(--input-radius);
   position: relative;
@@ -321,6 +322,9 @@ const upHandler = () => {
     box-sizing: border-box;
     border-radius: var(--input-radius) 0 0 var(--input-radius);
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .slot {
       padding: 0 5px;
     }
@@ -374,19 +378,19 @@ const upHandler = () => {
   }
 }
 .input-mini {
-  height: 30px;
-  line-height: 30px;
+  // height: 30px;
+  // line-height: 30px;
   font-size: 14px;
 }
 .input-small {
-  height: 34px;
+  // height: 34px;
+  // line-height: 34px;
   font-size: 14px;
-  line-height: 34px;
 }
 .input-medium {
-  height: 38px;
+  // height: 38px;
+  // line-height: 38px;
   font-size: 16px;
-  line-height: 38px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

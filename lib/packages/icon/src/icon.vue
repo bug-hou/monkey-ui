@@ -30,7 +30,6 @@ const props = withDefaults(
 .m-icon {
   display: inline-block;
   color: var(--icon-color);
-  cursor: pointer;
   text-align: center;
   font-size: inherit;
 }

@@ -4,14 +4,16 @@
     :class="[
       'm-switch',
       'm-switch-' + size,
-      isChangeCheck && 'm-switch-slider-big'
+      isChangeCheck && 'm-switch-slider-big',
+      disabled && 'm-switch-disabled'
     ]"
     :style="[
       { background: isCheck ? checkColor : unCheckColor },
       { color },
       { ['--m-switch-max-width']: maxWidth + 'px' },
       { ['--m-switch-shadow-color']: isCheck ? checkColor : unCheckColor },
-      { ['--m-switch-box-radius']: boxRadius + 'px' }
+      { ['--m-switch-box-radius']: boxRadius + 'px' },
+      { ['--m-switch-slider-back']: sliderColor }
     ]"
   >
     <div
@@ -25,12 +27,12 @@
         <slot name="checked"> {{ checkValue }} </slot>
       </p>
       <div class="m-switch-slider">
-        <div v-show="isCheck && checkIconName">
+        <div v-if="isCheck && checkIconName">
           <slot name="checkIcon">
             <m-icon :name="checkIconName"></m-icon>
           </slot>
         </div>
-        <div v-show="!isCheck && unCheckIconName">
+        <div v-if="!isCheck && unCheckIconName">
           <slot name="unCheckIcon">
             <m-icon :name="unCheckIconName"></m-icon>
           </slot>
@@ -60,13 +62,16 @@ const props = withDefaults(
     color?: string;
     sliderColor?: string;
     radius?: number;
+    disabled?: boolean;
   }>(),
   {
     size: "small",
     checkColor: "#18a058",
     unCheckColor: "#dbdbdb",
-    color: "white",
-    radius: 10
+    color: "#fff",
+    radius: 10,
+    disabled: false,
+    sliderColor: "#fff"
   }
 );
 const emits = defineEmits(["check", "unCheck", "update:modelValue"]);
@@ -94,24 +99,36 @@ watch(
 );
 
 function mouseDownHandle() {
-  isChangeCheck.value = true;
+  processDisabled(() => {
+    isChangeCheck.value = true;
+  });
 }
 
 function mouseUpHandle() {
-  if (isChangeCheck.value) {
-    isCheck.value = !isCheck.value;
-    isChangeCheck.value = false;
-    emits("update:modelValue", isCheck.value);
-    if (isCheck.value) {
-      emits("check");
-    } else {
-      emits("unCheck");
+  processDisabled(() => {
+    if (isChangeCheck.value) {
+      isCheck.value = !isCheck.value;
+      isChangeCheck.value = false;
+      emits("update:modelValue", isCheck.value);
+      if (isCheck.value) {
+        emits("check");
+      } else {
+        emits("unCheck");
+      }
     }
-  }
+  });
 }
 
 function mouseLeaveHandle() {
-  isChangeCheck.value = false;
+  processDisabled(() => {
+    isChangeCheck.value = false;
+  });
+}
+
+function processDisabled(fn: Function) {
+  if (!props.disabled) {
+    fn();
+  }
 }
 
 onMounted(() => {
@@ -138,6 +155,12 @@ onMounted(() => {
   position: relative;
   padding: 3px;
   border-radius: var(--m-switch-box-radius);
+  &.m-switch-disabled {
+    .m-switch-button {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
   &.m-switch-slider-big {
     box-shadow: 0px 0px 5px 2px var(--m-switch-shadow-color);
   }
@@ -151,15 +174,13 @@ onMounted(() => {
       right: calc(-1 * var(--m-switch-max-width));
     }
     .m-switch-slider {
-      background-color: #fff;
+      background-color: var(--m-switch-slider-back);
       margin: 0 5px;
       transition: all 0.5s;
       color: rgb(118, 124, 130);
       text-align: center;
     }
     p {
-      height: 20px;
-      line-height: 20px;
       white-space: nowrap;
     }
   }

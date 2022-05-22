@@ -61,7 +61,7 @@ provide(TEXT, props.text);
 </script>
 <style scoped lang="less">
 .mButtonGroup {
-  display: flex;
+  display: inline-flex;
   justify-content: space-evenly;
   padding: 10px;
   box-sizing: border-box;

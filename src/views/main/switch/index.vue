@@ -3,13 +3,17 @@
     <cpn-header-vue
       title="select"
       name="选择器"
-      description="select选择器在多个选项中选择多个或者一个，"
+      description="select选择器在多个选项中选择多个或者一个，通过v-model来绑定值，值为Boolean类型，true选中，false未选中"
     >
     </cpn-header-vue>
     <div class="layout">
       <size-vue></size-vue>
       <content-vue></content-vue>
       <icon-vue></icon-vue>
+      <disabled-vue></disabled-vue>
+      <color-vue></color-vue>
+      <slider-color-vue></slider-color-vue>
+      <shape-vue></shape-vue>
     </div>
   </div>
 </template>
@@ -25,8 +29,11 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import sizeVue from "./cpn/size.vue";
 import contentVue from "./cpn/content.vue";
 import iconVue from "./cpn/icon.vue";
+import disabledVue from "./cpn/disabled.vue";
+import colorVue from "./cpn/color.vue";
+import sliderColorVue from "./cpn/sliderColor.vue";
+import shapeVue from "./cpn/shape.vue";
 // import multipleVue from "./cpn/multiple.vue";
-// import disabledVue from "./cpn/disabled.vue";
 // import buttonVue from "./cpn/button.vue";
 // import moreVue from "./cpn/more.vue";
 </script>

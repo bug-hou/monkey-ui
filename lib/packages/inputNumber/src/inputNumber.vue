@@ -6,7 +6,7 @@
     @mouseleave="hover = false"
   >
     <m-input
-      class="m-input"
+      class="m-input-number"
       type="number"
       v-model="value"
       @input="inputHandler"
@@ -265,7 +265,7 @@ function processFiexd(num: any, fixed: number) {
       color: #0005;
     }
   }
-  .m-input {
+  .m-input-number {
     width: 100%;
     height: 100%;
     border: none;
@@ -275,7 +275,7 @@ function processFiexd(num: any, fixed: number) {
 }
 .mini {
   width: 140px;
-  height: 32px;
+  height: 30px;
   font-size: 16px;
   div {
     font-size: 18px;
@@ -283,7 +283,7 @@ function processFiexd(num: any, fixed: number) {
 }
 .small {
   width: 160px;
-  height: 34px;
+  height: 36px;
   font-size: 18px;
   div {
     font-size: 22px;
@@ -291,7 +291,7 @@ function processFiexd(num: any, fixed: number) {
 }
 .medium {
   width: 180px;
-  height: 40px;
+  height: 42px;
   font-size: 20px;
   div {
     font-size: 26px;
