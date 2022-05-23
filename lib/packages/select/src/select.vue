@@ -125,10 +125,31 @@ const emits = defineEmits(["update:modelValue", "loading"]);
 // 是否显示list列表信息
 const isShowList = ref(false);
 let selectItem = reactive([]);
+let values = reactive([]);
 const position = ref<"bottom" | "top">("bottom");
 const listRef = ref<HTMLElement>(null);
 let bscroll = null;
 const loading = ref(false);
+
+const items = Array.isArray(props.modelValue)
+  ? [...props.modelValue]
+  : [props.modelValue];
+
+if (items.length !== 0) {
+  items.forEach((item) => {
+    if (props.options.includes(item)) {
+      selectItem.push(item);
+      values.push(item);
+    } else {
+      props.options.forEach((option) => {
+        if (option.value === item) {
+          selectItem.push(option.label);
+          values.push(option.value);
+        }
+      });
+    }
+  });
+}
 
 function clickHandler(item) {
   const value = item.label ?? item;
@@ -137,16 +158,20 @@ function clickHandler(item) {
       if (props.multiple) {
         if (!selectItem.includes(value)) {
           selectItem.push(value);
+          values.push(item.value ?? item);
         } else {
           selectItem.splice(selectItem.indexOf(value), 1);
+          values.splice(values.indexOf(value), 1);
         }
       } else {
         selectItem[0] = value;
+        values[0] = item.value ?? item;
         isShowList.value = false;
       }
     }
   }
-  emits("update:modelValue", selectItem);
+  console.log(values);
+  emits("update:modelValue", props.multiple ? values : values[0]);
 }
 
 watch(
@@ -182,7 +207,7 @@ const showListClickHandle = (event) => {
     function windowHandle(event) {
       if (!event.target.dataset.name) {
         isShowList.value = false;
-        removeEventListener("click", windowHandle);
+        // removeEventListener("click", windowHandle);
       }
     }
   }
@@ -191,10 +216,12 @@ const showListClickHandle = (event) => {
 const deleteClickHandle = (index?: number) => {
   if (index != undefined) {
     selectItem.splice(index, 1);
+    values.splice(index, 1);
     return;
   }
   while (selectItem.length !== 0) {
     selectItem.pop();
+    values.pop();
   }
 };
 
@@ -218,7 +245,7 @@ onMounted(() => {
   position: relative;
   .m-select-box {
     box-sizing: border-box;
-    padding-right: 20px;
+    padding-right: 30px;
     width: 100%;
     padding-left: 0.5em;
     display: flex;
@@ -365,7 +392,7 @@ onMounted(() => {
   }
 }
 .m-select-mini {
-  min-height: 30px;
+  min-height: 28px;
 }
 .m-select-small {
   min-height: 35px;

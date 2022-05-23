@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="checkColor和UnCheckColor"
     description="checkColor和UnCheckColor分别设置选中显示的颜色，和未选中显示的颜色"
-    code="sizeCode"
+    :code="colorCode"
   >
     <m-switch
       v-model="switchValue1"
@@ -34,7 +34,7 @@
 // 从下载的组件中导入函数
 import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { colorCode } from "../doc";
 const switchValue1 = ref(false);
 const switchValue2 = ref(false);
 </script>

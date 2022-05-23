@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="radius"
     description="radius设置弧度值0~10"
-    code="sizeCode"
+    :code="shapeCode"
   >
     <m-switch
       v-model="switchValue1"
@@ -31,7 +31,7 @@
 // 从下载的组件中导入函数
 import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { shapeCode } from "../doc";
 const switchValue1 = ref(false);
 const switchValue2 = ref(false);
 </script>

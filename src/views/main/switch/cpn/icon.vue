@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="checkIconName和unCheckIconName"
     description="checkIconName和unCheckIconName分别设置选中后在圆圈中的图标名，和未选后显示的圆圈中的图标名，同时也可以使用插槽自定义图标插槽名checkIcon和unCheckIcon"
-    code="sizeCode"
+    :code="iconCode"
   >
     <m-switch
       v-model="switchValue1"
@@ -32,7 +32,7 @@
 // 从下载的组件中导入函数
 import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { iconCode } from "../doc";
 const switchValue1 = ref(false);
 const switchValue2 = ref(true);
 </script>

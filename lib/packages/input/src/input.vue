@@ -263,6 +263,7 @@ const upHandler = () => {
   display: flex;
   border-radius: var(--input-radius);
   position: relative;
+  font-size: 0;
   border: 1px solid var(--input-color);
   background-color: var(--input-back-color);
   &.m-input-center {
@@ -325,6 +326,7 @@ const upHandler = () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    align-self: stretch;
     .slot {
       padding: 0 5px;
     }
@@ -340,6 +342,7 @@ const upHandler = () => {
     font-size: inherit;
     color: inherit;
     border-radius: 5px;
+    display: block;
   }
   .suffix {
     border-radius: 0 var(--input-radius) var(--input-radius) 0;

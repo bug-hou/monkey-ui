@@ -7,8 +7,14 @@
       useBack && 'm-pagination-background',
       skip && 'm-pagination-skiping'
     ]"
+    :style="[
+      { '--m-pagination-interval': interval },
+      { '--m-pagination-color': color },
+      { '--m-pagination-background': background },
+      { '--m-pagination-activeColor': activeColor }
+    ]"
   >
-    <li class="m-pagination-prefix">
+    <li class="m-pagination-prefix" v-if="prefix">
       <slot name="prefix">
         {{ prefix }}
       </slot>
@@ -23,7 +29,9 @@
         <m-icon name="m-after"></m-icon>
       </slot>
     </li>
-    <li :class="activeLis === 1 && 'active'" @click="activeLis = 1">1</li>
+    <li :class="activeLis === 1 && 'active'" @click="activeLis = 1">
+      {{ label }}1
+    </li>
     <li
       v-show="leftMore"
       v-if="+defaultPageSize < +count"
@@ -34,7 +42,7 @@
     </li>
     <template v-for="(item, index) in showLis" :key="index">
       <li :class="+activeLis === +item && 'active'" @click="activeLis = item">
-        {{ item }}
+        {{ label + item }}
       </li>
     </template>
     <li
@@ -46,7 +54,7 @@
       <m-icon name="m-ellipsis"></m-icon>
     </li>
     <li :class="+activeLis === +count && 'active'" @click="activeLis = count">
-      {{ count }}
+      {{ label + count }}
     </li>
     <li
       @click="toRight"
@@ -58,6 +66,13 @@
         <m-icon name="m-right"></m-icon>
       </slot>
     </li>
+    <m-select
+      class="m-pagination-select"
+      v-if="showSizePicker"
+      :options="pageSizes"
+      v-model="pageSize"
+      size="mini"
+    ></m-select>
     <m-input-number
       class="m-pagination-skip"
       v-if="skip"
@@ -66,6 +81,11 @@
       v-model="activeLis"
       size="mini"
     ></m-input-number>
+    <li class="m-pagination-suffix" v-if="suffix">
+      <slot name="suffix">
+        {{ suffix }}
+      </slot>
+    </li>
   </ul>
 </template>
 
@@ -75,33 +95,45 @@ import { reactive, ref, watch, withDefaults, defineProps } from "vue";
 
 // 自定义方法引入
 import mInputNumber from "../../inputNumber/src/inputNumber.vue";
+import mSelect from "../../select/src/select.vue";
 
 const props = withDefaults(
   defineProps<{
     count?: number;
     defaultPageSize?: number;
     nav?: boolean;
-    defaultPage?: number;
     size?: "mini" | "small" | "medium";
     useBack?: boolean;
     skip?: boolean;
     isBorder?: boolean;
-    modelValue?: number;
-    prefix?: string;
+    modelValue: number;
+    prefix?: string | boolean;
+    pageCount?: number;
+    pageSizes?: any[];
+    label?: string;
+    showSizePicker?: boolean;
+    pageSize?: number;
+    suffix?: string | boolean;
+    interval?: string;
+    color?: string;
+    background?: string;
+    activeColor?: string;
   }>(),
   {
     size: "small",
     count: 10,
     defaultPageSize: 5,
-    defaultPage: 1,
     nav: true,
-    useBack: true,
-    skip: true,
-    isBorder: true
+    useBack: false,
+    skip: false,
+    isBorder: false,
+    label: "",
+    showSizePicker: false,
+    interval: "5px"
   }
 );
 
-const emits = defineEmits(["pageChange"]);
+const emits = defineEmits(["update:modelValue", "update:pageSize"]);
 
 const showLis = reactive(
   new Array(props.defaultPageSize - 2).fill(0).map((_, index) => index + 2)
@@ -111,13 +143,14 @@ const lisInfo = reactive({
   left: mid - 1,
   right: showLis.length - mid
 });
-const activeLis = ref(props.defaultPage);
+const activeLis = ref(props.modelValue ?? 1);
 const leftMore = ref(false);
 const rightMore = ref(true);
+
 watch(
   activeLis,
   (newValue) => {
-    emits("pageChange", newValue);
+    emits("update:modelValue", newValue);
     const count = Number(props.count);
     const defaultPageSize =
       Number(props.defaultPageSize) > 2 ? Number(props.defaultPageSize) : 3;
@@ -158,6 +191,13 @@ watch(
     immediate: true
   }
 );
+
+watch(
+  () => props.pageSize,
+  (newSize) => {
+    emits("update:pageSize", newSize);
+  }
+);
 const toLeft = () => {
   if (activeLis.value > 1) {
     activeLis.value--;
@@ -174,6 +214,7 @@ const clickLeftMore = () => {
 const clickRightMore = () => {
   activeLis.value = showLis.pop();
 };
+
 // const changePage = (event) => {
 //   if (+event.target.value > +props.count) {
 //     activeLis.value = +props.count;
@@ -186,14 +227,14 @@ const clickRightMore = () => {
 <style scoped lang="less">
 .m-pagination {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   li {
     height: 100%;
     padding: 0 10px;
-    line-height: 30px;
+    display: flex;
+    align-items: center;
+    margin: 0 var(--m-pagination-interval);
     cursor: pointer;
-    margin: 0 10px;
     border-radius: 8px;
     &:hover {
       color: var(--font-color-pagination-active);
@@ -203,9 +244,18 @@ const clickRightMore = () => {
     }
     &.m-pagination-disabled {
       cursor: not-allowed;
-      background-color: #0002;
+      background-color: #0000001a;
       color: var(--font-color-pagination-back);
     }
+  }
+  .m-pagination-select {
+    display: inline;
+    flex: 0 0;
+    white-space: nowrap;
+    margin: 0 var(--m-pagination-interval);
+  }
+  .m-pagination-skip {
+    margin: 0 var(--m-pagination-interval);
   }
   .active {
     color: var(--font-color-pagination-active);
@@ -224,8 +274,8 @@ const clickRightMore = () => {
 }
 
 .m-pagination-mini {
-  font-size: 14px;
-  height: 30px;
+  font-size: 12px;
+  height: 25px;
 }
 .m-pagination-small {
   font-size: 14px;
@@ -233,6 +283,6 @@ const clickRightMore = () => {
 }
 .m-pagination-medium {
   font-size: 16px;
-  height: 30px;
+  height: 35px;
 }
 </style>

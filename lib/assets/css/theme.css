@@ -63,7 +63,7 @@
 
   /* pagination中的颜色 */
   --font-color-pagination-active: #409eff;
-  --back-color-pagination: #f4f4f5;
+  --back-color-pagination: #f4f4f55e;
   --font-color-pagination-back: #606266;
   --font-color-pagination-back-active: white;
   --back-color-pagination-active: #409eff;

@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="disabled"
     description="禁止switch被点击选择"
-    code="sizeCode"
+    :code="disabledCode"
   >
     <m-switch
       v-model="switchValue"
@@ -23,7 +23,7 @@
 // 从下载的组件中导入函数
 import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-// import { sizeCode } from "../doc";
+import { disabledCode } from "../doc";
 const switchValue = ref(false);
 </script>
 <style lang="less" scoped>

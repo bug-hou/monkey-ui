@@ -4,11 +4,26 @@
     description="只有大小不一样，size支持mini，small，medium"
     :code="sizeCode"
   >
-    <m-switch v-model="switchValue" size="mini"></m-switch>
-    <p></p>
-    <m-switch v-model="switchValue" size="small"></m-switch>
-    <p></p>
-    <m-switch v-model="switchValue" size="medium"></m-switch>
+    <m-pagination
+      size="mini"
+      :count="100"
+      :defaultPageSize="6"
+      v-model="page"
+    ></m-pagination>
+    <br />
+    <m-pagination
+      size="small"
+      :count="100"
+      :defaultPageSize="6"
+      v-model="page"
+    ></m-pagination>
+    <br />
+    <m-pagination
+      size="medium"
+      :count="100"
+      :defaultPageSize="6"
+      v-model="page"
+    ></m-pagination>
   </cpn-play-vue>
 </template>
 
@@ -22,7 +37,7 @@
 import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { sizeCode } from "../doc";
-const switchValue = ref(true);
+const page = ref(1);
 </script>
 <style lang="less" scoped>
 p {
