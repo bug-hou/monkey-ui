@@ -1,28 +1,27 @@
 <template>
   <cpn-play-vue
-    title="showSizePicker"
-    description="showSizePicker"
+    title="prefix和Suffix和Lable"
+    description="添加前缀和后缀，或者将prefix和suffix设置为true，通过插槽自定义样式，label给页码添加内容"
     :code="sizeCode"
   >
     <m-pagination
-      size="mini"
-      :count="10"
-      :defaultPageSize="5"
+      :count="100"
+      :defaultPageSize="10"
       v-model="page"
-      v-model:pageSize="pageSize"
-      showSizePicker
-      :pageSizes="pageSizes"
-    ></m-pagination>
+      useBack
+      skip
+      prefix="选择页面"
+      suffix="进行输入跳转"
+    >
+    </m-pagination>
     <br />
     <m-pagination
-      size="small"
-      :count="5"
-      :defaultPageSize="5"
+      :count="100"
+      :defaultPageSize="10"
       useBack
       v-model="page"
-      v-model:pageSize="pageSize"
-      showSizePicker
-      :pageSizes="pageSizes"
+      skip
+      label="M-"
     ></m-pagination>
   </cpn-play-vue>
 </template>
@@ -38,25 +37,6 @@ import { ref } from "vue";
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { sizeCode } from "../doc";
 const page = ref(1);
-const pageSize = ref(10);
-const pageSizes = [
-  {
-    label: "10 每页",
-    value: 10
-  },
-  {
-    label: "20 每页",
-    value: 20
-  },
-  {
-    label: "30 每页",
-    value: 30
-  },
-  {
-    label: "40 每页",
-    value: 50
-  }
-];
 </script>
 <style lang="less" scoped>
 p {

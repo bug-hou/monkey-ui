@@ -10,29 +10,29 @@
     :class="[
       'button-' + size,
       'button-' + shape,
-      disabled && 'disabled',
+      disabled && 'm-button-disabled',
       !plain && 'plain',
       text && 'text',
       textFixed && 'fixed'
     ]"
     :style="[
       {
-        ['--color']: plain ? textColor : plainTextColor
+        ['--m-button-color']: plain ? textColor : plainTextColor
       },
       {
-        ['--back']: plain ? color : plainColor
+        ['--m-button-back']: plain ? color : plainColor
       },
       {
-        ['--border']: borderColor
+        ['--m-button-border']: borderColor
       },
       {
-        ['--hover-color']: textColor
+        ['--m-button-hover-color']: textColor
       },
       {
-        ['--hover-back']: color
+        ['--m-button-hover-back']: color
       },
       {
-        ['--text']: textColor === '#fff' ? borderColor : textColor
+        ['--m-button-text']: textColor === '#fff' ? borderColor : textColor
       }
     ]"
   >
@@ -174,9 +174,9 @@ function handleLeave() {
   font-size: 18px;
   justify-content: center;
   align-items: center;
-  border: 1px var(--border) solid;
-  color: var(--color);
-  background: var(--back);
+  border: 1px var(--m-button-border) solid;
+  color: var(--m-button-color);
+  background: var(--m-button-back);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -186,8 +186,8 @@ function handleLeave() {
   }
   &.plain {
     &:hover {
-      background: var(--hover-back);
-      color: var(--hover-color);
+      background: var(--m-button-hover-back);
+      color: var(--m-button-hover-color);
     }
   }
   &.text {
@@ -196,17 +196,22 @@ function handleLeave() {
     color: #666;
     font-weight: bold;
     &.fixed {
-      color: var(--text);
+      color: var(--m-button-text);
     }
     &:hover {
-      color: var(--text);
+      color: var(--m-button-text);
     }
   }
-  &.disabled {
+  &.m-button-disabled {
     cursor: not-allowed;
+    color: rgb(50, 50, 50);
+    background: #0000;
+    border-color: rgb(51, 54, 57);
+    opacity: 0.5;
     &:hover {
-      color: var(--color);
-      background: var(--back);
+      color: rgb(50, 50, 50);
+      background: #0000;
+      border-color: rgb(51, 54, 57);
     }
   }
 }

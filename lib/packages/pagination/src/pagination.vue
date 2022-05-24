@@ -105,7 +105,6 @@ const props = withDefaults(
     size?: "mini" | "small" | "medium";
     useBack?: boolean;
     skip?: boolean;
-    isBorder?: boolean;
     modelValue: number;
     prefix?: string | boolean;
     pageCount?: number;
@@ -115,9 +114,6 @@ const props = withDefaults(
     pageSize?: number;
     suffix?: string | boolean;
     interval?: string;
-    color?: string;
-    background?: string;
-    activeColor?: string;
   }>(),
   {
     size: "small",
@@ -126,7 +122,6 @@ const props = withDefaults(
     nav: true,
     useBack: false,
     skip: false,
-    isBorder: false,
     label: "",
     showSizePicker: false,
     interval: "5px"

@@ -11,7 +11,11 @@
       <div class="left">
         <template v-for="(item, index) in lHeights" :key="item">
           <div
-            :style="[{ height: item + '%' }, { ['--color']: lColors[index] }]"
+            :style="[
+              { ['--monkeys-height']: item + '%' },
+              { ['--monkeys-delay']: index },
+              { ['--color']: lColors[index] }
+            ]"
           ></div>
         </template>
       </div>
@@ -33,7 +37,11 @@
       <div class="right">
         <template v-for="(item, index) in rHeights" :key="item">
           <div
-            :style="[{ height: item + '%' }, { ['--color']: rColors[index] }]"
+            :style="[
+              { ['--monkeys-delay']: 4 - index },
+              { ['--monkeys-height']: item + '%' },
+              { ['--color']: rColors[index] }
+            ]"
           ></div>
         </template>
       </div>
@@ -56,6 +64,45 @@ const lColors = ["#67c23a", "#909399", "#faaca8", "#3ac5dc", "#f56c6c"];
 const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
 </script>
 <style scoped lang="less">
+@time: 1s;
+@keyframes roundToHeight {
+  0% {
+    height: 0;
+  }
+  40% {
+    height: calc(var(--monkeys-height) / 10 * 5);
+  }
+  60% {
+    height: calc(var(--monkeys-height) / 10 * 7);
+  }
+  100% {
+    height: var(--monkeys-height);
+  }
+}
+@keyframes topToBottom {
+  0% {
+    bottom: 50%;
+  }
+  100% {
+    bottom: 0;
+  }
+}
+@keyframes lineMove {
+  0% {
+    transform: rotate(15deg) translateX(-100%);
+  }
+  100% {
+    transform: rotate(15deg) translateX(0);
+  }
+}
+@keyframes lineMoveCopy {
+  0% {
+    transform: rotate(-15deg) translateX(100%);
+  }
+  100% {
+    transform: rotate(-15deg) translateX(0);
+  }
+}
 .index {
   overflow: hidden;
   position: relative;
@@ -68,9 +115,9 @@ const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
   .top {
     z-index: 100;
     height: 30%;
-    top: 0;
     .left,
     .right {
+      animation: lineMove @time forwards;
       width: 50%;
       height: 1px;
       background: #3ac5dc;
@@ -81,11 +128,13 @@ const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
       box-shadow: 0px 0px 5px #3ac5dc;
     }
     .right {
+      animation: lineMoveCopy @time forwards;
       transform-origin: 0 0;
       transform: rotate(-15deg);
       right: 0;
     }
     .mid {
+      animation: topToBottom @time forwards;
       position: absolute;
       left: 50%;
       bottom: 0;
@@ -115,6 +164,9 @@ const rColors = ["#f56c6c", "#3ac5dc", "#faaca8", "#909399", "#67c23a"];
       justify-content: space-evenly;
       height: 100%;
       div {
+        animation: roundToHeight calc(@time / 2) linear
+          calc(var(--monkeys-delay) * 0.2s);
+        animation-fill-mode: forwards;
         width: 10%;
         border-radius: 30px 30px 0 0;
         background-color: var(--color);

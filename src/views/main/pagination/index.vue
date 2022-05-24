@@ -10,8 +10,10 @@
       <size-vue></size-vue>
       <back-vue></back-vue>
       <interval-vue></interval-vue>
+      <picker-vue></picker-vue>
     </div>
     <skip-vue></skip-vue>
+    <prefix-vue></prefix-vue>
   </div>
 </template>
 
@@ -28,6 +30,8 @@ import sizeVue from "./cpn/size.vue";
 import backVue from "./cpn/back.vue";
 import skipVue from "./cpn/skip.vue";
 import intervalVue from "./cpn/interval.vue";
+import pickerVue from "./cpn/picker.vue";
+import prefixVue from "./cpn/prefix.vue";
 // import contentVue from "./cpn/content.vue";
 // import iconVue from "./cpn/icon.vue";
 // import disabledVue from "./cpn/disabled.vue";
