@@ -276,6 +276,8 @@ const upHandler = () => {
     font-size: 14px;
     letter-spacing: 1px;
     padding: 0 2px;
+    display: flex;
+    align-items: center;
   }
   .loading {
     display: flex;

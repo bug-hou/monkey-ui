@@ -35,9 +35,3 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { sizeCode } from "../doc";
 const page = ref(1);
 </script>
-<style lang="less" scoped>
-p {
-  width: 20px;
-  display: inline-block;
-}
-</style>

@@ -7,12 +7,7 @@
       useBack && 'm-pagination-background',
       skip && 'm-pagination-skiping'
     ]"
-    :style="[
-      { '--m-pagination-interval': interval },
-      { '--m-pagination-color': color },
-      { '--m-pagination-background': background },
-      { '--m-pagination-activeColor': activeColor }
-    ]"
+    :style="[{ '--m-pagination-interval': interval }]"
   >
     <li class="m-pagination-prefix" v-if="prefix">
       <slot name="prefix">
@@ -223,6 +218,10 @@ const clickRightMore = () => {
 .m-pagination {
   display: flex;
   align-items: center;
+  ul {
+    align-items: center;
+    display: flex;
+  }
   li {
     height: 100%;
     padding: 0 10px;

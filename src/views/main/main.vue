@@ -41,7 +41,8 @@ const base = [
   { name: "多选radio", path: "/radio" },
   { name: "选择Select", path: "/select" },
   { name: "开关Switch", path: "/switch" },
-  { name: "开关Pagination", path: "/pagination" }
+  { name: "开关Pagination", path: "/pagination" },
+  { name: "开关Tag", path: "/tag" },
 ];
 </script>
 <style scoped lang="less">
