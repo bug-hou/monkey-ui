@@ -126,7 +126,7 @@ const {
   TEXT
 } = ButtonNames;
 const type = useInject(props.type, TYPE, "default");
-const shape = useInject(props.shape, SHAPE, "rect");
+const shape = useInject(props.shape, SHAPE, "round");
 const size = useInject(props.size, SIZE, "small");
 const plain = useInject(props.plain, PLAIN, true);
 const disabled = useInject(props.disabled, DISABLED, false);

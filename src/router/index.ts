@@ -183,6 +183,15 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "tooltip",
+        component: () => import("../views/main/tooltip/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

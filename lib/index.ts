@@ -28,7 +28,9 @@ import { mSwitch } from "./packages/switch";
 
 import { mPagination } from "./packages/pagination";
 
-import { mTag, mTagInput } from "./packages/tag"
+import { mTag } from "./packages/tag";
+
+import { mTooltip } from "./packages/tooltip";
 
 export {
   mButton,
@@ -53,5 +55,5 @@ export {
   mSwitch,
   mPagination,
   mTag,
-  mTagInput
+  mTooltip
 }

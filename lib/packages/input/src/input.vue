@@ -256,6 +256,7 @@ const upHandler = () => {
   color: var(--font-color-input);
   position: relative;
   height: 30px;
+  display: inline-block;
 }
 .mInput {
   overflow: hidden;

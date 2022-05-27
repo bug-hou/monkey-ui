@@ -77,9 +77,9 @@ const props = withDefaults(
 const emits = defineEmits(["check", "unCheck", "update:modelValue"]);
 
 const mapSize = {
-  mini: 15,
-  small: 20,
-  medium: 30
+  mini: 10,
+  small: 15,
+  medium: 20
 };
 
 const checkRef = ref<HTMLElement>();
@@ -186,7 +186,6 @@ onMounted(() => {
   }
 }
 .m-switch-mini {
-  min-width: 45px;
   height: 15px;
   width: calc(var(--m-switch-max-width) + 22px);
   font-size: 12px;
@@ -199,7 +198,6 @@ onMounted(() => {
 }
 
 .m-switch-small {
-  min-width: 60px;
   height: 20px;
   width: calc(var(--m-switch-max-width) + 27px);
   font-size: 14px;
@@ -211,7 +209,6 @@ onMounted(() => {
   }
 }
 .m-switch-medium {
-  min-width: 90px;
   height: 30px;
   width: calc(var(--m-switch-max-width) + 37px);
   font-size: 18px;
