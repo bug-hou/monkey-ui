@@ -12,17 +12,13 @@
         <div class="descriptor" v-description="description"></div>
         <div class="operate">
           <m-icon-group color="black" size="medium">
-            <m-icon
-              name="icon-fuzhi"
-              title="复制代码"
-              @click="copyText"
-            ></m-icon>
+            <m-tooltip tooltipText="复制代码" effect="dark">
+              <m-icon name="icon-fuzhi" @click="copyText"></m-icon>
+            </m-tooltip>
             <span class="gay"></span>
-            <m-icon
-              name="icon-code"
-              title="显示代码"
-              @click="handleClickCode"
-            ></m-icon>
+            <m-tooltip tooltipText="显示代码" effect="dark">
+              <m-icon name="icon-code" @click="handleClickCode"></m-icon>
+            </m-tooltip>
           </m-icon-group>
         </div>
       </header>

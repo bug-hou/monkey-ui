@@ -1,6 +1,19 @@
 <!-- bgTooltip -->
 <template>
-  <div class="m-tooltip-contain">
+  <div
+    class="m-tooltip-contain"
+    @mouseenter="enterHandle"
+    @mouseleave="leaveHandle"
+    @click="clickHandle"
+    :style="[
+      { ['--m-tooltip-columns']: +columns },
+      { ['--m-tooltip-width']: width },
+      { ['--m-tooltip-height']: height },
+      { ['--m-tooltip-background']: background },
+      { ['--m-tooltip-color']: color },
+      { ['--m-tooltip-hover']: hoverColor }
+    ]"
+  >
     <slot></slot>
     <transition
       :name="
@@ -12,21 +25,25 @@
     >
       <div
         :class="[
-          'mTooltip',
+          'm-tooltip',
           'm-tooltip-' + direction,
-          arrow && 'm-tooltip-arrow'
+          arrow && 'm-tooltip-arrow',
+          list.length === 1 && 'm-tooltip-text',
+          width !== 'auto' && 'm-tooltip-width'
         ]"
-        ref="tooltip"
-        @mouseout="leave"
-        @mouseover="enter"
-        v-show="(fatherShow || selfShow) && tooltipShow"
+        ref="tooltipRef"
+        @mouseenter="tooltipEnterHandle"
+        @mouseleave="tooltipLeaveHandle"
+        v-show="(fatherShow || selfShow) && tooltipShow && showTooltip"
+        :style="!keepAliveOnHover && { 'pointer-events': 'none' }"
       >
-        <div
-          class="m-tooltip-container"
-          :style="{ ['--m-tooltip-columns']: +columns }"
-        >
+        <div class="m-tooltip-container">
+          <div class="m-tooltip-header">
+            <slot name="header"> {{ header }}</slot>
+          </div>
+          <m-divider></m-divider>
           <template v-for="(item, index) in list" :key="index">
-            <slot name="item" :item="item">
+            <slot name="tooltip" :item="item">
               <p @click="itemClick(item, index)">{{ item }}</p>
             </slot>
           </template>
@@ -38,7 +55,10 @@
 
 <script lang="ts" setup>
 // 从下载的组件中导入函数
-import { onMounted, reactive, ref, withDefaults, defineProps } from "vue";
+import { reactive, ref, withDefaults, defineProps, onMounted } from "vue";
+import mDivider from "../../divider/src/divider.vue";
+
+import { useScroll } from "../../../hooks";
 
 const props = withDefaults(
   defineProps<{
@@ -47,54 +67,100 @@ const props = withDefaults(
     columns?: number;
     height?: string;
     arrow?: boolean;
-    content: string | string[];
+    tooltipText?: string | string[];
     tooltipShow?: boolean;
+    trigger?: "hover" | "click";
+    effect?: "light" | "dark";
+    delay?: number;
+    duration?: number;
+    keepAliveOnHover?: boolean;
+    header?: string;
   }>(),
   {
     tooltipShow: true,
     columns: 1,
     arrow: true,
-    direction: "bottom"
+    direction: "top",
+    trigger: "hover",
+    width: "auto",
+    height: "auto",
+    effect: "light",
+    delay: 0,
+    duration: 0,
+    keepAliveOnHover: true,
+    tooltipText: ""
   }
 );
-const tooltip = ref();
 const fatherShow = ref(false);
 const selfShow = ref(false);
 const list = reactive([]);
-if (typeof props.content === "string") {
-  list.push(props.content);
-} else if (Array.isArray(props.content)) {
-  list.splice(0, 0, ...props.content);
+const showTooltip = ref(false);
+
+const tooltipRef = ref<HTMLElement>();
+
+let bscroll: any;
+
+const background = props.effect === "dark" ? "#262626" : "#fafbfc";
+const color = props.effect === "dark" ? "#fff" : "#61666d";
+const hoverColor = "#e3e5e7";
+
+if (typeof props.tooltipText === "string") {
+  list.push(props.tooltipText);
+} else if (Array.isArray(props.tooltipText)) {
+  list.splice(0, 0, ...props.tooltipText);
 }
-onMounted(() => {
-  const parent = tooltip.value.parentElement;
-  parent.addEventListener("mouseenter", () => {
-    fatherShow.value = true;
-  });
-  parent.addEventListener("mouseleave", () => {
-    fatherShow.value = false;
-  });
-});
-const enter = () => {
-  selfShow.value = true;
+
+const tooltipEnterHandle = () => {
+  bscroll.refresh();
+  if (props.trigger === "hover") selfShow.value = true;
 };
-const leave = () => {
-  selfShow.value = false;
+const tooltipLeaveHandle = () => {
+  bscroll.refresh();
+  if (props.trigger === "hover") selfShow.value = false;
 };
+
 const itemClick = (item, index) => {
   // emits("itemClick", item, index);
 };
+function enterHandle() {
+  processShowTooltip("hover", true);
+}
+function leaveHandle() {
+  processShowTooltip("hover", false);
+}
+function clickHandle() {
+  processShowTooltip("click", !showTooltip.value);
+}
+function processShowTooltip(name: "hover" | "click", value: boolean) {
+  if (props.trigger === name)
+    setTimeout(
+      () => {
+        fatherShow.value = !fatherShow.value;
+        showTooltip.value = value;
+        bscroll.refresh();
+      },
+      value ? props.delay : props.duration
+    );
+}
+
+onMounted(() => {
+  bscroll = useScroll(tooltipRef.value, {
+    scrollbar: { interactive: true, fade: true }
+  });
+});
 </script>
 <style scoped lang="less">
 .m-tooltip-contain {
   display: inline-block;
   position: relative;
-  .mTooltip {
+  .m-tooltip {
     z-index: 1000;
     position: absolute;
     transform: translateX(-50%);
     padding: 10px;
     left: 50%;
+    overflow: hidden;
+    height: var(--m-tooltip-height);
     &.m-tooltip-arrow::before {
       content: "";
       position: absolute;
@@ -103,16 +169,29 @@ const itemClick = (item, index) => {
       transform: translate(-50%, -2px);
       border: 10px solid transparent;
       border-radius: 5px;
-      border-top-color: var(--border-color-tooltip);
+      border-top-color: var(--m-tooltip-background);
+    }
+    &.m-tooltip-text {
+      .m-tooltip-container {
+        p {
+          padding: 0;
+          &:hover {
+            background-color: var(--m-tooltip-background);
+          }
+        }
+      }
     }
     .m-tooltip-container {
       display: grid;
-      grid-template-columns: repeat(var(--m-tooltip-columns), auto);
+      grid-template-columns: repeat(
+        var(--m-tooltip-columns),
+        var(--m-tooltip-width)
+      );
       grid-column-gap: 5px;
       border-radius: 8px;
-      background: var(--back-color-tooltip);
-      border: 1px solid var(--border-color-tooltip);
-      color: var(--font-color-tooltip);
+      background: var(--m-tooltip-background);
+      border: 1px solid var(--m-tooltip-background);
+      color: var(--m-tooltip-color);
       padding: 5px;
       box-shadow: 0px 0px 5px 3px var(--shadow-color-tooltip);
       p {
@@ -121,29 +200,42 @@ const itemClick = (item, index) => {
         border-radius: 6px;
         white-space: nowrap;
         &:hover {
-          background: var(--back-color-hover-tooltip);
+          background: var(--m-tooltip-hover);
         }
+      }
+    }
+    &.m-tooltip-width {
+      p {
+        white-space: pre-wrap !important;
+      }
+    }
+    .m-tooltip-header {
+      white-space: nowrap;
+      text-align: center;
+      font-weight: bold;
+      &:empty + div {
+        display: none;
       }
     }
   }
   .m-tooltip-top {
-    bottom: calc(100%);
+    bottom: 100%;
     left: 50%;
     right: auto;
     top: auto;
   }
   .m-tooltip-bottom {
-    top: calc(100%);
+    top: 100%;
     left: 50%;
     right: auto;
     bottom: auto;
-    &.arrow::before {
+    &.m-tooltip-arrow::before {
       bottom: calc(100% - 10px);
       transform: translate(-50%, 2px);
       top: auto;
       left: 50%;
       border: 10px solid transparent;
-      border-bottom-color: var(--border-color-tooltip);
+      border-bottom-color: var(--m-tooltip-background);
     }
   }
   .m-tooltip-left {
@@ -152,14 +244,14 @@ const itemClick = (item, index) => {
     left: auto;
     bottom: auto;
     transform: translateY(-50%);
-    &.arrow::before {
+    &.m-tooltip-arrow::before {
       left: calc(100% - 10px);
       transform: translate(-2px, -50%);
       top: 50%;
       bottom: auto;
       right: auto;
       border: 10px solid transparent;
-      border-left-color: var(--border-color-tooltip);
+      border-left-color: var(--m-tooltip-background);
     }
   }
   .m-tooltip-right {
@@ -168,14 +260,14 @@ const itemClick = (item, index) => {
     right: auto;
     bottom: auto;
     transform: translateY(-50%);
-    &.arrow::before {
+    &.m-tooltip-arrow::before {
       right: calc(100% - 10px);
       transform: translate(2px, -50%);
       left: auto;
       top: 50%;
       bottom: auto;
       border: 10px solid transparent;
-      border-right-color: var(--border-color-tooltip);
+      border-right-color: var(--m-tooltip-background);
     }
   }
 }
