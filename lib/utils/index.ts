@@ -8,4 +8,6 @@ export * from "./processStyle";
 
 export * from "./eventBus";
 
-export * from "./computePosition"
+export * from "./computePosition";
+
+export * from "./tween";

@@ -32,6 +32,46 @@ import { mTag } from "./packages/tag";
 
 import { mTooltip } from "./packages/tooltip";
 
+import { mEllipsis } from "./packages/ellipsis";
+
+import { mNumberAnimation } from "./packages/numberAnimation";
+
+import { App } from "vue";
+
+const monkeysUI = [
+  mButton,
+  mButtonGroup,
+  mIcon,
+  mIconGroup,
+  mInput,
+  mInputGroup,
+  mAvatar,
+  mGradient,
+  mBackTop,
+  mCard,
+  mDivider,
+  mCollapse,
+  mCollapseItem,
+  mInputNumber,
+  mCheckBox,
+  mCheckBoxGroup,
+  mRadio,
+  mRadioGroup,
+  mSelect,
+  mSwitch,
+  mPagination,
+  mTag,
+  mTooltip,
+  mEllipsis,
+  mNumberAnimation
+]
+
+export default (app: App, opt?: any) => {
+  monkeysUI.forEach(cpn => {
+    app.use(cpn)
+  })
+}
+
 export {
   mButton,
   mButtonGroup,
@@ -55,5 +95,7 @@ export {
   mSwitch,
   mPagination,
   mTag,
-  mTooltip
+  mTooltip,
+  mEllipsis,
+  mNumberAnimation
 }

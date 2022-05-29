@@ -43,7 +43,9 @@ const base = [
   { name: "开关Switch", path: "/switch" },
   { name: "开关Pagination", path: "/pagination" },
   { name: "开关Tag", path: "/tag" },
-  { name: "开关Tooltip", path: "/tooltip" }
+  { name: "开关Tooltip", path: "/tooltip" },
+  { name: "省略Ellipsis", path: "/ellipsis" },
+  { name: "省略numberAnimation", path: "/numberAnimation" }
 ];
 </script>
 <style scoped lang="less">

@@ -192,6 +192,24 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "ellipsis",
+        component: () => import("../views/main/ellipsis/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
+      }, {
+        path: "numberAnimation",
+        component: () => import("../views/main/numberAnimation/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }

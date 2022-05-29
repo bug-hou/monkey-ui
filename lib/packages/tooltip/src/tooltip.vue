@@ -38,6 +38,9 @@
         :style="!keepAliveOnHover && { 'pointer-events': 'none' }"
       >
         <div class="m-tooltip-container">
+          <div class="custom-vertical-scrollbar" ref="scrollBarRef">
+            <div class="custom-vertical-indicator"></div>
+          </div>
           <div class="m-tooltip-header">
             <slot name="header"> {{ header }}</slot>
           </div>
@@ -97,6 +100,7 @@ const list = reactive([]);
 const showTooltip = ref(false);
 
 const tooltipRef = ref<HTMLElement>();
+const scrollBarRef = ref<HTMLElement>();
 
 let bscroll: any;
 
@@ -145,7 +149,11 @@ function processShowTooltip(name: "hover" | "click", value: boolean) {
 
 onMounted(() => {
   bscroll = useScroll(tooltipRef.value, {
-    scrollbar: { interactive: true, fade: true }
+    scrollbar: {
+      interactive: true,
+      fade: true,
+      customElements: [scrollBarRef.value]
+    }
   });
 });
 </script>
@@ -213,6 +221,9 @@ onMounted(() => {
       white-space: nowrap;
       text-align: center;
       font-weight: bold;
+      &:empty {
+        display: none;
+      }
       &:empty + div {
         display: none;
       }
@@ -269,6 +280,23 @@ onMounted(() => {
       border: 10px solid transparent;
       border-right-color: var(--m-tooltip-background);
     }
+  }
+}
+
+.custom-vertical-scrollbar {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  height: 100%;
+  width: 7px;
+  border-radius: 6px;
+  transform: translateY(-50%) translateZ(0);
+  background-color: white;
+  .custom-vertical-indicator {
+    width: 100%;
+    height: 30px;
+    border-radius: 6px;
+    background-color: rgb(200, 200, 200, 0.3);
   }
 }
 </style>
