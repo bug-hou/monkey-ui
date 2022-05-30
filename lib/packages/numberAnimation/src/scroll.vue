@@ -1,7 +1,10 @@
 <template>
   <div
     class="numberAnimationScroll"
-    :style="{ ['--m-number-animation-scroll-value']: '-' + value + '0%' }"
+    ref="numberAnimationScrollRef"
+    :style="{
+      ['--m-number-animation-duration']: duration + 'ms'
+    }"
   >
     <span>0</span>
     <span>1</span>
@@ -23,31 +26,40 @@
  * @Description: 创建一个numberAnimationScroll组件
  */
 // 从下载的组件中导入函数
-import { defineProps } from "vue";
-withDefaults(
+import { defineProps, ref, watch, onMounted, nextTick } from "vue";
+const props = withDefaults(
   defineProps<{
     value: number;
+    duration: number;
   }>(),
   {}
 );
+
+const numberAnimationScrollRef = ref<HTMLElement>();
+onMounted(() => {
+  watch(
+    () => props.value,
+    (newValue) => {
+      setTimeout(() => {
+        numberAnimationScrollRef.value.style.transform =
+          "translateY(-" + newValue + "0%)";
+      }, 100);
+    },
+    {
+      immediate: true
+    }
+  );
+});
 </script>
 <style scoped lang="less">
 .numberAnimationScroll {
   margin-top: 0;
-  overflow: hidden;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
   height: calc(10 * 100%);
-  transition: transform 2s;
-  animation: numberScroll 2s linear forwards;
-  @keyframes numberScroll {
-    from {
-      transform: translateY(0%);
-    }
-    to {
-      transform: translateY(var(--m-number-animation-scroll-value));
-    }
-  }
-  span {
-    display: block;
-  }
+  transition: transform var(--m-number-animation-duration);
+  transform: translateY(0%);
 }
 </style>

@@ -1,14 +1,62 @@
 <template>
-  <div class="m-number-animation" ref="numberAnimationRef">
-    <p v-if="effect === 'change'">{{ displayedValue }}</p>
-    <div v-else>
+  <div
+    class="m-number-animation"
+    :class="[
+      showBackground && 'm-number-animation-background',
+      bold && 'm-number-animation-bold'
+    ]"
+    ref="numberAnimationRef"
+    :style="[
+      { ['--m-number-animation-height']: Math.max(height, fontSize) + 'px' },
+      { ['--m-number-animation-width']: width + 'px' },
+      { ['--m-number-animation-gap']: gap + 'px' },
+      { ['--m-number-animation-fontSize']: fontSize + 'px' },
+      { ['--m-number-animation-background']: background },
+      { ['--m-number-animation-color']: color }
+    ]"
+  >
+    <slot name="prefix">
+      {{ prefix }}
+    </slot>
+    <div v-if="effect === 'change'">
       <ul class="m-number-animation-scroll">
-        <scroll-vue
-          :value="+String(to).charAt(index)"
-          v-for="(item, index) in scrollValue"
-        ></scroll-vue>
+        <li v-for="(item, index) in String(displayedValue)">
+          <p
+            v-if="
+              showSeparator &&
+              (String(displayedValue).length - index) % 3 === 0 &&
+              index !== 0
+            "
+            class="m-number-animation-separator"
+          >
+            {{ separator }}
+          </p>
+          <p>{{ item }}</p>
+        </li>
       </ul>
     </div>
+    <div v-else>
+      <ul class="m-number-animation-scroll">
+        <li v-for="(item, index) in scrollValue" :key="index">
+          <p
+            v-if="
+              showSeparator &&
+              (scrollValue.length - index) % 3 === 0 &&
+              index !== 0
+            "
+            class="m-number-animation-separator"
+          >
+            {{ separator }}
+          </p>
+          <p>
+            <scroll-vue :duration="duration" :value="item"></scroll-vue>
+          </p>
+        </li>
+      </ul>
+    </div>
+    <slot name="suffix">
+      {{ suffix }}
+    </slot>
   </div>
 </template>
 
@@ -28,41 +76,99 @@ const props = withDefaults(
     from: number;
     effect?: "scroll" | "change";
     active?: boolean;
+    duration?: number;
+    background?: string;
+    height?: number;
+    fontSize?: number;
+    color?: string;
+    showBackground?: boolean;
+    gap?: number;
+    width?: number;
+    bold?: boolean;
+    showSeparator?: boolean;
+    separator?: string;
+    prefix?: string;
+    suffix?: string;
   }>(),
   {
     effect: "change",
-    active: true
+    active: true,
+    duration: 1000,
+    height: 24,
+    fontSize: 18,
+    background: "#9995",
+    color: "#333",
+    showBackground: false,
+    gap: 0,
+    bold: false,
+    separator: ","
   }
 );
+const { from, duration } = props;
 
 const numberAnimationRef = ref<HTMLElement>();
-const { from, to } = props;
 let displayedValue: Ref<number> = ref(from);
-let scrollValue = ref<number[]>(new Array(String(to).length).fill(0));
-if ((props.effect = "change")) {
-  watch(
-    () => props.active,
-    (newValue) => {
-      if (newValue) {
-        useChange(from, to, 2000, displayedValue);
+let scrollValue = ref<number[]>(processScrollValue());
+watch(
+  () => [props.active, props.to],
+  ([newActive, newTo]) => {
+    if (newActive) {
+      if (props.effect === "change") {
+        useChange(from, newTo as number, duration, displayedValue);
+      } else {
+        for (let i = 0; i < String(newTo as number).length; i++) {
+          scrollValue.value[i] = +String(newTo as number).charAt(i);
+        }
       }
-    },
-    {
-      immediate: true
     }
-  );
+  },
+  {
+    immediate: true
+  }
+);
+function processScrollValue() {
+  return new Array(String(from).length)
+    .fill(0)
+    .map((_, index) => +String(from).charAt(index));
 }
 </script>
 <style scoped lang="less">
 .m-number-animation {
+  display: flex;
+  height: var(--m-number-animation-height);
+  font-size: var(--m-number-animation-fontSize);
+  line-height: var(--m-number-animation-height);
+  overflow: hidden;
   .m-number-animation-scroll {
-    display: flex;
+    display: inline-flex;
     overflow: hidden;
-    height: 24px;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 5px;
-    line-height: 24px;
+  }
+  &.m-number-animation-background {
+    p {
+      background-color: var(--m-number-animation-background);
+    }
+  }
+  p {
+    display: inline-flex;
+    overflow: hidden;
+    border-radius: 5px;
+    justify-content: center;
+    text-align: center;
+    margin-right: var(--m-number-animation-gap);
+    width: var(--m-number-animation-width);
+    height: var(--m-number-animation-height);
+    color: var(--m-number-animation-color);
+    &.m-number-animation-bold {
+      font-weight: bold;
+    }
+    &.m-number-animation-separator {
+      flex: 0;
+    }
+  }
+  li:last-child {
+    p {
+      margin-right: 0;
+    }
   }
 }
 </style>

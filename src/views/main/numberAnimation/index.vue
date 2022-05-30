@@ -1,24 +1,17 @@
 <template>
   <div class="card">
     <cpn-header-vue
-      title="pagination"
-      name="分页器"
-      description="可用用来做分页显示的"
+      title="numberAnimation"
+      name="数字动画"
+      description="让数字随着音乐跳动"
     >
     </cpn-header-vue>
-    <m-number-animation
-      :to="100000000"
-      :from="0"
-      :active="active"
-    ></m-number-animation>
-    <br />
-    <br />
-    <m-number-animation
-      :to="123456789"
-      :from="0"
-      effect="scroll"
-    ></m-number-animation>
-    <div class="layout"></div>
+    <div class="layout">
+      <effect-vue></effect-vue>
+      <from-vue></from-vue>
+      <background-vue></background-vue>
+      <show-separator-vue></show-separator-vue>
+    </div>
   </div>
 </template>
 
@@ -32,17 +25,25 @@
 // import { ref } from "vue";
 import { ref } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import effectVue from "./cpn/effect.vue";
+import fromVue from "./cpn/from.vue";
+import backgroundVue from "./cpn/background.vue";
+import showSeparatorVue from "./cpn/showSeparator.vue";
 // import sizeVue from "./cpn/size.vue";
 // import backVue from "./cpn/back.vue";
 // import skipVue from "./cpn/skip.vue";
 // import intervalVue from "./cpn/interval.vue";
 // import pickerVue from "./cpn/picker.vue";
 // import prefixVue from "./cpn/prefix.vue";
-const active = ref(false);
+const active = ref(true);
 
-setTimeout(() => {
-  console.log("first");
-  active.value = true;
-}, 1000);
+const to = ref(123456789);
+
+// setTimeout(() => {
+//   active.value = true;
+// }, 10000);
+setInterval(() => {
+  to.value += 4;
+}, 5000);
 </script>
 <style scoped lang="less"></style>
