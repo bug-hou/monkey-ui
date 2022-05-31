@@ -35,6 +35,7 @@ import { mTooltip } from "./packages/tooltip";
 import { mEllipsis } from "./packages/ellipsis";
 
 import { mNumberAnimation } from "./packages/numberAnimation";
+import { mBadge } from "./packages/badge"
 
 import { App } from "vue";
 
@@ -63,7 +64,8 @@ const monkeysUI = [
   mTag,
   mTooltip,
   mEllipsis,
-  mNumberAnimation
+  mNumberAnimation,
+  mBadge
 ]
 
 export default (app: App, opt?: any) => {
@@ -97,5 +99,6 @@ export {
   mTag,
   mTooltip,
   mEllipsis,
-  mNumberAnimation
+  mNumberAnimation,
+  mBadge
 }

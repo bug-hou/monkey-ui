@@ -116,6 +116,9 @@ watch(
       if (props.effect === "change") {
         useChange(from, newTo as number, duration, displayedValue);
       } else {
+        if (String(newTo as number).length < scrollValue.value.length) {
+          scrollValue.value.splice(0, String(newTo as number).length);
+        }
         for (let i = 0; i < String(newTo as number).length; i++) {
           scrollValue.value[i] = +String(newTo as number).charAt(i);
         }

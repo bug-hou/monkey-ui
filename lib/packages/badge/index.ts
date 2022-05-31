@@ -1,3 +1,6 @@
-import bgBadge from "./src/base.vue";
+import Badge from "./src/badge.vue";
+import { withInstall } from "../../utils";
 
-export default bgBadge;
+const mBadge = withInstall(Badge, "mBadge");
+
+export { mBadge };

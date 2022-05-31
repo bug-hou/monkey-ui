@@ -156,7 +156,7 @@ const inputHandler = (event) => {
     } else {
       value.value = undefined;
     }
-    emits("update:modelValue", value.value);
+    emits("update:modelValue", +value.value);
   }
 };
 const decrement = () => {
@@ -164,14 +164,14 @@ const decrement = () => {
     +value.value - props.step < props.min
       ? processFiexd(value.value, props.fixed)
       : processFiexd(+value.value - props.step, props.fixed);
-  emits("update:modelValue", value.value);
+  emits("update:modelValue", +value.value);
 };
 const increment = () => {
   value.value =
     +value.value + props.step > props.max
       ? processFiexd(value.value, props.fixed)
       : processFiexd(+value.value + props.step, props.fixed);
-  emits("update:modelValue", value.value);
+  emits("update:modelValue", +value.value);
 };
 
 let mouseUp = false;

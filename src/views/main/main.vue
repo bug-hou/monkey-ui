@@ -45,7 +45,8 @@ const base = [
   { name: "开关Tag", path: "/tag" },
   { name: "开关Tooltip", path: "/tooltip" },
   { name: "省略Ellipsis", path: "/ellipsis" },
-  { name: "省略numberAnimation", path: "/numberAnimation" }
+  { name: "省略NumberAnimation", path: "/numberAnimation" },
+  { name: "省略Badge", path: "/badge" }
 ];
 </script>
 <style scoped lang="less">
