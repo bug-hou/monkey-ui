@@ -1,40 +1,28 @@
 <template>
   <cpn-play-vue
-    title="type"
-    description="type改变标记的颜色default(默认),error,primary,success,warning,info"
-    :code="typeCode"
+    title="medium"
+    description="medium为true时，标记会相当于大点"
+    :code="dotCode"
   >
-    <m-badge :value="5" type="error">
+    <m-badge :value="5" dot>
       <m-avatar
         src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
       ></m-avatar>
     </m-badge>
     <span class="gab"></span>
-    <m-badge :value="999" :max="99" type="info">
+    <m-badge :value="999" :max="99" dot>
       <m-avatar
         src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
       ></m-avatar>
     </m-badge>
     <span class="gab"></span>
-    <m-badge :value="15" type="primary">
+    <m-badge :value="15" medium dot>
       <m-avatar
         src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
       ></m-avatar>
     </m-badge>
     <span class="gab"></span>
-    <m-badge :value="999" :max="99" type="success">
-      <m-avatar
-        src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
-      ></m-avatar>
-    </m-badge>
-    <span class="gab"></span>
-    <m-badge :value="999" :max="99">
-      <m-avatar
-        src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
-      ></m-avatar>
-    </m-badge>
-    <span class="gab"></span>
-    <m-badge :value="999" :max="99" type="warning">
+    <m-badge :value="999" :max="99" medium dot>
       <m-avatar
         src="https://himg.bdimg.com/sys/portrait/hotitem/wildkid/26"
       ></m-avatar>
@@ -44,12 +32,12 @@
 
 <script lang="ts" setup>
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { typeCode } from "../doc";
+import { dotCode } from "../doc";
 </script>
 
 <style scoped lang="less">
 .gab {
-  width: 30px;
+  width: 50px;
   display: inline-block;
 }
 </style>

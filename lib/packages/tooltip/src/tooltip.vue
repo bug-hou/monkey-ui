@@ -124,6 +124,7 @@ const tooltipLeaveHandle = () => {
 };
 
 const itemClick = (item, index) => {
+
   // emits("itemClick", item, index);
 };
 function enterHandle() {

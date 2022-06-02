@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="medium"
     description="medium为true时，标记会相当于大点"
-    code='<m-back-top bottom="150" circle>回</m-back-top>'
+    :code="mediumCode"
   >
     <m-badge :value="5">
       <m-avatar
@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
+import { mediumCode } from "../doc";
 </script>
 
 <style scoped lang="less">

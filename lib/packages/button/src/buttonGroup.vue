@@ -1,5 +1,9 @@
 <template>
-  <div class="mButtonGroup">
+  <div
+    class="mButtonGroup"
+    :class="border && 'm-button-group-border'"
+    :style="[{ ['--m-button-group-border-color']: color }]"
+  >
     <slot></slot>
   </div>
 </template>
@@ -14,6 +18,9 @@
 import { defineProps, provide } from "vue";
 import type { ButtonType, ButtonShape, ButtonSize } from "./button";
 import ButtonNames from "../config";
+import { LightTheme } from "../../../common/style";
+
+import { getLightColor } from "../../../utils/index";
 
 interface ButtonProps {
   type?: ButtonType;
@@ -26,6 +33,7 @@ interface ButtonProps {
   textColor?: string;
   borderColor?: string;
   text?: boolean;
+  border?: boolean;
 }
 const props = withDefaults(defineProps<ButtonProps>(), {
   type: "default",
@@ -58,13 +66,26 @@ provide(COLOR, props.color);
 provide(BORDER_COLOR, props.borderColor);
 provide(TEXT_COLOR, props.textColor);
 provide(TEXT, props.text);
+
+const theme = LightTheme[props.type];
+
+const color = props.color ?? theme;
 </script>
-<style scoped lang="less">
+<style lang="less">
 .mButtonGroup {
   display: inline-flex;
   justify-content: space-evenly;
-  padding: 10px;
   box-sizing: border-box;
   align-items: center;
+  &.m-button-group-border {
+    border: 1px var(--m-button-group-border-color) solid;
+    .m-button {
+      border-width: 0;
+      border-right: 1px var(--m-button-group-border-color) solid;
+      &:last-of-type {
+        border-right: 0px;
+      }
+    }
+  }
 }
 </style>

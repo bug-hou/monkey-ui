@@ -83,6 +83,12 @@ const color = props.color ?? LightTheme[props.type];
     height: 18px;
     padding: 0 8px;
     font-size: 14px;
+    &.m-badge-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      padding: 0 0;
+    }
   }
 }
 </style>

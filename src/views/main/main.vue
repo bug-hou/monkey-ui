@@ -91,7 +91,7 @@ const base = [
   }
   nav {
     overflow: auto;
-    width: 10rem;
+    width: 15rem;
     border-right: 1px solid rgb(239, 239, 245);
     box-sizing: border-box;
   }

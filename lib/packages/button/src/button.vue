@@ -46,7 +46,7 @@
 
 <script lang="ts" setup name="mButton">
 // 从下载的组件中导入函数
-import { defineEmits, defineProps, withDefaults, provide, ref } from "vue";
+import { defineEmits, defineProps, withDefaults, ref } from "vue";
 
 import { useInject } from "../../../hooks";
 

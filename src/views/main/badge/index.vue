@@ -8,6 +8,8 @@
     <div class="layout">
       <medium-vue></medium-vue>
       <type-vue></type-vue>
+      <dot-vue></dot-vue>
+      <add-vue></add-vue>
     </div>
   </div>
 </template>
@@ -22,6 +24,8 @@
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import mediumVue from "./cpn/medium.vue";
 import typeVue from "./cpn/type.vue";
+import dotVue from "./cpn/dot.vue";
+import addVue from "./cpn/add.vue";
 // import sizeVue from "./cpn/size.vue";
 // import typeVue from "./cpn/type.vue";
 // import shapeVue from "./cpn/shape.vue";
