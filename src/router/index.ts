@@ -219,6 +219,15 @@ const routers: RouteRecordRaw[] = [
             name: "中年"
           }]
         }
+      }, {
+        path: "rate",
+        component: () => import("../views/main/rate/index.vue"),
+        meta: {
+          aside: [{
+            href: "#",
+            name: "中年"
+          }]
+        }
       }
     ]
   }
