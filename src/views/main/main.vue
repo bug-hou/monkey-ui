@@ -4,7 +4,7 @@
       <nav-list-vue :title="baseTitle" :list="base"></nav-list-vue>
     </nav>
     <main class="scroll">
-      <router-view class="view"></router-view>
+      <router-view class="view" replace></router-view>
     </main>
     <aside>
       <ul>
@@ -38,16 +38,17 @@ const base = [
   { name: "折叠面板collapse", path: "/collapse" },
   { name: "数字输入inputNumber", path: "/inputNumber" },
   { name: "多选checkBox", path: "/checkBox" },
-  { name: "多选radio", path: "/radio" },
+  { name: "单选radio", path: "/radio" },
   { name: "选择Select", path: "/select" },
   { name: "开关Switch", path: "/switch" },
-  { name: "开关Pagination", path: "/pagination" },
-  { name: "开关Tag", path: "/tag" },
-  { name: "开关Tooltip", path: "/tooltip" },
+  { name: "分页器Pagination", path: "/pagination" },
+  { name: "标签Tag", path: "/tag" },
+  { name: "提示Tooltip", path: "/tooltip" },
   { name: "省略Ellipsis", path: "/ellipsis" },
-  { name: "省略NumberAnimation", path: "/numberAnimation" },
-  { name: "省略Badge", path: "/badge" },
-  { name: "省略Rate", path: "/rate" },
+  { name: "数字动画NumberAnimation", path: "/numberAnimation" },
+  { name: "标识Badge", path: "/badge" },
+  { name: "评分Rate", path: "/rate" },
+  { name: "时间线Timeline", path: "/timeline" },
 ];
 </script>
 <style scoped lang="less">
@@ -60,7 +61,7 @@ const base = [
     overflow: auto;
     padding-right: 5rem;
     .view {
-      padding: 1.6rem 1.2rem 2.8rem 2.8rem;
+      padding: 1.6rem 1.2rem 1.8rem 1.8rem;
       flex: 1;
       width: 100%;
     }
@@ -92,9 +93,22 @@ const base = [
   }
   nav {
     overflow: auto;
-    width: 15rem;
+    width: 13rem;
     border-right: 1px solid rgb(239, 239, 245);
     box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .main {
+    aside {
+      display: none;
+    }
+    nav {
+      overflow: auto;
+      width: 13rem;
+      border-right: 1px solid rgb(239, 239, 245);
+      box-sizing: border-box;
+    }
   }
 }
 </style>

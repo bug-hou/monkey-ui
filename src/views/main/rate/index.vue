@@ -2,10 +2,14 @@
   <div class="card">
     <cpn-header-vue title="rate" name="评分" description="rate评分还是很好用的">
     </cpn-header-vue>
-    <m-rate v-model="value"></m-rate>
-    <m-rate v-model="value" type="half"></m-rate>
-    <m-rate v-model="value" type="wantonly" show></m-rate>
-    <div class="layout"></div>
+    <div class="layout">
+      <size-vue></size-vue>
+      <readonly-vue></readonly-vue>
+      <show-vue></show-vue>
+      <type-vue></type-vue>
+      <color-vue></color-vue>
+      <count-vue></count-vue>
+    </div>
   </div>
 </template>
 
@@ -16,13 +20,12 @@
  * @Description: 创建一个card组件
  */
 // 从下载的组件中导入函数
-import { ref } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
-
-const value = ref(1);
-// import sizeVue from "./cpn/size.vue";
-// import disabledVue from "./cpn/disabled.vue";
-// import buttonVue from "./cpn/button.vue";
-// const checks = ref("腾讯");
+import sizeVue from "./cpn/size.vue";
+import readonlyVue from "./cpn/readonly.vue";
+import showVue from "./cpn/show.vue";
+import typeVue from "./cpn/type.vue";
+import colorVue from "./cpn/color.vue";
+import countVue from "./cpn/count.vue";
 </script>
 <style scoped lang="less"></style>

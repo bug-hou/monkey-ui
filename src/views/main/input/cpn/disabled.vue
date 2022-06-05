@@ -6,6 +6,7 @@
   >
     <m-input v-model="a" disabled placeholder="你点不动我了吧"></m-input>
     <br />
+    <br />
     <m-input
       v-model="a"
       disabled

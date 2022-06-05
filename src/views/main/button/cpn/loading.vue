@@ -8,9 +8,11 @@
       <m-button @click="handleClick" :loading="loading" loadingName="loop">
         点一下-loop
       </m-button>
+      <p class="gap"></p>
       <m-button @click="handleClick" :loading="loading" type="error">
         点我呀-short
       </m-button>
+      <p class="gap"></p>
       <m-button
         @click="handleClick"
         :loading="loading"
@@ -19,6 +21,7 @@
       >
         我也行-grow
       </m-button>
+      <p class="gap"></p>
       <m-button
         @click="handleClick"
         :loading="loading"
@@ -28,10 +31,13 @@
         我有点慢-slow
       </m-button>
     </m-button-group>
+    <br />
+    <br />
     <m-button-group :plain="false" shape="round">
       <m-button @click="handleClick" :loading="loading" loadingName="deep"
         >看我-deep</m-button
       >
+      <p class="gap"></p>
       <m-button
         @click="handleClick"
         :loading="loading"
@@ -40,6 +46,7 @@
       >
         我在上面-top
       </m-button>
+      <p class="gap"></p>
       <m-button
         @click="handleClick"
         :loading="loading"
@@ -48,6 +55,7 @@
       >
         我长-long
       </m-button>
+      <p class="gap"></p>
       <m-button
         @click="handleClick"
         :loading="loading"
@@ -80,6 +88,8 @@ function handleClick() {
 }
 </script>
 <style scoped lang="less">
-.loading {
+.gap {
+  display: inline-block;
+  width: 10px;
 }
 </style>

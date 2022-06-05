@@ -37,7 +37,9 @@ import { mEllipsis } from "./packages/ellipsis";
 import { mNumberAnimation } from "./packages/numberAnimation";
 import { mBadge } from "./packages/badge"
 
-import { mRate } from "./packages/rate"
+import { mRate } from "./packages/rate";
+
+import { mTimeline, mTimelineItem } from "./packages/timeline"
 
 import { App } from "vue";
 
@@ -68,7 +70,9 @@ const monkeysUI = [
   mEllipsis,
   mNumberAnimation,
   mBadge,
-  mRate
+  mRate,
+  mTimeline,
+  mTimelineItem
 ]
 
 export default (app: App, opt?: any) => {
@@ -104,5 +108,7 @@ export {
   mEllipsis,
   mNumberAnimation,
   mBadge,
-  mRate
+  mRate,
+  mTimeline,
+  mTimelineItem
 }

@@ -1,8 +1,8 @@
 <!--  -->
 <template>
-  <div class="m-rate">
+  <div class="m-rate" :class="'m-rate-' + size">
     <div
-      :class="['m-rate-icon', 'm-rate-' + size]"
+      class="m-rate-icon"
       :style="[
         { ['--m-rate-active-color']: color },
         { ['--m-rate-color']: defaultColor },
@@ -17,8 +17,8 @@
       >
       </m-icon>
     </div>
-    <slot name="default" :precent="precent">
-      <p v-if="show">{{ value }}</p>
+    <slot :precent="value">
+      <p v-if="show">{{ prefix + value + suffix }}</p>
     </slot>
   </div>
 </template>
@@ -49,7 +49,9 @@ const props = withDefaults(
     type: "all",
     defaultColor: "#c6d1de",
     show: false,
-    fixed: 1
+    fixed: 1,
+    suffix: "",
+    prefix: ""
   }
 );
 const emits = defineEmits(["update:modelValue"]);
@@ -88,12 +90,18 @@ function clickHandle(index: number, event) {
 }
 </script>
 <style scoped lang="less">
+@pColor: #6669;
+@pTextColor: white;
 .m-rate {
   display: flex;
   align-items: center;
-  > p {
-    color: #1f2d3d;
-    font-size: 12px;
+  p {
+    margin-left: 20px;
+    padding: 0 10px;
+    border-radius: 5px;
+    color: @pTextColor;
+    background-color: @pColor;
+    height: 90%;
   }
 }
 .m-rate-icon {
@@ -116,17 +124,14 @@ function clickHandle(index: number, event) {
   }
 }
 .m-rate-mini {
-  // width: 80px;
   height: 20px;
   font-size: 14px;
 }
 .m-rate-small {
-  // width: 100px;
   height: 25px;
-  font-size: 18px;
+  font-size: 16px;
 }
 .m-rate-medium {
-  // width: 120px;
   height: 25px;
   font-size: 20px;
 }

@@ -2,6 +2,7 @@
   <cpn-play-vue title="loading" description="实现加载动画" :code="loadingCode">
     <m-input v-model="a" loading placeholder="我动画一直显示"></m-input>
     <br />
+    <br />
     <m-input v-model="a" :loading="loading" placeholder="只要你输入我就有动画">
     </m-input>
   </cpn-play-vue>

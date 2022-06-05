@@ -10,6 +10,7 @@
       placeholder="我只能输入10个字"
     ></m-input>
     <br />
+    <br />
     <m-input
       v-model="a"
       :maxLength="10"

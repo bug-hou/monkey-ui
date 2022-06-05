@@ -6,6 +6,7 @@
   >
     <m-button-group>
       <m-button disabled>我不能点击</m-button>
+      <p class="gap"></p>
       <m-button disabled :plain="false">我不能点击</m-button>
     </m-button-group>
   </cpn-play-vue>
@@ -22,6 +23,8 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { disabledCode } from "../doc";
 </script>
 <style scoped lang="less">
-.disabled {
+.gap {
+  display: inline-block;
+  width: 30px;
 }
 </style>

@@ -7,6 +7,7 @@
     <m-input v-model="a" placeholder="我可以定义前缀哦" prefix="http">
     </m-input>
     <br />
+    <br />
     <m-input
       v-model="a"
       placeholder="后缀和前缀"
@@ -14,6 +15,7 @@
       suffix="你的名字"
     >
     </m-input>
+    <br />
     <br />
     <m-input
       v-model="a"
@@ -26,6 +28,7 @@
       suffixTextColor="white"
     >
     </m-input>
+    <br />
     <br />
     <m-input
       v-model="a"

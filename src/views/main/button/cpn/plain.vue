@@ -6,12 +6,16 @@
   >
     <m-button-group :plain="false" shape="round">
       <m-button>default</m-button>
+      <p class="gap"></p>
       <m-button type="success">success</m-button>
+      <p class="gap"></p>
       <m-button type="error">error</m-button>
+      <p class="gap"></p>
       <m-button type="primary">primary</m-button>
+      <p class="gap"></p>
       <m-button type="info">info</m-button>
+      <p class="gap"></p>
       <m-button type="warning">warning</m-button>
-      <m-button color="rgb(48, 170, 105)" borderColor="rgb(48, 170, 105)">warning</m-button>
     </m-button-group>
   </cpn-play-vue>
 </template>
@@ -27,6 +31,7 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { plainCode } from "../doc";
 </script>
 <style scoped lang="less">
-.pbuttonpain {
+.gap {
+  width: 20px;
 }
 </style>

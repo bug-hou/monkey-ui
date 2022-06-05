@@ -11,6 +11,7 @@
       suffix="圆角输入框"
     ></m-input>
     <br />
+    <br />
     <m-input v-model="a" radius="20px" placeholder="自定义radius属性">
     </m-input>
   </cpn-play-vue>

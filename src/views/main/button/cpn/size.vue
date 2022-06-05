@@ -6,8 +6,11 @@
   >
     <m-button-group class="size">
       <m-button shape="round" size="mini" type="success">小小按钮</m-button>
+      <p class="gap"></p>
       <m-button shape="round" size="small" type="error">小按钮</m-button>
+      <p class="gap"></p>
       <m-button shape="round" size="medium" type="primary">中等按钮</m-button>
+      <p class="gap"></p>
       <m-button shape="round" size="big" type="info">大大的按钮</m-button>
     </m-button-group>
   </cpn-play-vue>
@@ -24,6 +27,7 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { sizeCode } from "../doc";
 </script>
 <style scoped lang="less">
-.butonSize {
+.gap {
+  width: 20px;
 }
 </style>

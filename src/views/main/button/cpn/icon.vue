@@ -9,14 +9,17 @@
         <m-icon name="m-upload"></m-icon>
         成功的上传
       </m-button>
+      <p class="gap"></p>
       <m-button type="info" shape="round">
         <m-icon name="m-upload"></m-icon>
         上传信息哦
       </m-button>
+      <p class="gap"></p>
       <m-button type="warning" shape="arc">
         <m-icon name="m-upload"></m-icon>
         是一个警告
       </m-button>
+      <p class="gap"></p>
       <m-button type="error" shape="circle">
         <m-icon name="m-upload"></m-icon>
       </m-button>
@@ -35,6 +38,8 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { iconCode } from "../doc";
 </script>
 <style scoped lang="less">
-.icon {
+.gap {
+  display: inline-block;
+  width: 30px;
 }
 </style>

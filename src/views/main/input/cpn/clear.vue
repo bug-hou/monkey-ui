@@ -10,6 +10,7 @@
       placeholder="你要输入才显示clear按钮哦"
     ></m-input>
     <br />
+    <br />
     <m-input
       v-model="a"
       clear
@@ -18,6 +19,7 @@
       placeholder="我是同时拥有的组件"
     >
     </m-input>
+    <br />
     <br />
     <m-input
       v-model="a"

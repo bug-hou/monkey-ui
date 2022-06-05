@@ -29,7 +29,6 @@ const gradient = processStyle(
   ",",
   props.colors
 );
-console.log(gradient);
 </script>
 <style scoped lang="less">
 .m-gradient {

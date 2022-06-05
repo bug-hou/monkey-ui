@@ -10,8 +10,10 @@
       placeholder="当你输入monkeysUI就对了"
     ></m-input>
     <br />
+    <br />
     <m-input v-model="a" color="#f56c6c" placeholder="我背景是红色的">
     </m-input>
+    <br />
     <br />
     <m-input
       v-model="a"

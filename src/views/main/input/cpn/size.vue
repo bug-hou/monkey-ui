@@ -12,12 +12,14 @@
         index="1"
       ></m-input>
       <br />
+      <br />
       <m-input
         v-model="a"
         placeholder="使用input组件一定要绑定v-model才使用"
         size="small"
         index="5"
       ></m-input>
+      <br />
       <br />
       <m-input
         v-model="a"
@@ -41,7 +43,3 @@ import { sizeCode } from "../doc";
 import { ref } from "vue";
 const a = ref("");
 </script>
-<style scoped lang="less">
-.base {
-}
-</style>

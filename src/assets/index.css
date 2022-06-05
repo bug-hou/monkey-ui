@@ -34,7 +34,7 @@ pre {
     grid-template-columns: repeat(auto, 700px);
   }
 }
-@media screen and (max-width: 700) {
+@media screen and (max-width: 1000px) {
   .layout {
     grid-template-columns: repeat(1, 90%);
   }

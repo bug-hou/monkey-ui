@@ -11,12 +11,14 @@
         </template>
         点一下才有
       </m-button>
+      <p class="gap"></p>
       <m-button @click="handleClick" :loading="loading" type="error">
         <template #icon>
           <m-icon name="m-upload"></m-icon>
         </template>
         点我也可以
       </m-button>
+      <p class="gap"></p>
       <m-button @click="handleClick" :loading="loading" type="primary">
         <template #icon>
           <m-icon name="m-upload"></m-icon>
@@ -44,6 +46,7 @@ function handleClick() {
 }
 </script>
 <style scoped lang="less">
-.slot {
+.gap {
+  width: 20px;
 }
 </style>

@@ -6,10 +6,15 @@
   >
     <m-button-group class="type">
       <m-button>default</m-button>
+      <p class="gap"></p>
       <m-button type="success">success</m-button>
+      <p class="gap"></p>
       <m-button type="error">error</m-button>
+      <p class="gap"></p>
       <m-button type="primary">primary</m-button>
+      <p class="gap"></p>
       <m-button type="info">info</m-button>
+      <p class="gap"></p>
       <m-button type="warning">warning</m-button>
     </m-button-group>
   </cpn-play-vue>
@@ -25,3 +30,8 @@
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { typeCode } from "../doc";
 </script>
+<style scoped>
+.gap {
+  width: 20px;
+}
+</style>
