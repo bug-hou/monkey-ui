@@ -49,6 +49,7 @@ const base = [
   { name: "标识Badge", path: "/badge" },
   { name: "评分Rate", path: "/rate" },
   { name: "时间线Timeline", path: "/timeline" },
+  { name: "结果Result", path: "/result" },
 ];
 </script>
 <style scoped lang="less">

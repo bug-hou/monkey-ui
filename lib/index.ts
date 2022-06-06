@@ -39,7 +39,9 @@ import { mBadge } from "./packages/badge"
 
 import { mRate } from "./packages/rate";
 
-import { mTimeline, mTimelineItem } from "./packages/timeline"
+import { mTimeline, mTimelineItem } from "./packages/timeline";
+
+import { mResult } from "./packages/result"
 
 import { App } from "vue";
 
@@ -72,7 +74,8 @@ const monkeysUI = [
   mBadge,
   mRate,
   mTimeline,
-  mTimelineItem
+  mTimelineItem,
+  mResult
 ]
 
 export default (app: App, opt?: any) => {
@@ -110,5 +113,6 @@ export {
   mBadge,
   mRate,
   mTimeline,
-  mTimelineItem
+  mTimelineItem,
+  mResult
 }
