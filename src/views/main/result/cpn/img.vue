@@ -1,14 +1,21 @@
 <template>
   <cpn-play-vue
-    title="palm"
-    description="component设置为palm时显示一个手掌"
-    :code="palmCode"
+    title="header"
+    description="自定义header插件"
+    :code="imgCode"
   >
     <m-result
       title="403禁止访问"
       component="palm"
       content="你可能需要提升一下权限"
     >
+      <template #header>
+        <img
+          src="https://game.gtimg.cn/images/lol/act/img/skinloading/157000.jpg"
+          alt="亚索"
+          style="height: 160px;width: 160px;"
+        />
+      </template>
       <template #footer>
         <m-button type="primary">提升权限</m-button>
       </template>
@@ -24,5 +31,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { palmCode } from "../doc";
+import { imgCode } from "../doc";
 </script>

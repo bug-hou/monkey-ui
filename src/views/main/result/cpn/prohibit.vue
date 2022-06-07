@@ -1,16 +1,12 @@
 <template>
-  <cpn-play-vue
-    title="palm"
-    description="component设置为palm时显示一个手掌"
-    :code="palmCode"
-  >
+  <cpn-play-vue title="prohibit" description="component设置为prohibit时显示一个禁止" :code="prohibitCode">
     <m-result
-      title="403禁止访问"
-      component="palm"
-      content="你可能需要提升一下权限"
+      title="李青"
+      content="双眼失明丝毫不影响我追捕敌人，因为我能闻到他们身上的臭味"
+      component="prohibit"
     >
       <template #footer>
-        <m-button type="primary">提升权限</m-button>
+        <m-button>下一个</m-button>
       </template>
     </m-result>
   </cpn-play-vue>
@@ -24,5 +20,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { palmCode } from "../doc";
+import { prohibitCode } from "../doc";
 </script>

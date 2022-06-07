@@ -41,7 +41,9 @@ import { mRate } from "./packages/rate";
 
 import { mTimeline, mTimelineItem } from "./packages/timeline";
 
-import { mResult } from "./packages/result"
+import { mResult } from "./packages/result";
+
+import { mAffix } from "./packages/affix";
 
 import { App } from "vue";
 
@@ -75,7 +77,8 @@ const monkeysUI = [
   mRate,
   mTimeline,
   mTimelineItem,
-  mResult
+  mResult,
+  mAffix,
 ]
 
 export default (app: App, opt?: any) => {
@@ -114,5 +117,6 @@ export {
   mRate,
   mTimeline,
   mTimelineItem,
-  mResult
+  mResult,
+  mAffix
 }

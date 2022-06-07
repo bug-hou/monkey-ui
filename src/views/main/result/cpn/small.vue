@@ -1,5 +1,5 @@
 <template>
-  <cpn-play-vue title="small" description="component设置为small时显示一个笑脸" :code="cupCode">
+  <cpn-play-vue title="small" description="component设置为small时显示一个笑脸" :code="smallCode">
     <m-result
       title="恭喜你答对了"
       content="我于杀戮之中绽放，亦如黎明中的花朵"
@@ -20,5 +20,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { cupCode } from "../doc";
+import { smallCode } from "../doc";
 </script>

@@ -3,6 +3,7 @@
     <m-result
       title="404资源不存在"
       content="你可以试着换一个地址从新发送一个请求"
+      component="cup"
     >
       <template #footer>
         <m-button type="error">跳转一下</m-button>

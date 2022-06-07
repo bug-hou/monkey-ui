@@ -1,16 +1,12 @@
 <template>
-  <cpn-play-vue
-    title="palm"
-    description="component设置为palm时显示一个手掌"
-    :code="palmCode"
-  >
+  <cpn-play-vue title="cry" description="component设置为cry时显示一个哭脸" :code="cryCode">
     <m-result
-      title="403禁止访问"
-      component="palm"
-      content="你可能需要提升一下权限"
+      title="别灰心下一次就能中了"
+      content="再接再厉你可以成功的进大厂加油"
+      component="cry"
     >
       <template #footer>
-        <m-button type="primary">提升权限</m-button>
+        <m-button>下一个</m-button>
       </template>
     </m-result>
   </cpn-play-vue>
@@ -24,5 +20,5 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { palmCode } from "../doc";
+import { cryCode } from "../doc";
 </script>

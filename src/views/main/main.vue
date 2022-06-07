@@ -50,6 +50,7 @@ const base = [
   { name: "评分Rate", path: "/rate" },
   { name: "时间线Timeline", path: "/timeline" },
   { name: "结果Result", path: "/result" },
+  { name: "结果Affix", path: "/affix" },
 ];
 </script>
 <style scoped lang="less">

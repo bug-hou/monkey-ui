@@ -9,7 +9,16 @@ function scrollParent(element: HTMLElement): HTMLElement | null {
     return null;
   }
   const style = getComputedStyle(parent);
-  if (parent.clientHeight < parent.scrollHeight && (style.overflow !== "visible")) {
+  const client = parent.clientHeight;
+  const scroll = parent.scrollHeight;
+  if (parent.nodeName === "HTML" || parent.nodeName === "BODY") {
+    if (client < scroll) {
+      return parent;
+    } else {
+      scrollParent(parent);
+    }
+  }
+  if (client < scroll && (style.overflow !== "visible")) {
     return parent;
   } else {
     return scrollParent(parent);

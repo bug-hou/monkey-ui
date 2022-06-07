@@ -10,6 +10,11 @@
       <cup-vue></cup-vue>
       <small-vue></small-vue>
       <palm-vue></palm-vue>
+      <cry-vue></cry-vue>
+      <prohibit-vue></prohibit-vue>
+      <planet-vue></planet-vue>
+      <ghost-vue></ghost-vue>
+      <img-vue></img-vue>
     </div>
   </div>
 </template>
@@ -25,11 +30,10 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import cupVue from "./cpn/cup.vue";
 import smallVue from "./cpn/small.vue";
 import palmVue from "./cpn/palm.vue";
-// import sizeVue from "./cpn/size.vue";
-// import readonlyVue from "./cpn/readonly.vue";
-// import showVue from "./cpn/show.vue";
-// import typeVue from "./cpn/type.vue";
-// import colorVue from "./cpn/color.vue";
-// import countVue from "./cpn/count.vue";
+import cryVue from "./cpn/cry.vue";
+import prohibitVue from "./cpn/prohibit.vue";
+import planetVue from "./cpn/planet.vue";
+import ghostVue from "./cpn/ghost.vue";
+import imgVue from "./cpn/img.vue";
 </script>
 <style scoped lang="less"></style>
