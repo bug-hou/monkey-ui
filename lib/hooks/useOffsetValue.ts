@@ -1,4 +1,4 @@
-export default function offsetValue(obj: any, direction: "left" | "top") {
+export function offsetValue(obj: any, direction: "left" | "top") {
   //将top,left首字母大写,并拼接成offsetTop,offsetLeft
   const offsetDir = 'offset' + direction[0].toUpperCase() + direction.substring(1);
 
