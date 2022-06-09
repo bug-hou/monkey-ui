@@ -51,6 +51,7 @@ const base = [
   { name: "时间线Timeline", path: "/timeline" },
   { name: "结果Result", path: "/result" },
   { name: "结果Affix", path: "/affix" },
+  { name: "级联选择Cascader", path: "/cascader" }
 ];
 </script>
 <style scoped lang="less">

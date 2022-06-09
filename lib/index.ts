@@ -45,6 +45,8 @@ import { mResult } from "./packages/result";
 
 import { mAffix } from "./packages/affix";
 
+import { mCascader } from "./packages/cascader"
+
 import { App } from "vue";
 
 const monkeysUI = [
@@ -79,6 +81,7 @@ const monkeysUI = [
   mTimelineItem,
   mResult,
   mAffix,
+  mCascader
 ]
 
 export default (app: App, opt?: any) => {
@@ -118,5 +121,6 @@ export {
   mTimeline,
   mTimelineItem,
   mResult,
-  mAffix
+  mAffix,
+  mCascader
 }

@@ -2,7 +2,7 @@
 <template>
   <label
     :class="[
-      bgSize,
+      'm-checkbox-' + mSize,
       (disabled || (!isChecked && !isSelect)) && 'disabled',
       isButton && 'labelBorder',
       hasBorder && 'hasBorder',
@@ -55,7 +55,7 @@ const emits = defineEmits(["update:modelValue"]);
 const check = useInject(props.modelValue, radioConfig.modelValue);
 const hasBorder = useInject(props.border, "border", false);
 const isButton = useInject(props.button, radioConfig.button, false);
-const bgSize = useInject(props.size, radioConfig.size, "small");
+const mSize = useInject(props.size, radioConfig.size, "small");
 const disabled = useInject(props.disabled, radioConfig.disabled, false);
 
 const isSelect = useInject(undefined, radioConfig.select);
@@ -82,6 +82,20 @@ watch(
 );
 </script>
 <style scoped lang="less">
+@keyframes leftToBottom {
+  0% {
+    height: 0px;
+    width: 0px;
+  }
+  30% {
+    height: 3px;
+    width: 0;
+  }
+  100% {
+    width: 8px;
+    height: 3px;
+  }
+}
 label {
   position: relative;
   color: var(--font-color-check-box);
@@ -132,16 +146,17 @@ input {
   color: var(--font-color-check-box-border);
 }
 input + p {
+  height: 3px;
+  width: 8px;
   transition: all 0.3s;
   position: relative;
   box-sizing: border-box;
   border: 2px solid var(--border-color-check-box);
+  text-align: center;
   width: 16px;
   height: 16px;
-  border-radius: 50%;
-  padding: 1px;
-  text-align: center;
   &.radio {
+    padding: 1px;
     border-radius: 50%;
   }
 }
@@ -149,11 +164,22 @@ input:checked + p {
   background-clip: content-box;
   border-color: var(--border-color-check-box-active);
   box-shadow: 0px 0px 3px 1px var(--shadow-color-check-box);
+  background-color: var(--back-color-check-box);
   &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 8px;
+    height: 3px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    animation: leftToBottom 0.5s forwards;
+  }
+  &.radio::after {
     transition: all 0.3s;
     content: "";
-    display: block;
-    position: absolute;
     left: 50%;
     top: 50%;
     width: 8px;
@@ -161,9 +187,8 @@ input:checked + p {
     background-color: var(--back-color-check-box);
     transform: translate(-50%, -50%);
     box-shadow: 0px 0px 3px 1px var(--shadow-color-check-box);
-  }
-  &.radio::after {
     border-radius: 50%;
+    border: none;
   }
 }
 input:checked + div {
@@ -172,7 +197,7 @@ input:checked + div {
 .select {
   visibility: hidden;
 }
-.mini {
+.m-checkbox-mini {
   font-size: 14px;
   input {
     margin-left: 5px;
@@ -181,7 +206,7 @@ input:checked + div {
     padding-left: 2px;
   }
 }
-.small {
+.m-checkbox-small {
   font-size: 16px;
   input {
     margin-left: 8px;
@@ -190,7 +215,7 @@ input:checked + div {
     padding-left: 5px;
   }
 }
-.medium {
+.m-checkbox-medium {
   font-size: 18px;
   input {
     margin-left: 10px;
