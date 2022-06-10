@@ -41,7 +41,7 @@ const props = withDefaults(
     circle: false
   }
 );
-let callback: Function;
+let callback: Function = () => {};
 const scrollRef = ref<HTMLElement>();
 const showBackTop = ref(false);
 

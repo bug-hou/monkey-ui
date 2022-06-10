@@ -3,7 +3,7 @@
     class="m-cascader-item"
     :class="[
       option.disabled && 'm-cascader-item-disabled',
-      status === 'select' ? 'm-cascader-item-select' : 'm-cascader-item-none'
+      'm-cascader-item-' + status
     ]"
   >
     <p class="m-cascader-rect"></p>
@@ -55,6 +55,22 @@ function verifyChildren() {
         height: 4px;
         width: 10px;
         border-left: 2px solid white;
+        border-bottom: 2px solid white;
+      }
+    }
+  }
+  &.m-cascader-item-has {
+    color: @color;
+    .m-cascader-rect {
+      background: @color;
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -50%);
+        height: 4px;
+        width: 10px;
         border-bottom: 2px solid white;
       }
     }

@@ -9,8 +9,9 @@
         class="m-cascader-list-option"
         :index="index"
         :options="option"
-        :select-index="selectIndex[index]"
+        :select-index="activeMap.get(option) ?? []"
         :active-index="activeIndex[index]"
+        :has-index="childrenMap.get(option) ?? []"
         @change="changeHandle"
         @show="showHandle"
         @hidden="hiddenHandle"
@@ -26,7 +27,7 @@
  * @Description: 创建一个m-cascader组件
  */
 // 从下载的组件中导入函数
-import { reactive, defineProps } from "vue";
+import { reactive, defineProps, ref } from "vue";
 import { Options } from "../config/type";
 
 import cascaderListVue from "./cascaderList.vue";
@@ -40,14 +41,18 @@ const props = withDefaults(
 const showOptions = reactive([props.options]);
 const activeIndex = reactive([]);
 const showValues = reactive([]);
-const selectIndex = reactive([]);
 
+const activeMap = ref(new WeakMap<object, number[]>());
+const childrenMap = ref(new WeakMap<object, number[]>());
+
+// 向showOPtions数组中添加值，并且同步更新activeIndex
 function changeHandle(option: Options[], index: number, parentIndex: number) {
   showOptions.splice(index + 1, showOptions.length);
   activeIndex.splice(index, activeIndex.length);
   showOptions.push(option);
   activeIndex.push(parentIndex);
 }
+
 function showHandle(option: Options, index: number, parentIndex: number) {
   let showValue = "";
   for (let i = 0; i < index; i++) {
@@ -56,17 +61,28 @@ function showHandle(option: Options, index: number, parentIndex: number) {
   showValue += option.label;
   showValues.push(showValue);
 
-  if (!Array.isArray(selectIndex[index])) {
-    selectIndex[index] = [];
+  let key = showOptions[index];
+  let values = activeMap.value.get(key) ?? [];
+  values.push(parentIndex);
+  activeMap.value.set(key, values);
+  while (index !== 0 && values.length === key.length) {
+    key = showOptions[index - 1];
+    values = activeMap.value.get(key) ?? [];
+    values.push(activeIndex[index - 1]);
+    activeMap.value.set(key, values);
+    index--;
   }
-  selectIndex[index].push(parentIndex);
+  while (index !== 0) {
+    key = showOptions[index - 1];
+    values = childrenMap.value.get(key) ?? [];
+    if (!values.includes(activeIndex[index - 1])) {
+      values.push(activeIndex[index - 1]);
+      childrenMap.value.set(key, values);
+    }
+    index--;
+  }
 }
 function hiddenHandle(option: Options, index: number, parentIndex: number) {
-  selectIndex[index].splice(selectIndex[index].indexOf(parentIndex), 1);
-  if (selectIndex[index].length === 0) {
-    selectIndex[index] = null;
-  }
-
   let showValue = "";
   for (let i = 0; i < index; i++) {
     showValue += showOptions[i][activeIndex[i]].label + "/";
@@ -74,6 +90,39 @@ function hiddenHandle(option: Options, index: number, parentIndex: number) {
   showValue += option.label;
 
   showValues.splice(showValues.indexOf(showValue), 1);
+
+  let key = showOptions[index];
+
+  let values = activeMap.value.get(key);
+
+  let curIndex = index;
+  while (curIndex !== -1) {
+    values.splice(
+      values.indexOf(
+        curIndex === index ? parentIndex : activeIndex[curIndex - 1]
+      ),
+      1
+    );
+    activeMap.value.set(key, values);
+    if (values.length === (curIndex === index ? key.length - 1 : key.length)) {
+      key = showOptions[curIndex - 1];
+      values = activeMap.value.get(key);
+      curIndex--;
+    } else {
+      break;
+    }
+  }
+
+  key = showOptions[index];
+
+  values = activeMap.value.get(key);
+  while (index !== 0 && values.length === 0) {
+    key = showOptions[index - 1];
+    values = childrenMap.value.get(key);
+    values.splice(values.indexOf(activeIndex[index - 1]), 1);
+    childrenMap.value.set(key, values);
+    index--;
+  }
 }
 </script>
 <style scoped lang="less">

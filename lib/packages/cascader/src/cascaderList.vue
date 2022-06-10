@@ -8,7 +8,13 @@
             activeIndex === index && 'm-cascader-option-list-item-active'
           ]"
           :option="item"
-          :status="selectIndex?.includes(index) ? 'select' : 'none'"
+          :status="
+            selectIndex?.includes(index)
+              ? 'select'
+              : hasIndex.includes(index)
+              ? 'has'
+              : 'none'
+          "
           @click="clickHandle(item, index)"
         ></cascader-item-vue>
       </template>
@@ -34,6 +40,7 @@ const props = withDefaults(
     index: number;
     activeIndex?: number;
     selectIndex?: number[];
+    hasIndex?: number[];
   }>(),
   {}
 );
@@ -42,14 +49,14 @@ const emits = defineEmits(["change", "show", "hidden"]);
 const cascaderRef = ref<HTMLElement>();
 
 function clickHandle(item: Options, parentIndex: number) {
-  if (!props.selectIndex?.includes(parentIndex)) {
-    if (item.children && item.children.length !== 0) {
-      emits("change", item.children, props.index, parentIndex);
-    } else {
-      emits("show", item, props.index, parentIndex);
-    }
+  if (item.children && item.children.length !== 0) {
+    emits("change", item.children, props.index, parentIndex);
   } else {
-    emits("hidden", item, props.index, parentIndex);
+    if (!props.selectIndex?.includes(parentIndex)) {
+      emits("show", item, props.index, parentIndex);
+    } else {
+      emits("hidden", item, props.index, parentIndex);
+    }
   }
 }
 

@@ -35,7 +35,21 @@ const options = [
       },
       {
         label: "2-1",
-        value: "2-1"
+        value: "2-1",
+        children: [
+          {
+            label: "2-1",
+            value: "2-1"
+          },
+          {
+            label: "2-1",
+            value: "2-1"
+          },
+          {
+            label: "2-1",
+            value: "2-1"
+          }
+        ]
       },
       {
         label: "2-1",
