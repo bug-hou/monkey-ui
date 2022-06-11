@@ -29,7 +29,7 @@
  * @Description: 创建一个m-cascader组件
  */
 // 从下载的组件中导入函数
-import { reactive, defineProps, ref, nextTick } from "vue";
+import { reactive, defineProps, ref } from "vue";
 import { Options } from "../config/type";
 
 import cascaderListVue from "./cascaderList.vue";
@@ -39,6 +39,7 @@ const props = withDefaults(
     options: Options[];
     join?: string;
     multiple?: boolean;
+    modelValue?: string | string[];
   }>(),
   {
     join: "/",
@@ -47,21 +48,79 @@ const props = withDefaults(
 );
 const showOptions = reactive([props.options]);
 const activeIndex = reactive<number[]>([]);
-const showValues = reactive<string[]>([]);
+const showValues = reactive<string[]>(
+  Array.isArray(props.modelValue)
+    ? props.modelValue
+    : props.modelValue
+    ? [props.modelValue]
+    : []
+);
 
 const showLabels = reactive<string[]>([]);
 
 const activeMap = ref(new WeakMap<object, number[]>());
 const childrenMap = ref(new WeakMap<object, number[]>());
 
+parseModelValue();
+
+function parseModelValue() {
+  const models: string[] = showValues;
+  for (let i = 0; i < models.length; i++) {
+    if (props.multiple) {
+      processeInitialValue(models[i]);
+    } else {
+      processeInitialValue(models[i]);
+      break;
+    }
+  }
+}
+
+function processeInitialValue(value: string) {
+  const valuess = value.split(props.join);
+  let options = props.options;
+  let indexs: number[] = [];
+  let optionss: Options[] = [];
+  let label = "";
+  for (let i = 0; i < valuess.length; i++) {
+    for (let j = 0; j < options.length; j++) {
+      if (options[j].value === valuess[i]) {
+        label += options[j].label + props.join;
+        optionss.push(options[j]);
+        indexs.push(j);
+        if (i === valuess.length - 1) {
+          const activeValues = activeMap.value.get(options) ?? [];
+          activeValues.push(j);
+          activeMap.value.set(options, activeValues);
+          showLabels.push(label);
+          break;
+        }
+        const childrenValue = childrenMap.value.get(options) ?? [];
+        childrenValue.push(j);
+        childrenMap.value.set(options, childrenValue);
+        options = options[j].children ?? [];
+        break;
+      }
+    }
+  }
+  while (indexs.length !== 0) {
+    const key = optionss.pop();
+    const index = indexs.pop();
+    const value = activeMap.value.get(key as Options) ?? [];
+    if (value.length === key?.children?.length) {
+      value.push(index as number);
+      activeMap.value.set(key, value);
+    } else {
+      break;
+    }
+  }
+}
+
 // 向showOPtions数组中添加值，并且同步更新activeIndex
 function changeHandle(option: Options[], index: number, parentIndex: number) {
-  setTimeout(() => {
-    showOptions.splice(index + 1, showOptions.length);
-    activeIndex.splice(index, activeIndex.length);
-    showOptions.push(option);
-    activeIndex.push(parentIndex);
-  }, 100);
+  showOptions.splice(index + 1, showOptions.length);
+  activeIndex.splice(index, activeIndex.length);
+  showOptions.push(option);
+  activeIndex.push(parentIndex);
 }
 
 function showHandle(option: Options, index: number, parentIndex: number) {
@@ -212,6 +271,9 @@ function selectHandle(
   label?: string,
   showValue?: string
 ) {
+  if (!props.multiple) {
+    return;
+  }
   if (!label) {
     const values = activeMap.value.get(showOptions[index]) ?? [];
     const childrenValues = childrenMap.value.get(showOptions[index]) ?? [];
@@ -251,6 +313,9 @@ function cancelHandle(
   label?: string,
   showValue?: string
 ) {
+  if (!props.multiple) {
+    return;
+  }
   if (!label) {
     const value = activeMap.value.get(showOptions[index]) ?? [];
     value.splice(value.indexOf(parentIndex), 1);
@@ -337,7 +402,7 @@ function processShow(
     border-radius: 10px;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
       0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
-    background-color: #fafbfc;
+    background-color: #fff;
     display: inline-flex;
     .m-cascader-list-option {
       border-right: 1px solid @color;
