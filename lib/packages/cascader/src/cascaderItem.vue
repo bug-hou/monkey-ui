@@ -6,7 +6,7 @@
       'm-cascader-item-' + status
     ]"
   >
-    <p class="m-cascader-rect"></p>
+    <p class="m-cascader-rect" @click="clickHandle"></p>
     <p class="m-cascader-label">{{ option.label }}</p>
     <p v-if="verifyChildren()" class="m-cascader-children"></p>
   </div>
@@ -19,7 +19,7 @@
  * @Description: 创建一个m-cascader-item组件
  */
 // 从下载的组件中导入函数
-import { defineProps } from "vue";
+import { defineProps, withDefaults, defineEmits } from "vue";
 import { Options } from "../config/type";
 const props = withDefaults(
   defineProps<{
@@ -28,8 +28,19 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+const emits = defineEmits(["select", "cancel"]);
 function verifyChildren() {
   return props.option.children && props.option.children.length !== 0;
+}
+function clickHandle() {
+  if (props.option.children && props.option.children.length !== 0) {
+    if (props.status === "select") {
+      emits("cancel");
+    } else {
+      emits("select");
+    }
+  }
 }
 </script>
 <style scoped lang="less">

@@ -27,14 +27,16 @@ pre {
 .layout {
   display: grid;
   grid-template-columns: repeat(2, 48%);
+  /* transform: scale(0.9); */
+  transform-origin: center center;
   justify-content: space-evenly;
 }
 @media screen and (max-width: 2000px) {
   .layout {
-    grid-template-columns: repeat(auto, 700px);
+    grid-template-columns: repeat(none, 700px);
   }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1360px) {
   .layout {
     grid-template-columns: repeat(1, 90%);
   }

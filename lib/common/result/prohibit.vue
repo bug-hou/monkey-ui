@@ -33,9 +33,9 @@ import { withDefaults, defineProps } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    color: string;
-    width: number;
-    height: number;
+    color?: string;
+    width?: number;
+    height?: number;
   }>(),
   {
     color: "#FF4D3C",

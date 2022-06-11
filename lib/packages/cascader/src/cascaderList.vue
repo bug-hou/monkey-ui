@@ -16,6 +16,8 @@
               : 'none'
           "
           @click="clickHandle(item, index)"
+          @cancel="cancelHandle(item, index)"
+          @select="selectHandle(item, index)"
         ></cascader-item-vue>
       </template>
     </div>
@@ -45,7 +47,7 @@ const props = withDefaults(
   {}
 );
 
-const emits = defineEmits(["change", "show", "hidden"]);
+const emits = defineEmits(["change", "show", "hidden", "select", "cancel"]);
 const cascaderRef = ref<HTMLElement>();
 
 function clickHandle(item: Options, parentIndex: number) {
@@ -59,7 +61,12 @@ function clickHandle(item: Options, parentIndex: number) {
     }
   }
 }
-
+function cancelHandle(item: Options, parentIndex: number) {
+  emits("cancel", item, props.index, parentIndex);
+}
+function selectHandle(item: Options, parentIndex: number) {
+  emits("select", item, props.index, parentIndex);
+}
 onMounted(() => {
   useScroll(cascaderRef.value);
 });

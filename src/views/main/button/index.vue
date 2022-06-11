@@ -7,15 +7,15 @@
     ></cpn-header-vue>
     <div class="layout">
       <size-vue></size-vue>
-      <type-vue></type-vue>
-      <shape-vue></shape-vue>
-      <plain-vue></plain-vue>
       <disabled-vue></disabled-vue>
       <icon-vue></icon-vue>
       <loading-vue></loading-vue>
       <slot-vue></slot-vue>
       <text-vue></text-vue>
     </div>
+    <shape-vue></shape-vue>
+    <plain-vue></plain-vue>
+    <type-vue></type-vue>
   </div>
 </template>
 
@@ -26,7 +26,6 @@
  * @Description: 创建一个button组件
  */
 // 从下载的组件中导入函数
-import { ref } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import sizeVue from "./cpn/size.vue";
 import typeVue from "./cpn/type.vue";
@@ -37,11 +36,6 @@ import loadingVue from "./cpn/loading.vue";
 import slotVue from "./cpn/slot.vue";
 import disabledVue from "./cpn/disabled.vue";
 import textVue from "./cpn/text.vue";
-const loading = ref(false);
-function handleClick() {
-  loading.value = true;
-  setTimeout(() => (loading.value = false), 2000);
-}
 </script>
 <style scoped lang="less">
 .button {
