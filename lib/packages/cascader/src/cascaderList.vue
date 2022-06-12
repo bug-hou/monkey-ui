@@ -51,6 +51,9 @@ const emits = defineEmits(["change", "show", "hidden", "select", "cancel"]);
 const cascaderRef = ref<HTMLElement>();
 
 function clickHandle(item: Options, parentIndex: number) {
+  if (item.disabled) {
+    return;
+  }
   if (item.children && item.children.length !== 0) {
     emits("change", item.children, props.index, parentIndex);
   } else {
@@ -68,7 +71,9 @@ function selectHandle(item: Options, parentIndex: number) {
   emits("select", item, props.index, parentIndex);
 }
 onMounted(() => {
-  useScroll(cascaderRef.value);
+  useScroll(cascaderRef.value, {
+    bounce: false
+  });
 });
 </script>
 <style scoped lang="less">

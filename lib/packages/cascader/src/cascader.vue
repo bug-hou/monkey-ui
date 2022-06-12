@@ -1,25 +1,30 @@
 <template>
-  <div class="m-cascader">
-    <div class="m-cascader-showValue">
-      <p v-for="item in showValues">{{ item }}</p>
+  <label class="m-cascader">
+    <div class="m-cascader-showValue" @mousedown.prevent="a">
+      <m-tag class="m-cascader-tag" v-for="item in showLabels">{{
+        item
+      }}</m-tag>
     </div>
-    <div class="m-cascader-list">
-      <cascader-list-vue
-        v-for="(option, index) in showOptions"
-        class="m-cascader-list-option"
-        :index="index"
-        :options="option"
-        :select-index="activeMap.get(option) ?? []"
-        :active-index="activeIndex[index]"
-        :has-index="childrenMap.get(option) ?? []"
-        @change="changeHandle"
-        @show="showHandle"
-        @hidden="hiddenHandle"
-        @select="selectHandle"
-        @cancel="cancelHandle"
-      ></cascader-list-vue>
-    </div>
-  </div>
+    <input type="text" ref="inputRef" />
+    <transition name="cascader-transition">
+      <div class="m-cascader-list" @mousedown="a">
+        <cascader-list-vue
+          v-for="(option, index) in showOptions"
+          class="m-cascader-list-option"
+          :index="index"
+          :options="option"
+          :select-index="activeMap.get(option) ?? []"
+          :active-index="activeIndex[index]"
+          :has-index="childrenMap.get(option) ?? []"
+          @change="changeHandle"
+          @show="showHandle"
+          @hidden="hiddenHandle"
+          @select="selectHandle"
+          @cancel="cancelHandle"
+        ></cascader-list-vue>
+      </div>
+    </transition>
+  </label>
 </template>
 
 <script lang="ts" setup name="m-cascader">
@@ -29,8 +34,10 @@
  * @Description: 创建一个m-cascader组件
  */
 // 从下载的组件中导入函数
-import { reactive, defineProps, ref } from "vue";
+import { reactive, defineProps, ref, watch, onMounted } from "vue";
 import { Options } from "../config/type";
+
+import mTag from "../../tag/src/tag.vue";
 
 import cascaderListVue from "./cascaderList.vue";
 
@@ -40,12 +47,17 @@ const props = withDefaults(
     join?: string;
     multiple?: boolean;
     modelValue?: string | string[];
+    checked?: boolean;
   }>(),
   {
     join: "/",
-    multiple: false
+    multiple: false,
+    checked: true
   }
 );
+
+const emits = defineEmits(["update:modelValue"]);
+
 const showOptions = reactive([props.options]);
 const activeIndex = reactive<number[]>([]);
 const showValues = reactive<string[]>(
@@ -60,6 +72,21 @@ const showLabels = reactive<string[]>([]);
 
 const activeMap = ref(new WeakMap<object, number[]>());
 const childrenMap = ref(new WeakMap<object, number[]>());
+const inputRef = ref<HTMLInputElement>();
+
+watch(showValues, (newValue) => {
+  emits("update:modelValue", newValue);
+});
+
+function a() {
+  inputRef.value?.focus();
+}
+
+onMounted(() => {
+  if (props.checked) {
+    a();
+  }
+});
 
 parseModelValue();
 
@@ -89,13 +116,13 @@ function processeInitialValue(value: string) {
         indexs.push(j);
         if (i === valuess.length - 1) {
           const activeValues = activeMap.value.get(options) ?? [];
-          activeValues.push(j);
+          goHeavy(activeValues, j);
           activeMap.value.set(options, activeValues);
-          showLabels.push(label);
+          showLabels.push(label.slice(0, -1));
           break;
         }
         const childrenValue = childrenMap.value.get(options) ?? [];
-        childrenValue.push(j);
+        goHeavy(childrenValue, j);
         childrenMap.value.set(options, childrenValue);
         options = options[j].children ?? [];
         break;
@@ -107,7 +134,7 @@ function processeInitialValue(value: string) {
     const index = indexs.pop();
     const value = activeMap.value.get(key as Options) ?? [];
     if (value.length === key?.children?.length) {
-      value.push(index as number);
+      goHeavy(value, index);
       activeMap.value.set(key, value);
     } else {
       break;
@@ -123,42 +150,58 @@ function changeHandle(option: Options[], index: number, parentIndex: number) {
   activeIndex.push(parentIndex);
 }
 
-function showHandle(option: Options, index: number, parentIndex: number) {
-  processShow(index, option);
+function showHandle(
+  option: Options,
+  index: number,
+  parentIndex: number,
+  children = true
+) {
+  if (children) {
+    console.log("flksdjfkl");
+    processShow(index, option);
+  }
 
   let key = showOptions[index];
   let values = activeMap.value.get(key) ?? [];
   if (props.multiple) {
-    values.push(parentIndex);
+    goHeavy(values, parentIndex);
   } else {
+    activeMap.value = new WeakMap<object, number[]>();
+    childrenMap.value = new WeakMap<object, number[]>();
     values[0] = parentIndex;
   }
   activeMap.value.set(key, values);
   while (index !== 0 && values.length === key.length) {
     key = showOptions[index - 1];
     values = activeMap.value.get(key) ?? [];
-    values.push(activeIndex[index - 1]);
+    goHeavy(values, activeIndex[index - 1]);
     activeMap.value.set(key, values);
     index--;
   }
   while (index !== 0) {
     key = showOptions[index - 1];
     values = childrenMap.value.get(key) ?? [];
-    if (!values.includes(activeIndex[index - 1])) {
-      values.push(activeIndex[index - 1]);
-      childrenMap.value.set(key, values);
-    }
+    goHeavy(values, activeIndex[index - 1]);
+    childrenMap.value.set(key, values);
     index--;
   }
 }
 
-function hiddenHandle(option: Options, index: number, parentIndex: number) {
+function hiddenHandle(
+  option: Options,
+  index: number,
+  parentIndex: number,
+  isChldren = true
+) {
   processShow(index, option, (showValue, showLabel) => {
     showValues.splice(showValues.indexOf(showValue), 1);
     showLabels.splice(showLabels.indexOf(showLabel), 1);
   });
 
-  let key = showOptions[index];
+  let key = showOptions[isChldren ? index : index - 1];
+  if (!key) {
+    return;
+  }
 
   let values = activeMap.value.get(key) ?? [];
 
@@ -197,7 +240,7 @@ function hiddenHandle(option: Options, index: number, parentIndex: number) {
 
   key = showOptions[index];
 
-  values = activeMap.value.get(key) ?? [];
+  values = childrenMap.value.get(key) ?? [];
   let childrenValue = activeMap.value.get(key) ?? [];
   while (index !== 0 && values.length === 0 && childrenValue.length === 0) {
     key = showOptions[index - 1];
@@ -221,25 +264,25 @@ function rootSearchAdd(
 ) {
   const name = label + (parentOption as any).children[index].label;
   const vvalue = value + (parentOption as any).children[index].value;
-  if (!showValues.includes(vvalue) && props.multiple) {
-    showValues.push(vvalue);
-    showLabels.push(name);
+  if (props.multiple) {
+    goHeavy(showValues, vvalue);
+    goHeavy(showLabels, name);
+    // if (!Array.isArray((parentOption as any).children[index].children)) {
+    //   goHeavy(showValues, vvalue);
+    //   goHeavy(showLabels, name);
+    // }
   } else {
     showLabels[0] = name;
     showValues[0] = vvalue;
   }
 
   const values = activeMap.value.get(parentOption.children as any) ?? [];
-  if (!values.includes(index)) {
-    values.push(index);
-  }
+  goHeavy(values, index);
   activeMap.value.set(parentOption.children as any, values);
   if (Array.isArray((parentOption.children as any)[index].children)) {
     const childrenValues =
       childrenMap.value.get(parentOption.children as any) ?? [];
-    if (!childrenValues.includes(index)) {
-      childrenValues.push(index);
-    }
+    goHeavy(childrenValues, index);
     childrenMap.value.set(parentOption.children as any, childrenValues);
   }
 }
@@ -253,15 +296,12 @@ function rootSearchSub(
   const name = label + (parentOption as any).children[index].label;
   const vvalue = value + (parentOption as any).children[index].value;
   if (props.multiple) {
-    showValues.splice(showValues.indexOf(name), 1);
-    showLabels.splice(showLabels.indexOf(vvalue), 1);
+    showValues.splice(showValues.indexOf(vvalue), 1);
+    showLabels.splice(showLabels.indexOf(name), 1);
   } else {
     showLabels[0] = name;
     showValues[0] = vvalue;
   }
-
-  activeMap.value.delete(parentOption.children as any);
-  childrenMap.value.delete(parentOption.children as any);
 }
 
 function selectHandle(
@@ -277,20 +317,20 @@ function selectHandle(
   if (!label) {
     const values = activeMap.value.get(showOptions[index]) ?? [];
     const childrenValues = childrenMap.value.get(showOptions[index]) ?? [];
-    if (!values.includes(parentIndex)) {
-      values.push(parentIndex);
-    }
-    if (!childrenValues.includes(parentIndex)) {
-      childrenValues.push(parentIndex);
-    }
+    goHeavy(values, parentIndex);
+    goHeavy(childrenValues, parentIndex);
     activeMap.value.set(showOptions[index], values);
     childrenMap.value.set(showOptions[index], childrenValues);
 
     processShow(index, option);
     label = processPrefix(index);
     showValue = processPrefix(index, "value");
+
+    // 向上通知我们选中了
+    showHandle(option, index, parentIndex, false);
   }
   label += option.label + props.join;
+  showValue += option.value + props.join;
 
   const values = activeMap.value.get(option) ?? [];
 
@@ -316,6 +356,8 @@ function cancelHandle(
   if (!props.multiple) {
     return;
   }
+  activeMap.value.delete(option.children as any);
+  childrenMap.value.delete(option.children as any);
   if (!label) {
     const value = activeMap.value.get(showOptions[index]) ?? [];
     value.splice(value.indexOf(parentIndex), 1);
@@ -326,9 +368,12 @@ function cancelHandle(
 
     label = processPrefix(index);
     showValue = processPrefix(index, "value");
-  }
-  showValues.splice(showValues.indexOf(label + option.label), 1);
 
+    // 向上通知我们取消选中了
+    hiddenHandle(option, index, parentIndex, false);
+  }
+  showValues.splice(showValues.indexOf((showValue as any) + option.value), 1);
+  showLabels.splice(showLabels.indexOf(label + option.value));
   label += option.label + props.join;
   showValue += option.value + props.join;
 
@@ -338,7 +383,7 @@ function cancelHandle(
     if (Array.isArray(o.children) && o.children.length !== 0) {
       cancelHandle(o, index, parentIndex, label, showValue);
     } else {
-      rootSearchSub(option, index, label, showValue as string);
+      rootSearchSub(option, i, label, showValue as string);
     }
   }
 }
@@ -357,10 +402,8 @@ function processShow(
     showLabel
   ) => {
     if (props.multiple) {
-      if (!showValues.includes(showValue)) {
-        showValues.push(showValue);
-        showLabels.push(showLabel);
-      }
+      goHeavy(showValues, showValue);
+      goHeavy(showLabels, showLabel);
     } else {
       showValues[0] = showValue;
       showLabels[0] = showLabel;
@@ -373,37 +416,52 @@ function processShow(
   showLabel += option.label;
   callBack(showValue, showLabel);
 }
+
+function goHeavy<T>(target: T[], value: T) {
+  if (!target.includes(value)) {
+    target.push(value);
+  }
+}
 </script>
 <style scoped lang="less">
 @color: (rgb(239, 239, 245));
+
 .m-cascader {
   position: relative;
   .m-cascader-showValue {
     min-height: 38px;
     display: flex;
+    flex-wrap: wrap;
     border: 1px solid @color;
     padding: 5px 10px;
     border-radius: 10px;
-    p {
-      padding: 0px 10px;
-      margin-right: 10px;
-      background-color: @color;
-      border: 1px solid #6666;
+    .m-cascader-tag {
+      height: 100%;
+      margin: 5px 10px;
     }
     &:hover {
       border-color: #0ff;
     }
   }
+  input {
+    position: absolute;
+    left: -9999px;
+  }
+  input:focus + .m-cascader-list {
+    opacity: 1;
+  }
   .m-cascader-list {
     position: absolute;
+    display: inline-flex;
     top: 110%;
     left: 0;
+    opacity: 0;
+    transition: all 1s;
     overflow: hidden;
     border-radius: 10px;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
       0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
     background-color: #fff;
-    display: inline-flex;
     .m-cascader-list-option {
       border-right: 1px solid @color;
       &:last-child {

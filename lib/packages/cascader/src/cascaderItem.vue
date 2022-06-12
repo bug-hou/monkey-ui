@@ -34,6 +34,9 @@ function verifyChildren() {
   return props.option.children && props.option.children.length !== 0;
 }
 function clickHandle() {
+  if (props.option.disabled) {
+    return;
+  }
   if (props.option.children && props.option.children.length !== 0) {
     if (props.status === "select") {
       emits("cancel");
@@ -52,7 +55,7 @@ function clickHandle() {
   position: relative;
   align-items: center;
   margin-bottom: 5px;
-  padding: 0 10px;
+  padding: 3px 10px;
   &.m-cascader-item-select {
     color: @color;
     .m-cascader-rect {
@@ -92,6 +95,10 @@ function clickHandle() {
     height: 18px;
     border-radius: 3px;
     border: 1px solid @borderColor;
+  }
+  &.m-cascader-item-disabled {
+    color: #6666;
+    cursor: not-allowed;
   }
   .m-cascader-label {
     flex: 1;
