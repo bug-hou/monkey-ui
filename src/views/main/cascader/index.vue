@@ -2,7 +2,7 @@
   <div>
     <cpn-header-vue title="cascader" name="级联选择" description="用来选择多个">
     </cpn-header-vue>
-    <m-cascader :options="options" v-model="value" multiple></m-cascader>
+    <m-cascader :options="options" v-model="value"></m-cascader>
     <div class="layout"></div>
   </div>
 </template>

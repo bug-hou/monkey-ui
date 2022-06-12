@@ -40,6 +40,8 @@ import { Options } from "../config/type";
 import mTag from "../../tag/src/tag.vue";
 
 import cascaderListVue from "./cascaderList.vue";
+import { values } from "lodash";
+import { Option } from "naive-ui/lib/transfer/src/interface";
 
 const props = withDefaults(
   defineProps<{
@@ -47,12 +49,25 @@ const props = withDefaults(
     join?: string;
     multiple?: boolean;
     modelValue?: string | string[];
-    checked?: boolean;
+    show?: boolean;
+    // 后添加的
+    trigger?: "click" | "hover";
+    clearable?: boolean;
+    filter?: (str: string) => string;
+    valueField?: string;
+    labelField?: string;
+    maxTagCount?: number;
+    placeholder?: string;
+    remote?: boolean;
   }>(),
   {
     join: "/",
     multiple: false,
-    checked: true
+    show: true,
+    maxTagCount: 3,
+    filter(str) {
+      return str;
+    }
   }
 );
 
@@ -83,7 +98,7 @@ function a() {
 }
 
 onMounted(() => {
-  if (props.checked) {
+  if (props.show) {
     a();
   }
 });
@@ -94,52 +109,95 @@ function parseModelValue() {
   const models: string[] = showValues;
   for (let i = 0; i < models.length; i++) {
     if (props.multiple) {
-      processeInitialValue(models[i]);
+      queryLocation(models[i]);
     } else {
-      processeInitialValue(models[i]);
-      break;
+      if (i === props.maxTagCount) {
+        break;
+      }
+      queryLocation(models[i]);
     }
   }
 }
 
-function processeInitialValue(value: string) {
+function queryLocation(value: string, type: "add" | "sub" = "add") {
   const valuess = value.split(props.join);
   let options = props.options;
   let indexs: number[] = [];
-  let optionss: Options[] = [];
+  let optionss: Options[][] = [];
   let label = "";
   for (let i = 0; i < valuess.length; i++) {
     for (let j = 0; j < options.length; j++) {
       if (options[j].value === valuess[i]) {
         label += options[j].label + props.join;
-        optionss.push(options[j]);
-        indexs.push(j);
-        if (i === valuess.length - 1) {
-          const activeValues = activeMap.value.get(options) ?? [];
-          goHeavy(activeValues, j);
-          activeMap.value.set(options, activeValues);
-          showLabels.push(label.slice(0, -1));
-          break;
+        if (i !== valuess.length - 1) {
+          optionss.push(options);
+          indexs.push(j);
         }
-        const childrenValue = childrenMap.value.get(options) ?? [];
-        goHeavy(childrenValue, j);
-        childrenMap.value.set(options, childrenValue);
+        if (type === "add") {
+          treatmentToAdd(i, j, valuess, label, options);
+        } else {
+          treatmentToSub(i, j, valuess, options);
+        }
         options = options[j].children ?? [];
         break;
       }
     }
   }
   while (indexs.length !== 0) {
-    const key = optionss.pop();
-    const index = indexs.pop();
-    const value = activeMap.value.get(key as Options) ?? [];
-    if (value.length === key?.children?.length) {
-      goHeavy(value, index);
-      activeMap.value.set(key, value);
+    const key = optionss.pop() as any;
+    const index = indexs.pop() as any;
+    if (type === "add") {
+      const value = activeMap.value.get(key as any) ?? [];
+      if (value.length === key.length) {
+        goHeavy(value, index);
+        activeMap.value.set(key, value);
+      } else {
+        break;
+      }
     } else {
-      break;
+      debugger;
+      const childrenValue = childrenMap.value.get(key as any) ?? [];
+      removeValue(childrenValue, index);
+      childrenMap.value.set(key, childrenValue);
+      if (childrenValue.length !== 0) {
+        break;
+      }
     }
   }
+}
+
+function treatmentToAdd(
+  i: number,
+  j: number,
+  valuess: string[],
+  label: string,
+  options: Options[]
+) {
+  if (i === valuess.length - 1) {
+    const activeValues = activeMap.value.get(options) ?? [];
+    goHeavy(activeValues, j);
+    activeMap.value.set(options, activeValues);
+    goHeavy(showLabels, label.slice(0, -1));
+    return;
+  }
+  const childrenValue = childrenMap.value.get(options) ?? [];
+  goHeavy(childrenValue, j);
+  childrenMap.value.set(options, childrenValue);
+}
+
+function treatmentToSub(
+  i: number,
+  j: number,
+  valuess: string[],
+  options: Options[]
+) {
+  if (i === valuess.length - 1) {
+    const activeValues = activeMap.value.get(options) ?? [];
+    removeValue(activeValues, j);
+    activeMap.value.set(options, activeValues);
+    return;
+  }
+  activeMap.value.delete(options);
 }
 
 // 向showOPtions数组中添加值，并且同步更新activeIndex
@@ -157,19 +215,20 @@ function showHandle(
   children = true
 ) {
   if (children) {
-    console.log("flksdjfkl");
     processShow(index, option);
+    if (!props.multiple) {
+      processQueue();
+    }
   }
 
   let key = showOptions[index];
   let values = activeMap.value.get(key) ?? [];
-  if (props.multiple) {
-    goHeavy(values, parentIndex);
-  } else {
-    activeMap.value = new WeakMap<object, number[]>();
-    childrenMap.value = new WeakMap<object, number[]>();
-    values[0] = parentIndex;
-  }
+  goHeavy(values, parentIndex);
+  // else {
+  // activeMap.value = new WeakMap<object, number[]>();
+  // childrenMap.value = new WeakMap<object, number[]>();
+  // values[0] = parentIndex;
+  // }
   activeMap.value.set(key, values);
   while (index !== 0 && values.length === key.length) {
     key = showOptions[index - 1];
@@ -207,34 +266,48 @@ function hiddenHandle(
 
   let curIndex = index;
   while (curIndex !== -1) {
-    if (props.multiple) {
-      values.splice(
-        values.indexOf(
-          curIndex === index ? parentIndex : activeIndex[curIndex - 1]
-        ),
-        1
-      );
-      activeMap.value.set(key, values);
-      if (
-        values.length === (curIndex === index ? key.length - 1 : key.length)
-      ) {
-        key = showOptions[curIndex - 1];
-        values = activeMap.value.get(key) ?? [];
-        curIndex--;
-      } else {
-        break;
-      }
+    // if (props.multiple) {
+    //   values.splice(
+    //     values.indexOf(
+    //       curIndex === index ? parentIndex : activeIndex[curIndex - 1]
+    //     ),
+    //     1
+    //   );
+    //   activeMap.value.set(key, values);
+    //   if (
+    //     values.length === (curIndex === index ? key.length - 1 : key.length)
+    //   ) {
+    //     key = showOptions[curIndex - 1];
+    //     values = activeMap.value.get(key) ?? [];
+    //     curIndex--;
+    //   } else {
+    //     break;
+    //   }
+    // } else {
+    //   activeMap.value.delete(key);
+    //   if (
+    //     values.length === (curIndex === index ? key.length - 1 : key.length)
+    //   ) {
+    //     key = showOptions[curIndex - 1];
+    //     values = activeMap.value.get(key) ?? [];
+    //     curIndex--;
+    //   } else {
+    //     break;
+    //   }
+    // }
+    values.splice(
+      values.indexOf(
+        curIndex === index ? parentIndex : activeIndex[curIndex - 1]
+      ),
+      1
+    );
+    activeMap.value.set(key, values);
+    if (values.length === (curIndex === index ? key.length - 1 : key.length)) {
+      key = showOptions[curIndex - 1];
+      values = activeMap.value.get(key) ?? [];
+      curIndex--;
     } else {
-      activeMap.value.delete(key);
-      if (
-        values.length === (curIndex === index ? key.length - 1 : key.length)
-      ) {
-        key = showOptions[curIndex - 1];
-        values = activeMap.value.get(key) ?? [];
-        curIndex--;
-      } else {
-        break;
-      }
+      break;
     }
   }
 
@@ -246,12 +319,17 @@ function hiddenHandle(
     key = showOptions[index - 1];
     values = childrenMap.value.get(key) ?? [];
     values.splice(values.indexOf(childrenMap[index - 1]), 1);
-    if (props.multiple) {
-      childrenValue = activeMap.value.get(key) ?? [];
-      childrenMap.value.set(key, values);
-    } else {
-      childrenMap.value.delete(key);
+    childrenValue = activeMap.value.get(key) ?? [];
+    childrenMap.value.set(key, values);
+    if (!props.multiple) {
+      processQueue();
     }
+    // if (props.multiple) {
+    //   childrenValue = activeMap.value.get(key) ?? [];
+    //   childrenMap.value.set(key, values);
+    // } else {
+    //   childrenMap.value.delete(key);
+    // }
     index--;
   }
 }
@@ -264,6 +342,8 @@ function rootSearchAdd(
 ) {
   const name = label + (parentOption as any).children[index].label;
   const vvalue = value + (parentOption as any).children[index].value;
+  // goHeavy(showValues, vvalue);
+  // goHeavy(showLabels, name);
   if (props.multiple) {
     goHeavy(showValues, vvalue);
     goHeavy(showLabels, name);
@@ -275,6 +355,9 @@ function rootSearchAdd(
     showLabels[0] = name;
     showValues[0] = vvalue;
   }
+  // if (!props.multiple) {
+  //   processQueue();
+  // }
 
   const values = activeMap.value.get(parentOption.children as any) ?? [];
   goHeavy(values, index);
@@ -401,13 +484,18 @@ function processShow(
     showValue,
     showLabel
   ) => {
-    if (props.multiple) {
-      goHeavy(showValues, showValue);
-      goHeavy(showLabels, showLabel);
-    } else {
-      showValues[0] = showValue;
-      showLabels[0] = showLabel;
+    goHeavy(showValues, showValue);
+    goHeavy(showLabels, showLabel);
+    if (!props.multiple) {
+      processQueue();
     }
+    // if (props.multiple) {
+    //   goHeavy(showValues, showValue);
+    //   goHeavy(showLabels, showLabel);
+    // } else {
+    //   showValues[0] = showValue;
+    //   showLabels[0] = showLabel;
+    // }
   }
 ) {
   let showValue = processPrefix(index, "value");
@@ -422,6 +510,21 @@ function goHeavy<T>(target: T[], value: T) {
     target.push(value);
   }
 }
+
+function removeValue<T>(target: T[], value: T) {
+  if (target.includes(value)) {
+    target.splice(target.indexOf(value), 1);
+  }
+}
+
+function processQueue() {
+  const len = showValues.length;
+  if (len > props.maxTagCount) {
+    const value = showValues.shift() as any;
+    showLabels.shift();
+    queryLocation(value, "sub");
+  }
+}
 </script>
 <style scoped lang="less">
 @color: (rgb(239, 239, 245));
@@ -429,15 +532,15 @@ function goHeavy<T>(target: T[], value: T) {
 .m-cascader {
   position: relative;
   .m-cascader-showValue {
-    min-height: 38px;
+    min-height: 2.375rem;
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid @color;
-    padding: 5px 10px;
-    border-radius: 10px;
+    border: 0.0625rem solid @color;
+    padding: 0.3125rem 0.625rem;
+    border-radius: 0.625rem;
     .m-cascader-tag {
       height: 100%;
-      margin: 5px 10px;
+      margin: 0.3125rem 0.625rem;
     }
     &:hover {
       border-color: #0ff;
@@ -445,7 +548,7 @@ function goHeavy<T>(target: T[], value: T) {
   }
   input {
     position: absolute;
-    left: -9999px;
+    left: -624.9375rem;
   }
   input:focus + .m-cascader-list {
     opacity: 1;
@@ -458,12 +561,13 @@ function goHeavy<T>(target: T[], value: T) {
     opacity: 0;
     transition: all 1s;
     overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
-      0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 0.625rem;
+    box-shadow: 0 0.1875rem 0.375rem -0.25rem rgba(0, 0, 0, 0.12),
+      0 0.375rem 1rem 0 rgba(0, 0, 0, 0.08),
+      0 0.5625rem 1.75rem 0.5rem rgba(0, 0, 0, 0.05);
     background-color: #fff;
     .m-cascader-list-option {
-      border-right: 1px solid @color;
+      border-right: 0.0625rem solid @color;
       &:last-child {
         border-right: none;
       }
