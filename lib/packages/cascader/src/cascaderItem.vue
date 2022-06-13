@@ -21,6 +21,7 @@
 // 从下载的组件中导入函数
 import { defineProps, withDefaults, defineEmits } from "vue";
 import { Options } from "../config/type";
+import { useInject } from "../../../hooks";
 const props = withDefaults(
   defineProps<{
     option: Options;
@@ -45,10 +46,34 @@ function clickHandle() {
     }
   }
 }
+const showRect = useInject(undefined, "showRect", true);
 </script>
 <style scoped lang="less">
 @borderColor: #6666;
 @color: (rgb(24, 160, 88));
+
+@keyframes leftToBottom {
+  0% {
+    height: 0px;
+    width: 0px;
+  }
+  30% {
+    height: 3px;
+    width: 0;
+  }
+  100% {
+    width: 8px;
+    height: 3px;
+  }
+}
+@keyframes toBottom {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 8px;
+  }
+}
 .m-cascader-item {
   display: flex;
   font-size: 16px;
@@ -64,12 +89,11 @@ function clickHandle() {
         content: "";
         position: absolute;
         left: 50%;
-        top: 40%;
+        top: 45%;
         transform: translate(-50%, -50%) rotate(-45deg);
-        height: 4px;
-        width: 10px;
         border-left: 2px solid white;
         border-bottom: 2px solid white;
+        animation: leftToBottom 0.5s forwards;
       }
     }
   }
@@ -81,18 +105,17 @@ function clickHandle() {
         content: "";
         position: absolute;
         left: 50%;
-        top: 40%;
+        top: 50%;
         transform: translate(-50%, -50%);
-        height: 4px;
-        width: 10px;
         border-bottom: 2px solid white;
+        animation: toBottom 0.5s forwards;
       }
     }
   }
   .m-cascader-rect {
     position: relative;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     border-radius: 3px;
     border: 1px solid @borderColor;
   }

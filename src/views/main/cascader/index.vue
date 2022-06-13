@@ -14,7 +14,7 @@
  * @Description: 创建一个card组件
  */
 // 从下载的组件中导入函数
-import { ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { Options } from "../../../../lib/packages/cascader/config/type";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 // import sizeVue from "./cpn/size.vue";
@@ -50,7 +50,11 @@ function getOptions(depth = 3, iterator = 1, prefix = "") {
   }
   return options;
 }
-const value = ref(["v-1/v-1-1/v-1-1-1", "v-1/v-1-1/v-1-1-2"]);
+const value = reactive(["v-1/v-1-1/v-1-1-1", "v-1/v-1-1/v-1-1-2"]);
 const options = getOptions();
+
+watch(value, () => {
+  console.log(value);
+});
 </script>
 <style scoped lang="less"></style>

@@ -1,29 +1,31 @@
 <template>
   <label class="m-cascader">
-    <div class="m-cascader-showValue" @mousedown.prevent="a">
-      <m-tag class="m-cascader-tag" v-for="item in showLabels">{{
-        item
-      }}</m-tag>
-    </div>
     <input type="text" ref="inputRef" />
-    <transition name="cascader-transition">
-      <div class="m-cascader-list" @mousedown="a">
-        <cascader-list-vue
-          v-for="(option, index) in showOptions"
-          class="m-cascader-list-option"
-          :index="index"
-          :options="option"
-          :select-index="activeMap.get(option) ?? []"
-          :active-index="activeIndex[index]"
-          :has-index="childrenMap.get(option) ?? []"
-          @change="changeHandle"
-          @show="showHandle"
-          @hidden="hiddenHandle"
-          @select="selectHandle"
-          @cancel="cancelHandle"
-        ></cascader-list-vue>
-      </div>
-    </transition>
+    <div class="m-cascader-showValue" @mousedown.prevent="a">
+      <m-tag
+        class="m-cascader-tag"
+        v-for="(item, index) in showLabels"
+        :closabled="clearable"
+        @close="closeHandle(index)"
+        >{{ processLabel(item, labelRule) }}</m-tag
+      >
+    </div>
+    <div class="m-cascader-list" @mousedown="a">
+      <cascader-list-vue
+        v-for="(option, index) in showOptions"
+        class="m-cascader-list-option"
+        :index="index"
+        :options="option"
+        :select-index="activeMap.get(option) ?? []"
+        :active-index="!isNaN(index) ? activeIndex[index] : undefined"
+        :has-index="childrenMap.get(option) ?? []"
+        @change="changeHandle"
+        @show="showHandle"
+        @hidden="hiddenHandle"
+        @select="selectHandle"
+        @cancel="cancelHandle"
+      ></cascader-list-vue>
+    </div>
   </label>
 </template>
 
@@ -34,37 +36,40 @@
  * @Description: 创建一个m-cascader组件
  */
 // 从下载的组件中导入函数
-import { reactive, defineProps, ref, watch, onMounted } from "vue";
-import { Options } from "../config/type";
+import { reactive, defineProps, ref, watch, onMounted, toRaw } from "vue";
+import { Options, TagType, Rule } from "../config/type";
 
 import mTag from "../../tag/src/tag.vue";
 
 import cascaderListVue from "./cascaderList.vue";
-import { values } from "lodash";
-import { Option } from "naive-ui/lib/transfer/src/interface";
 
 const props = withDefaults(
   defineProps<{
     options: Options[];
-    join?: string;
+    separator?: string;
     multiple?: boolean;
     modelValue?: string | string[];
     show?: boolean;
+    clearable?: boolean;
+    maxTagCount?: number;
+    tagType?: TagType;
     // 后添加的
     trigger?: "click" | "hover";
-    clearable?: boolean;
     filter?: (str: string) => string;
+    filterOption?: () => Options;
     valueField?: string;
     labelField?: string;
-    maxTagCount?: number;
     placeholder?: string;
     remote?: boolean;
+    labelRule?: Rule;
   }>(),
   {
-    join: "/",
+    separator: "/",
     multiple: false,
     show: true,
-    maxTagCount: 3,
+    maxTagCount: 4,
+    clearable: true,
+    labelRule: "child",
     filter(str) {
       return str;
     }
@@ -90,7 +95,7 @@ const childrenMap = ref(new WeakMap<object, number[]>());
 const inputRef = ref<HTMLInputElement>();
 
 watch(showValues, (newValue) => {
-  emits("update:modelValue", newValue);
+  emits("update:modelValue", toRaw(newValue));
 });
 
 function a() {
@@ -120,7 +125,7 @@ function parseModelValue() {
 }
 
 function queryLocation(value: string, type: "add" | "sub" = "add") {
-  const valuess = value.split(props.join);
+  const valuess = value.split(props.separator);
   let options = props.options;
   let indexs: number[] = [];
   let optionss: Options[][] = [];
@@ -128,7 +133,7 @@ function queryLocation(value: string, type: "add" | "sub" = "add") {
   for (let i = 0; i < valuess.length; i++) {
     for (let j = 0; j < options.length; j++) {
       if (options[j].value === valuess[i]) {
-        label += options[j].label + props.join;
+        label += options[j].label + props.separator;
         if (i !== valuess.length - 1) {
           optionss.push(options);
           indexs.push(j);
@@ -155,10 +160,13 @@ function queryLocation(value: string, type: "add" | "sub" = "add") {
         break;
       }
     } else {
-      debugger;
       const childrenValue = childrenMap.value.get(key as any) ?? [];
-      removeValue(childrenValue, index);
-      childrenMap.value.set(key, childrenValue);
+      const cchildrenValue = childrenMap.value.get(key[index].children) ?? [];
+      const vvalue = activeMap.value.get(key[index].children) ?? [];
+      if (cchildrenValue.length === 0 && vvalue.length === 0) {
+        removeValue(childrenValue, index);
+        childrenMap.value.set(key, childrenValue);
+      }
       if (childrenValue.length !== 0) {
         break;
       }
@@ -200,6 +208,12 @@ function treatmentToSub(
   activeMap.value.delete(options);
 }
 
+function closeHandle(index: number) {
+  queryLocation(showValues[index], "sub");
+  removeValue(showValues, showValues[index]);
+  removeValue(showLabels, showLabels[index]);
+}
+
 // 向showOPtions数组中添加值，并且同步更新activeIndex
 function changeHandle(option: Options[], index: number, parentIndex: number) {
   showOptions.splice(index + 1, showOptions.length);
@@ -216,14 +230,14 @@ function showHandle(
 ) {
   if (children) {
     processShow(index, option);
-    if (!props.multiple) {
-      processQueue();
-    }
   }
 
   let key = showOptions[index];
   let values = activeMap.value.get(key) ?? [];
   goHeavy(values, parentIndex);
+  if (!props.multiple) {
+    processQueue();
+  }
   // else {
   // activeMap.value = new WeakMap<object, number[]>();
   // childrenMap.value = new WeakMap<object, number[]>();
@@ -412,8 +426,8 @@ function selectHandle(
     // 向上通知我们选中了
     showHandle(option, index, parentIndex, false);
   }
-  label += option.label + props.join;
-  showValue += option.value + props.join;
+  label += option.label + props.separator;
+  showValue += option.value + props.separator;
 
   const values = activeMap.value.get(option) ?? [];
 
@@ -457,8 +471,8 @@ function cancelHandle(
   }
   showValues.splice(showValues.indexOf((showValue as any) + option.value), 1);
   showLabels.splice(showLabels.indexOf(label + option.value));
-  label += option.label + props.join;
-  showValue += option.value + props.join;
+  label += option.label + props.separator;
+  showValue += option.value + props.separator;
 
   const children = option.children as any;
   for (let i = 0; i < children.length; i++) {
@@ -473,7 +487,7 @@ function cancelHandle(
 function processPrefix(index: number, key: "label" | "value" = "label") {
   let showValue = "";
   for (let i = 0; i < index; i++) {
-    showValue += showOptions[i][activeIndex[i]][key] + props.join;
+    showValue += showOptions[i][activeIndex[i]][key] + props.separator;
   }
   return showValue;
 }
@@ -525,32 +539,48 @@ function processQueue() {
     queryLocation(value, "sub");
   }
 }
+
+function processLabel(str: string, type: Rule) {
+  switch (type) {
+    case "all":
+      return str;
+    case "child":
+      return str.slice(
+        str.lastIndexOf(props.separator) + props.separator.length
+      );
+    case "parent":
+      return str.split(props.separator).slice(-2).join(props.separator);
+  }
+}
 </script>
 <style scoped lang="less">
 @color: (rgb(239, 239, 245));
-
+@shadowColor: (rgb(48, 170, 105));
 .m-cascader {
   position: relative;
   .m-cascader-showValue {
-    min-height: 2.375rem;
+    width: 300px;
+    min-height: 38px;
     display: flex;
     flex-wrap: wrap;
+    grid-gap: 5px;
     border: 0.0625rem solid @color;
-    padding: 0.3125rem 0.625rem;
-    border-radius: 0.625rem;
+    padding: 5px 10px;
+    border-radius: 10px;
+    justify-content: start;
     .m-cascader-tag {
       height: 100%;
-      margin: 0.3125rem 0.625rem;
-    }
-    &:hover {
-      border-color: #0ff;
     }
   }
   input {
     position: absolute;
-    left: -624.9375rem;
+    left: -9999px;
   }
-  input:focus + .m-cascader-list {
+  input:focus + div {
+    border-color: rgb(48, 170, 105);
+    box-shadow: 0 0 0 2px rgba(24, 160, 88, 0.2);
+  }
+  input:focus ~ .m-cascader-list {
     opacity: 1;
   }
   .m-cascader-list {

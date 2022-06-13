@@ -5,3 +5,12 @@ export interface Options {
   disabled?: boolean;
   children?: Options[];
 }
+
+export type TagType = "success"
+  | "error"
+  | "info"
+  | "primary"
+  | "warning"
+  | "default";
+
+export type Rule = "all" | "parent" | "child";

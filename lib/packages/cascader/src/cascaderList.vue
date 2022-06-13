@@ -41,8 +41,8 @@ const props = withDefaults(
     options: Options[];
     index: number;
     activeIndex?: number;
-    selectIndex?: number[];
-    hasIndex?: number[];
+    selectIndex: number[];
+    hasIndex: number[];
   }>(),
   {}
 );
@@ -72,7 +72,12 @@ function selectHandle(item: Options, parentIndex: number) {
 }
 onMounted(() => {
   useScroll(cascaderRef.value, {
-    bounce: false
+    bounce: false,
+    scrollbar: {
+      fade: true,
+      interactive: true,
+      scrollbarTrackClickable: true
+    }
   });
 });
 </script>
