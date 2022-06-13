@@ -158,11 +158,6 @@ width: 30px;
 </style>
 `
 export const loadingCode = `<template>
-<cpn-play-vue
-  :code="loadingCode"
-  title="loading"
-  description="一个好的button少不了loading状态，目前来说只有7种short(默认)，loop，top，grow，slow，deep，long，"
->
   <m-button-group :plain="false" shape="round">
     <m-button @click="handleClick" :loading="loading" loadingName="loop">
       点一下-loop
@@ -227,7 +222,6 @@ export const loadingCode = `<template>
   <template #code>
     <pre v-highlight="loadingCode"></pre>
   </template>
-</cpn-play-vue>
 </template>
 
 <script lang="ts" setup>
