@@ -45,7 +45,9 @@ import { mResult } from "./packages/result";
 
 import { mAffix } from "./packages/affix";
 
-import { mCascader } from "./packages/cascader"
+import { mCascader } from "./packages/cascader";
+
+import { mAutoComplete } from "./packages/autoComplete";
 
 import { App } from "vue";
 
@@ -81,7 +83,8 @@ const monkeysUI = [
   mTimelineItem,
   mResult,
   mAffix,
-  mCascader
+  mCascader,
+  mAutoComplete
 ]
 
 export default (app: App, opt?: any) => {
@@ -122,5 +125,6 @@ export {
   mTimelineItem,
   mResult,
   mAffix,
-  mCascader
+  mCascader,
+  mAutoComplete
 }

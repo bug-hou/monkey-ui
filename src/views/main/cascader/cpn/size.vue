@@ -21,7 +21,7 @@
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { sizeCode } from "../doc";
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 function getOptions(depth = 3, iterator = 1, prefix = ""): any {
   const length = 12;
   const options = [];
@@ -53,11 +53,3 @@ function getOptions(depth = 3, iterator = 1, prefix = ""): any {
 const value = reactive(["v-1/v-1-1/v-1-1-1"]);
 const options = getOptions();
 </script>
-<style scoped lang="less">
-.card {
-  display: inline-block;
-  width: 240px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-</style>

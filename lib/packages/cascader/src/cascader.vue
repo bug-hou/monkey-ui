@@ -16,11 +16,15 @@
           >{{ processLabel(item, labelRule) }}</m-tag
         >
       </div>
-      <p v-else>
+      <p v-else style="color: #666">
         {{ placeholder }}
       </p>
     </div>
-    <div class="m-cascader-contain" @mousedown="a">
+    <div
+      class="m-cascader-contain"
+      :class="'m-cascader-contain-' + direction"
+      @mousedown="a"
+    >
       <div class="m-cascader-list" v-if="options">
         <cascader-list-vue
           v-for="(option, index) in showOptions"
@@ -98,7 +102,7 @@ const props = withDefaults(
     multiple: false,
     focus: false,
     maxTagCount: 1,
-    clearable: false,
+    clearable: true,
     remote: false,
     labelRule: "all",
     filter: (str) => str,

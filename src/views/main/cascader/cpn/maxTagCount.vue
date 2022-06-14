@@ -2,13 +2,14 @@
   <cpn-play-vue
     title="maxTagCount"
     description="maxTagCount最多可以选中多少，不能和multiple为false生效"
-    :code="sizeCode"
+    :code="maxTagCountCode"
   >
     <m-cascader
       :options="options"
       v-model="value"
       :maxTagCount="5"
       placeholder="maxTagCount的值为5"
+      direction="top"
     ></m-cascader>
   </cpn-play-vue>
 </template>
@@ -21,8 +22,8 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
-import { reactive, ref } from "vue";
+import { maxTagCountCode } from "../doc";
+import { reactive } from "vue";
 function getOptions(depth = 3, iterator = 1, prefix = ""): any {
   const length = 12;
   const options = [];
@@ -55,12 +56,3 @@ const value = reactive([]);
 
 const options = getOptions();
 </script>
-<style scoped lang="less">
-.card {
-  display: inline-block;
-  width: 240px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-</style>
-

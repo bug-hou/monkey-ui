@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="base"
     description="只是传递options数组和value"
-    :code="sizeCode"
+    :code="optionCode"
   >
     <m-cascader
       class="cascader"
@@ -22,8 +22,8 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
-import { reactive, ref } from "vue";
+import { optionCode } from "../doc";
+import { reactive } from "vue";
 function getOptions(depth = 3, iterator = 1, prefix = ""): any {
   const length = 12;
   const options = [];
@@ -56,8 +56,3 @@ const value = reactive([]);
 
 const options = getOptions();
 </script>
-<style scoped lang="less">
-.cascader {
-  width: 100%;
-}
-</style>

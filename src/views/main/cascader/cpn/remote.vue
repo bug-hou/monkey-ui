@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="remote"
     description="当remote为true会等待数据更新，有点复杂我太LOW了不好意思"
-    :code="sizeCode"
+    :code="remoteCode"
   >
     <m-cascader
       :options="options"
@@ -12,6 +12,7 @@
       @load="loadHandle"
       :loadOption="loadOption"
       placeholder="请选择"
+      direction="top"
     ></m-cascader>
   </cpn-play-vue>
 </template>
@@ -24,7 +25,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
+import { remoteCode } from "../doc";
 import { reactive, ref } from "vue";
 
 function getOptions(deep = 1, count = 2) {
@@ -60,11 +61,3 @@ function loadHandle(item: any) {
   }, 2000);
 }
 </script>
-<style scoped lang="less">
-.card {
-  display: inline-block;
-  width: 240px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-</style>

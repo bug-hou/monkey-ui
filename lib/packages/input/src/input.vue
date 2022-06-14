@@ -65,26 +65,31 @@
       @mouseenter="enterHandler"
       @mouseleave="leaveHandler"
     >
-      <transition-group name="listPositionOpacity" :appear="true" mode="out-in">
-        <li
-          v-for="(item, index) in list"
-          :key="item"
-          @click="clickListItem(item, index)"
-          :class="activeIndex == index && 'hover'"
-          @mouseenter="itemEnterHandler(index)"
-        >
-          <slot name="list" :value="item">{{
-            typeof item === "object" ? item.value : item
-          }}</slot>
-        </li>
-      </transition-group>
+      <li
+        v-for="(item, index) in list"
+        :key="item"
+        @click="clickListItem(item, index)"
+        :class="activeIndex == index && 'hover'"
+        @mouseenter="itemEnterHandler(index)"
+      >
+        <slot name="list" :value="item">{{
+          typeof item === "object" ? item.value : item
+        }}</slot>
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup :inheritAttrs="false">
 // 从下载的组件中导入函数
-import { defineEmits, ref, watch, withDefaults, defineProps } from "vue";
+import {
+  defineEmits,
+  ref,
+  watch,
+  withDefaults,
+  defineProps,
+  nextTick
+} from "vue";
 import { LoopLoadingVue } from "../../../common/loading/index";
 import { getLightColor } from "../../../utils";
 
@@ -97,7 +102,13 @@ import type {
 // 自定义方法引入
 
 // 自定义组件引入
-const emits = defineEmits(["update:modelValue", "liClick", "focus", "blur"]);
+const emits = defineEmits([
+  "update:modelValue",
+  "liClick",
+  "focus",
+  "blur",
+  "listClick"
+]);
 
 const props = withDefaults(
   defineProps<{
@@ -150,7 +161,7 @@ const inputType = ref(props.type);
 const isShow = ref(false);
 const isHover = ref(false);
 const input = ref<InstanceType<typeof HTMLInputElement>>();
-const activeIndex = ref(undefined);
+const activeIndex = ref(1);
 const focus = ref(false);
 const len = ref(String(value.value).length);
 
@@ -207,6 +218,13 @@ const changeListShow = () => {
       typeof props.list[activeIndex.value] == "object"
         ? props.list[activeIndex.value].value
         : props.list[activeIndex.value];
+    console.log(props.list[activeIndex.value]);
+    nextTick(() => {
+      emits(
+        "listClick",
+        props.list[activeIndex.value].value ?? props.list[activeIndex.value]
+      );
+    });
     isShow.value = false;
   }
 };
@@ -228,7 +246,7 @@ const enterHandler = () => {
 };
 
 const leaveHandler = () => {
-  activeIndex.value = undefined;
+  activeIndex.value = 0;
   isHover.value = false;
 };
 const itemEnterHandler = (index) => {
@@ -237,26 +255,27 @@ const itemEnterHandler = (index) => {
 const downHandler = () => {
   if (activeIndex.value < props.list.length - 1) {
     activeIndex.value++;
-  }
-  if (activeIndex.value === undefined) {
+  } else {
     activeIndex.value = 0;
   }
 };
 const upHandler = () => {
   if (activeIndex.value > 0) {
     activeIndex.value--;
-  }
-  if (activeIndex.value === undefined) {
-    activeIndex.value = 0;
+  } else {
+    activeIndex.value = props.list.length - 1;
   }
 };
 </script>
 <style scoped lang="less">
+@bgColor: (rgb(238, 240, 245));
+@color: #18a058;
 .labelBox {
   color: var(--font-color-input);
   position: relative;
   height: 30px;
   display: inline-block;
+  width: 100%;
 }
 .mInput {
   overflow: hidden;
@@ -309,10 +328,7 @@ const upHandler = () => {
     }
   }
   .clear {
-    right: 20px;
-    top: 50%;
-    transform: translateX(-10px);
-    // transform: translateY(-50%);
+    transform: translate(-10px, 20%);
     font-size: inherit;
     color: inherit;
   }
@@ -341,11 +357,11 @@ const upHandler = () => {
     border: none;
     padding-left: 10px;
     box-sizing: border-box;
-    width: 100%;
     font-size: inherit;
     color: inherit;
     border-radius: 5px;
     display: block;
+    width: 100%;
   }
   .suffix {
     border-radius: 0 var(--input-radius) var(--input-radius) 0;
@@ -377,25 +393,19 @@ const upHandler = () => {
     &.hover {
       padding-left: 10px;
       cursor: pointer;
-      background: var(--back-color-input-list-active);
-      color: var(--font-color-input-list-active);
+      background: @bgColor;
+      color: @color;
       font-weight: bold;
     }
   }
 }
 .input-mini {
-  // height: 30px;
-  // line-height: 30px;
   font-size: 14px;
 }
 .input-small {
-  // height: 34px;
-  // line-height: 34px;
   font-size: 14px;
 }
 .input-medium {
-  // height: 38px;
-  // line-height: 38px;
   font-size: 16px;
 }
 input::-webkit-outer-spin-button,

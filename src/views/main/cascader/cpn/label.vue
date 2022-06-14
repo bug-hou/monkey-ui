@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="labelRule"
     description="labelRule设置如何显示值child，all(默认)，parent三种类型"
-    :code="sizeCode"
+    :code="labelCode"
   >
     <m-radio-group name="buttonmini" v-model="labelRule" button>
       <m-radio value="all">ALL</m-radio>
@@ -27,7 +27,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { sizeCode } from "../doc";
+import { labelCode } from "../doc";
 import { reactive, ref } from "vue";
 function getOptions(depth = 3, iterator = 1, prefix = ""): any {
   const length = 12;
@@ -63,11 +63,3 @@ const options = getOptions();
 
 const labelRule = ref("all");
 </script>
-<style scoped lang="less">
-.card {
-  display: inline-block;
-  width: 240px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-</style>
