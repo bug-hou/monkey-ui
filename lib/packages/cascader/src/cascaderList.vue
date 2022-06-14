@@ -18,6 +18,7 @@
           @click="clickHandle(item, index)"
           @cancel="cancelHandle(item, index)"
           @select="selectHandle(item, index)"
+          @mouseenter="enterHandle(item, index)"
         ></cascader-item-vue>
       </template>
     </div>
@@ -43,25 +44,23 @@ const props = withDefaults(
     activeIndex?: number;
     selectIndex: number[];
     hasIndex: number[];
+    trigger: "click" | "hover";
   }>(),
   {}
 );
+
 
 const emits = defineEmits(["change", "show", "hidden", "select", "cancel"]);
 const cascaderRef = ref<HTMLElement>();
 
 function clickHandle(item: Options, parentIndex: number) {
-  if (item.disabled) {
-    return;
+  if (props.trigger === "click") {
+    processCommon(item, parentIndex);
   }
-  if (item.children && item.children.length !== 0) {
-    emits("change", item.children, props.index, parentIndex);
-  } else {
-    if (!props.selectIndex?.includes(parentIndex)) {
-      emits("show", item, props.index, parentIndex);
-    } else {
-      emits("hidden", item, props.index, parentIndex);
-    }
+}
+function enterHandle(item: Options, parentIndex: number) {
+  if (props.trigger === "hover") {
+    processCommon(item, parentIndex);
   }
 }
 function cancelHandle(item: Options, parentIndex: number) {
@@ -70,8 +69,22 @@ function cancelHandle(item: Options, parentIndex: number) {
 function selectHandle(item: Options, parentIndex: number) {
   emits("select", item, props.index, parentIndex);
 }
+function processCommon(item: Options, parentIndex: number) {
+  if (item.disabled) {
+    return;
+  }
+  if (item.children) {
+    emits("change", item, props.index, parentIndex);
+  } else {
+    if (!props.selectIndex?.includes(parentIndex)) {
+      emits("show", item, props.index, parentIndex);
+    } else {
+      emits("hidden", item, props.index, parentIndex);
+    }
+  }
+}
 onMounted(() => {
-  useScroll(cascaderRef.value, {
+  useScroll(cascaderRef.value as any, {
     bounce: false,
     scrollbar: {
       fade: true,
@@ -85,7 +98,7 @@ onMounted(() => {
 .m-cascader-option-list {
   padding: 10px 0;
   max-height: 250px;
-  width: 180px;
+  min-width: 180px;
   box-sizing: border-box;
   cursor: pointer;
   position: relative;

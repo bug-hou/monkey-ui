@@ -134,10 +134,10 @@
   /* checkBox中的颜色 */
   --border-color-check-box: rgb(239, 239, 245);
   --font-color-check-box: rgb(51, 54, 57);
-  --border-color-check-box-active: #409eff;
+  --border-color-check-box-active: rgb(48, 170, 105);
   --shadow-color-check-box: #409effbd;
   --font-color-check-box-disabled: #c0c4cc;
-  --back-color-check-box: #409eff;
+  --back-color-check-box: rgb(48, 170, 105);
   --font-color-check-box-border: white;
 
   /* menu中的颜色 */

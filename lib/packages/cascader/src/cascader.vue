@@ -1,30 +1,47 @@
 <template>
   <label class="m-cascader">
     <input type="text" ref="inputRef" />
-    <div class="m-cascader-showValue" @mousedown.prevent="a">
-      <m-tag
-        class="m-cascader-tag"
-        v-for="(item, index) in showLabels"
-        :closabled="clearable"
-        @close="closeHandle(index)"
-        >{{ processLabel(item, labelRule) }}</m-tag
-      >
+    <div
+      class="m-cascader-label"
+      @mousedown.prevent="a"
+      :class="'m-cascader-label-' + size"
+    >
+      <div class="m-cascader-showValue" v-if="showLabels.length !== 0">
+        <m-tag
+          class="m-cascader-tag"
+          :size="size"
+          v-for="(item, index) in showLabels"
+          :closabled="clearable"
+          @close="closeHandle(index)"
+          >{{ processLabel(item, labelRule) }}</m-tag
+        >
+      </div>
+      <p v-else>
+        {{ placeholder }}
+      </p>
     </div>
-    <div class="m-cascader-list" @mousedown="a">
-      <cascader-list-vue
-        v-for="(option, index) in showOptions"
-        class="m-cascader-list-option"
-        :index="index"
-        :options="option"
-        :select-index="activeMap.get(option) ?? []"
-        :active-index="!isNaN(index) ? activeIndex[index] : undefined"
-        :has-index="childrenMap.get(option) ?? []"
-        @change="changeHandle"
-        @show="showHandle"
-        @hidden="hiddenHandle"
-        @select="selectHandle"
-        @cancel="cancelHandle"
-      ></cascader-list-vue>
+    <div class="m-cascader-contain" @mousedown="a">
+      <div class="m-cascader-list" v-if="options">
+        <cascader-list-vue
+          v-for="(option, index) in showOptions"
+          class="m-cascader-list-option"
+          :index="index"
+          :options="option"
+          :select-index="activeMap.get(option) ?? []"
+          :active-index="!isNaN(index) ? activeIndex[index] : undefined"
+          :has-index="childrenMap.get(option) ?? []"
+          @change="changeHandle"
+          @show="showHandle"
+          @hidden="hiddenHandle"
+          @select="selectHandle"
+          @cancel="cancelHandle"
+          :trigger="remote ? 'click' : trigger"
+        ></cascader-list-vue>
+      </div>
+      <div v-else></div>
+      <div class="m-cascader-footer">
+        <slot> </slot>
+      </div>
     </div>
   </label>
 </template>
@@ -36,8 +53,18 @@
  * @Description: 创建一个m-cascader组件
  */
 // 从下载的组件中导入函数
-import { reactive, defineProps, ref, watch, onMounted, toRaw } from "vue";
+import {
+  reactive,
+  defineProps,
+  ref,
+  watch,
+  onMounted,
+  toRaw,
+  provide
+} from "vue";
 import { Options, TagType, Rule } from "../config/type";
+
+import configName from "../config";
 
 import mTag from "../../tag/src/tag.vue";
 
@@ -49,40 +76,49 @@ const props = withDefaults(
     separator?: string;
     multiple?: boolean;
     modelValue?: string | string[];
-    show?: boolean;
+    focus?: boolean;
     clearable?: boolean;
     maxTagCount?: number;
     tagType?: TagType;
-    // 后添加的
-    trigger?: "click" | "hover";
     filter?: (str: string) => string;
-    filterOption?: () => Options;
-    valueField?: string;
-    labelField?: string;
+    filterOption?: (Options: Options[]) => Options[];
     placeholder?: string;
     remote?: boolean;
     labelRule?: Rule;
+    loadOption?: Options[];
+    trigger?: "click" | "hover";
+    size?: "mini" | "small" | "medium";
+    direction?: "bottom" | "top";
+    // 后添加的
+    valueField?: string;
+    labelField?: string;
   }>(),
   {
     separator: "/",
     multiple: false,
-    show: true,
-    maxTagCount: 4,
-    clearable: true,
-    labelRule: "child",
-    filter(str) {
-      return str;
-    }
+    focus: false,
+    maxTagCount: 1,
+    clearable: false,
+    remote: false,
+    labelRule: "all",
+    filter: (str) => str,
+    filterOption: (options) => options,
+    trigger: "click",
+    size: "small"
   }
 );
 
-const emits = defineEmits(["update:modelValue"]);
+const emits = defineEmits(["update:modelValue", "load"]);
 
 const showOptions = reactive([props.options]);
 const activeIndex = reactive<number[]>([]);
 const showValues = reactive<string[]>(
-  Array.isArray(props.modelValue)
-    ? props.modelValue
+  props.remote
+    ? []
+    : Array.isArray(props.modelValue)
+    ? props.multiple
+      ? props.modelValue
+      : props.modelValue.slice(0, props.maxTagCount)
     : props.modelValue
     ? [props.modelValue]
     : []
@@ -94,6 +130,10 @@ const activeMap = ref(new WeakMap<object, number[]>());
 const childrenMap = ref(new WeakMap<object, number[]>());
 const inputRef = ref<HTMLInputElement>();
 
+const loading = ref(false);
+
+provide(configName.LOADING, loading);
+
 watch(showValues, (newValue) => {
   emits("update:modelValue", toRaw(newValue));
 });
@@ -103,12 +143,14 @@ function a() {
 }
 
 onMounted(() => {
-  if (props.show) {
+  if (props.focus) {
     a();
   }
 });
 
-parseModelValue();
+if (!props.remote) {
+  parseModelValue();
+}
 
 function parseModelValue() {
   const models: string[] = showValues;
@@ -215,11 +257,50 @@ function closeHandle(index: number) {
 }
 
 // 向showOPtions数组中添加值，并且同步更新activeIndex
-function changeHandle(option: Options[], index: number, parentIndex: number) {
+async function changeHandle(
+  option: Options,
+  index: number,
+  parentIndex: number
+) {
   showOptions.splice(index + 1, showOptions.length);
   activeIndex.splice(index, activeIndex.length);
-  showOptions.push(option);
-  activeIndex.push(parentIndex);
+  if (props.remote) {
+    const result = (await processRemote(option, index, parentIndex)) as any;
+    processOptions(result, parentIndex);
+  } else {
+    processOptions(option.children ?? [], parentIndex);
+  }
+}
+
+function processOptions(options: Options[], index: number) {
+  showOptions.push(props.filterOption(options));
+  activeIndex.push(index);
+}
+
+function processRemote(option: Options, index: number, parentIndex: number) {
+  return new Promise((resolve, reject) => {
+    try {
+      if (option.children?.length !== 0) {
+        resolve(option.children);
+      } else {
+        emits("load", option);
+        loading.value = true;
+        let cancelWatch = watch(
+          () => props.loadOption,
+          (newOptions) => {
+            if (loading.value) {
+              option.children = newOptions;
+              loading.value = false;
+              cancelWatch();
+              resolve(newOptions);
+            }
+          }
+        );
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function showHandle(
@@ -408,7 +489,7 @@ function selectHandle(
   label?: string,
   showValue?: string
 ) {
-  if (!props.multiple) {
+  if (!props.multiple || props.remote) {
     return;
   }
   if (!label) {
@@ -450,7 +531,7 @@ function cancelHandle(
   label?: string,
   showValue?: string
 ) {
-  if (!props.multiple) {
+  if (!props.multiple || props.remote) {
     return;
   }
   activeMap.value.delete(option.children as any);
@@ -541,15 +622,14 @@ function processQueue() {
 }
 
 function processLabel(str: string, type: Rule) {
+  const strs = str.split(props.separator).map((item) => props.filter(item));
   switch (type) {
     case "all":
-      return str;
+      return strs.join(props.separator);
     case "child":
-      return str.slice(
-        str.lastIndexOf(props.separator) + props.separator.length
-      );
+      return strs[strs.length - 1];
     case "parent":
-      return str.split(props.separator).slice(-2).join(props.separator);
+      return strs.slice(-2).join(props.separator);
   }
 }
 </script>
@@ -558,15 +638,23 @@ function processLabel(str: string, type: Rule) {
 @shadowColor: (rgb(48, 170, 105));
 .m-cascader {
   position: relative;
-  .m-cascader-showValue {
-    width: 300px;
+  display: block;
+  .m-cascader-label {
     min-height: 38px;
+    border: 0.0625rem solid @color;
+    padding: 5px 8px;
+    border-radius: 10px;
+  }
+  .m-cascader-label-mini {
+    min-height: 34px;
+  }
+  .m-cascader-label-medium {
+    min-height: 42px;
+  }
+  .m-cascader-showValue {
+    grid-gap: 5px;
     display: flex;
     flex-wrap: wrap;
-    grid-gap: 5px;
-    border: 0.0625rem solid @color;
-    padding: 5px 10px;
-    border-radius: 10px;
     justify-content: start;
     .m-cascader-tag {
       height: 100%;
@@ -580,28 +668,44 @@ function processLabel(str: string, type: Rule) {
     border-color: rgb(48, 170, 105);
     box-shadow: 0 0 0 2px rgba(24, 160, 88, 0.2);
   }
-  input:focus ~ .m-cascader-list {
+  input:focus ~ .m-cascader-contain {
     opacity: 1;
+    z-index: 100;
+    height: 250px;
   }
   .m-cascader-list {
-    position: absolute;
     display: inline-flex;
-    top: 110%;
-    left: 0;
-    opacity: 0;
-    transition: all 1s;
     overflow: hidden;
-    border-radius: 0.625rem;
-    box-shadow: 0 0.1875rem 0.375rem -0.25rem rgba(0, 0, 0, 0.12),
-      0 0.375rem 1rem 0 rgba(0, 0, 0, 0.08),
-      0 0.5625rem 1.75rem 0.5rem rgba(0, 0, 0, 0.05);
-    background-color: #fff;
     .m-cascader-list-option {
       border-right: 0.0625rem solid @color;
       &:last-child {
         border-right: none;
       }
     }
+  }
+  .m-cascader-contain {
+    z-index: -100;
+    position: absolute;
+    top: 110%;
+    overflow: hidden;
+    height: 0;
+    left: 0;
+    opacity: 0;
+    transition: all 1s;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.1875rem 0.375rem -0.25rem rgba(0, 0, 0, 0.12),
+      0 0.375rem 1rem 0 rgba(0, 0, 0, 0.08),
+      0 0.5625rem 1.75rem 0.5rem rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    &.m-cascader-contain-top {
+      top: auto;
+      bottom: 110%;
+    }
+  }
+  .m-cascader-footer {
+    background-color: @color;
+    width: 100%;
+    color: black;
   }
 }
 </style>

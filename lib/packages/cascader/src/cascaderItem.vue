@@ -5,10 +5,18 @@
       option.disabled && 'm-cascader-item-disabled',
       'm-cascader-item-' + status
     ]"
+    @click="activeHandle"
   >
-    <p class="m-cascader-rect" @click="clickHandle"></p>
+    <p v-if="showRect" class="m-cascader-rect" @click="clickHandle"></p>
     <p class="m-cascader-label">{{ option.label }}</p>
-    <p v-if="verifyChildren()" class="m-cascader-children"></p>
+    <p
+      v-if="verifyChildren() && (!loading || !isActive)"
+      class="m-cascader-children"
+    ></p>
+    <loop-loading-vue
+      v-if="isActive && loading"
+      color="#6666"
+    ></loop-loading-vue>
   </div>
 </template>
 
@@ -19,9 +27,11 @@
  * @Description: 创建一个m-cascader-item组件
  */
 // 从下载的组件中导入函数
-import { defineProps, withDefaults, defineEmits } from "vue";
+import { defineProps, withDefaults, defineEmits, watch, ref } from "vue";
 import { Options } from "../config/type";
+import configName from "../config";
 import { useInject } from "../../../hooks";
+import { LoopLoadingVue } from "../../../common/loading/index";
 const props = withDefaults(
   defineProps<{
     option: Options;
@@ -30,15 +40,17 @@ const props = withDefaults(
   {}
 );
 
-const emits = defineEmits(["select", "cancel"]);
+const emits = defineEmits(["select", "cancel", "active"]);
+
+const isActive = ref(false);
 function verifyChildren() {
-  return props.option.children && props.option.children.length !== 0;
+  return props.option.children;
 }
 function clickHandle() {
   if (props.option.disabled) {
     return;
   }
-  if (props.option.children && props.option.children.length !== 0) {
+  if (props.option.children) {
     if (props.status === "select") {
       emits("cancel");
     } else {
@@ -46,7 +58,20 @@ function clickHandle() {
     }
   }
 }
-const showRect = useInject(undefined, "showRect", true);
+
+function activeHandle() {
+  if (props.option.children?.length === 0) {
+    isActive.value = true;
+  }
+}
+const showRect = useInject(undefined, configName.SHOWRECT, true);
+const loading = useInject(undefined, configName.LOADING, false);
+
+watch(loading, (newValue) => {
+  if (!newValue) {
+    isActive.value = false;
+  }
+});
 </script>
 <style scoped lang="less">
 @borderColor: #6666;
@@ -76,7 +101,7 @@ const showRect = useInject(undefined, "showRect", true);
 }
 .m-cascader-item {
   display: flex;
-  font-size: 16px;
+  font-size: 15px;
   position: relative;
   align-items: center;
   margin-bottom: 5px;
@@ -89,7 +114,7 @@ const showRect = useInject(undefined, "showRect", true);
         content: "";
         position: absolute;
         left: 50%;
-        top: 45%;
+        top: 40%;
         transform: translate(-50%, -50%) rotate(-45deg);
         border-left: 2px solid white;
         border-bottom: 2px solid white;
@@ -114,8 +139,8 @@ const showRect = useInject(undefined, "showRect", true);
   }
   .m-cascader-rect {
     position: relative;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 3px;
     border: 1px solid @borderColor;
   }
