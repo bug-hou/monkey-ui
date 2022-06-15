@@ -55,6 +55,10 @@ const base = [
   {
     name: "自动填充AutoComplete",
     path: "/autoComplete"
+  },
+  {
+    name: "自动填充VertualScroll",
+    path: "/vertualScroll"
   }
 ];
 </script>

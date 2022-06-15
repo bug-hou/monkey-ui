@@ -29,18 +29,5 @@ import listVue from "./cpn/list.vue";
 import scrollVue from "./cpn/scroll.vue";
 import headerVue from "./cpn/header.vue";
 import directionVue from "./cpn/direction.vue";
-// import sizeVue from "./cpn/size.vue";
-// import roundedVue from "./cpn/rounded.vue";
-// import typeVue from "./cpn/type.vue";
-// import closabledVue from "./cpn/closabled.vue";
-// import disabledVue from "./cpn/disabled.vue";
-// import contentVue from "./cpn/content.vue";
-// import iconVue from "./cpn/icon.vue";
-// import colorVue from "./cpn/color.vue";
-// import sliderColorVue from "./cpn/sliderColor.vue";
-// import shapeVue from "./cpn/shape.vue";
-// import multipleVue from "./cpn/multiple.vue";
-// import buttonVue from "./cpn/button.vue";
-// import moreVue from "./cpn/more.vue";
 </script>
 <style scoped lang="less"></style>
