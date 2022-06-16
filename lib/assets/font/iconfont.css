@@ -12,6 +12,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.m-toLeft::before {
+  content: "\e601";
+}
+
+.m-toRight::before {
+  content: "\e602";
+}
+
 .m-cha::before {
   content: "\e612";
 }

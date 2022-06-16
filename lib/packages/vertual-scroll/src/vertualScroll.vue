@@ -3,8 +3,8 @@
     class="m-vertualScroll"
     ref="vertucalScrollRef"
     :style="[
-      { height: maxHeight },
-      { width },
+      { height: maxHeight + 'px' },
+      { width: width + 'px' },
       { ['--m-vertual-scroll-height']: height + 'px' }
     ]"
   >
@@ -66,19 +66,27 @@ onMounted(() => {
     bounce: false
   });
 
+  let timer;
+
   bscroll.on("scroll", ({ y }) => {
-    settingOptions(Math.abs(y));
+    clearInterval(timer);
+    translateY.value = Math.abs(y);
+
+    timer = setTimeout(() => {
+      settingOptions(Math.abs(y));
+    }, 30);
   });
 });
 settingOptions();
 function settingOptions(y: number = props.start) {
-  translateY.value = y;
   const minLen = Math.floor(y / props.height);
-  const maxLen = Math.floor((y + props.maxHeight) / props.height);
+  const maxLen = Math.ceil((y + props.maxHeight) / props.height);
   const len = maxLen - minLen;
   const options: any[] = [];
   for (let i = 0; i < len; i++) {
-    options.push(props.options[minLen + i]);
+    if (minLen + i < props.options.length) {
+      options.push(props.options[minLen + i]);
+    }
   }
   showOptions.value = options;
 }
@@ -90,8 +98,10 @@ function clickHandle(item) {
 <style scoped lang="less">
 .m-vertualScroll {
   overflow: hidden;
-  height: 500px;
   position: relative;
+  .m-vertual-scroll-contain {
+    padding: 0;
+  }
   li {
     width: 100%;
     height: var(--m-vertual-scroll-height);

@@ -59,6 +59,10 @@ const base = [
   {
     name: "自动填充VertualScroll",
     path: "/vertualScroll"
+  },
+  {
+    name: "自动填充Transfer",
+    path: "/transfer"
   }
 ];
 </script>

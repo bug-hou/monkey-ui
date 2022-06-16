@@ -50,7 +50,9 @@ import { mCascader } from "./packages/cascader";
 import { mAutoComplete } from "./packages/autoComplete";
 
 
-import { mVertualScroll } from "./packages/vertual-scroll"
+import { mVertualScroll } from "./packages/vertual-scroll";
+
+import { mTransfer } from "./packages/transfer"
 
 import { App } from "vue";
 
@@ -88,7 +90,8 @@ const monkeysUI = [
   mAffix,
   mCascader,
   mAutoComplete,
-  mVertualScroll
+  mVertualScroll,
+  mTransfer
 ]
 
 export default (app: App, opt?: any) => {
@@ -131,5 +134,6 @@ export {
   mAffix,
   mCascader,
   mAutoComplete,
-  mVertualScroll
+  mVertualScroll,
+  mTransfer
 }

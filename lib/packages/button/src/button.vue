@@ -129,7 +129,6 @@ const type = useInject(props.type, TYPE, "default");
 const shape = useInject(props.shape, SHAPE, "round");
 const size = useInject(props.size, SIZE, "small");
 const plain = useInject(props.plain, PLAIN, true);
-const disabled = useInject(props.disabled, DISABLED, false);
 const text = useInject(props.text, TEXT, false);
 
 const theme = LightTheme[type];
@@ -145,23 +144,23 @@ const iconColor = ref(plain ? textColor : color);
 const emits = defineEmits(["mClick", "mTouch"]);
 
 const handleClick = (event: MouseEvent) => {
-  if (!disabled) {
+  if (!props.disabled) {
     emits("mClick", event);
   }
 };
 
 const handleTouch = (event: TouchEvent) => {
-  if (!disabled) {
+  if (!props.disabled) {
     emits("mClick", event);
   }
 };
 function handleEnter() {
-  if (!disabled && !plain) {
+  if (!props.disabled && !plain) {
     iconColor.value = textColor;
   }
 }
 function handleLeave() {
-  if (!disabled && !plain) {
+  if (!props.disabled && !plain) {
     iconColor.value = color;
   }
 }
@@ -204,14 +203,11 @@ function handleLeave() {
   }
   &.m-button-disabled {
     cursor: not-allowed;
-    color: rgb(50, 50, 50);
-    background: #0000;
-    border-color: rgb(51, 54, 57);
     opacity: 0.5;
     &:hover {
-      color: rgb(50, 50, 50);
-      background: #0000;
-      border-color: rgb(51, 54, 57);
+      color: var(--m-button-color);
+      border-color: var(--m-button-border);
+      background: var(--m-button-back);
     }
   }
 }
