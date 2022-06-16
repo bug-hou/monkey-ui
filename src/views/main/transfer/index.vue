@@ -28,7 +28,12 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 function getOptions(prefix = "option") {
   let options = [];
   for (let i = 0; i < 10; i++) {
-    options.push(prefix + (i + 1));
+    const obj: any = {
+      label: prefix + (i + 1),
+      value: "v" + prefix + (i + 1),
+      disabled: !Math.round(Math.random() * 3)
+    };
+    options.push(obj);
   }
   return options;
 }

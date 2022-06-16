@@ -2,14 +2,18 @@
   <div class="m-transfer">
     <div class="m-transfer-origin m-transfer-common">
       <header>
-        <div class="m-transfer-content">
+        <div
+          class="m-transfer-content"
+          :class="originInfo.disableds === 0 && 'm-transfer-content-disabled'"
+          @click="changeStatusHandle('origin')"
+        >
           <span :class="originInfo.selectStatus" class="m-transfer-rect"></span>
           <span>{{ originLabel }}</span>
         </div>
         <div>
-          <span>{{ originInfo.optionSelect }}</span>
+          <span>{{ originInfo.selection.length }}</span>
           <span>/</span>
-          <span>{{ originInfo.optionAll }}</span>
+          <span>{{ originInfo.options.length }}</span>
         </div>
       </header>
       <main ref="originRef">
@@ -17,14 +21,15 @@
           <transition-group name="mTransferItemLeave" mode="out-in">
             <li
               v-for="(item, index) in originInfo.options"
-              :key="item"
-              @click="clickHandle('origin', index)"
+              :key="item[props.valueName]"
+              :class="item.disabled && 'm-transfer-li-disabled'"
+              @click="clickHandle('origin', index, item)"
             >
               <span
                 class="m-transfer-rect"
                 :class="originInfo.selection.includes(index) && 'select'"
               ></span>
-              <p>{{ item }}</p>
+              <p>{{ processObject(labelName, item) }}</p>
             </li>
           </transition-group>
         </ul>
@@ -53,14 +58,18 @@
     </div>
     <div class="m-transfer-target m-transfer-common">
       <header>
-        <div class="m-transfer-content">
-          <span :class="originInfo.selectStatus" class="m-transfer-rect"></span>
+        <div
+          class="m-transfer-content"
+          :class="targetInfo.disableds === 0 && 'm-transfer-content-disabled'"
+          @click="changeStatusHandle('target')"
+        >
+          <span :class="targetInfo.selectStatus" class="m-transfer-rect"></span>
           <span>{{ targetLabel }}</span>
         </div>
         <div>
-          <span>{{ targetInfo.optionSelect }}</span>
+          <span>{{ targetInfo.selection.length }}</span>
           <span>/</span>
-          <span>{{ targetInfo.optionAll }}</span>
+          <span>{{ targetInfo.options.length }}</span>
         </div>
       </header>
       <main ref="targetRef">
@@ -68,14 +77,15 @@
           <transition-group name="mTransferItemLeaveRight" mode="out-in">
             <li
               v-for="(item, index) in targetInfo.options"
-              :key="item"
-              @click="clickHandle('target', index)"
+              :class="item.disabled && 'm-transfer-li-disabled'"
+              :key="item[props.valueName]"
+              @click="clickHandle('target', index, item)"
             >
               <span
                 class="m-transfer-rect"
                 :class="targetInfo.selection.includes(index) && 'select'"
               ></span>
-              <p>{{ item }}</p>
+              <p>{{ processObject(labelName, item) }}</p>
             </li>
           </transition-group>
         </ul>
@@ -92,7 +102,7 @@
  * @Description: 创建一个m-transfer组件
  */
 // 从下载的组件中导入函数
-import { ref, onMounted, defineProps, reactive, nextTick } from "vue";
+import { ref, onMounted, defineProps, reactive } from "vue";
 import mButtonVue from "../../button/src/button.vue";
 import { useScroll } from "../../../hooks";
 import { Info } from "./transfer";
@@ -105,52 +115,79 @@ const props = withDefaults(
     targetOptions: any[];
     labelName?: string;
     valueName?: string;
+    targetValue?: any[];
+    originValue?: any[];
   }>(),
   {
     originLabel: "原项",
-    targetLabel: "目标项"
+    targetLabel: "目标项",
+    labelName: "label",
+    valueName: "value"
   }
 );
 
-const emits = defineEmits(["update:targetOptions", "update:originOptions"]);
+const emits = defineEmits(["update:targetValue", "update:originValue"]);
 
 const originRef = ref<HTMLElement>();
 const targetRef = ref<HTMLElement>();
 
 const originInfo = reactive<Info>({
-  optionAll: props.originOptions.length,
-  optionSelect: 0,
-  selectStatus: "select",
+  selectStatus: "none",
   selection: [],
   options: props.originOptions,
-  scroll: undefined
+  scroll: undefined,
+  disableds: processDisableds(props.originOptions)
 });
 
+const originValues = ref<any[]>([]);
+const targetValues = ref<any[]>([]);
+
 const targetInfo = reactive<Info>({
-  optionAll: props.targetOptions.length,
-  optionSelect: 0,
   selectStatus: "none",
   selection: [],
   options: props.targetOptions,
-  scroll: undefined
+  scroll: undefined,
+  disableds: processDisableds(props.targetOptions)
 });
 
-function clickHandle(type: "origin" | "target", index: number) {
+function clickHandle(type: "origin" | "target", index: number, item: any) {
+  if (typeof item === "object" && item.disabled) {
+    return;
+  }
   let target: number[];
   let curInfo: Info;
+  let values: any[];
   if (type === "origin") {
     target = originInfo.selection;
     curInfo = originInfo;
+    values = originValues.value;
   } else {
     target = targetInfo.selection;
     curInfo = targetInfo;
+    values = targetValues.value;
   }
+  const value = processObject(props.valueName, item);
   if (target.includes(index)) {
     target.splice(target.indexOf(index), 1);
-    curInfo.optionSelect--;
+    values.splice(values.indexOf(value), 1);
+    if (curInfo.selection.length === 0) {
+      curInfo.selectStatus = "none";
+    } else {
+      curInfo.selectStatus = "has";
+    }
   } else {
-    curInfo.optionSelect++;
     target.push(index);
+    values.push(value);
+    if (curInfo.selection.length === curInfo.disableds) {
+      curInfo.selectStatus = "select";
+    } else {
+      curInfo.selectStatus = "has";
+    }
+  }
+  if (type === "origin") {
+    emits("update:originValue", values);
+  } else {
+    emits("update:targetValue", values);
   }
 }
 
@@ -178,6 +215,83 @@ function buttonHandle(type: "origin" | "target") {
     originInfo.scroll.refresh();
   }, 500);
   curInfo.selection = [];
+  curInfo.selectStatus = "none";
+
+  originInfo.disableds = processDisableds(originInfo.options);
+  targetInfo.disableds = processDisableds(targetInfo.options);
+}
+
+function changeStatusHandle(type: "target" | "origin") {
+  let info: Info;
+  let values: string[];
+  if (type === "origin") {
+    info = originInfo;
+    values = originValues.value = [];
+  } else {
+    info = targetInfo;
+    values = targetValues.value = [];
+  }
+  if (info.disableds === 0) {
+    return;
+  }
+  info.selection = [];
+  if (info.selectStatus !== "select") {
+    for (let i = 0; i < info.options.length; i++) {
+      if (info.options[i].disabled) {
+        continue;
+      }
+      info.selection.push(i);
+      values.push(info.options[i][props.valueName]);
+    }
+    info.selectStatus = "select";
+  } else {
+    info.selectStatus = "none";
+  }
+  if (type === "origin") {
+    emits("update:originValue", values);
+  } else {
+    emits("update:targetValue", values);
+  }
+}
+
+function processObject(key: string, obj: any) {
+  if (typeof obj === "object") {
+    return obj[key] ?? obj;
+  } else {
+    return obj;
+  }
+}
+
+function processDisableds(objs: any[]) {
+  let answer = 0;
+  for (let obj of objs) {
+    if (typeof obj === "object") {
+      if (!obj.disabled) {
+        answer++;
+      }
+    }
+  }
+  return answer;
+}
+
+function processInitialValue(
+  target: any[],
+  options: any[],
+  type: "target" | "origin"
+) {
+  let index: number;
+  options.forEach((item) => {
+    if (
+      target.some((i, ind) => {
+        if (i.value === item.value) {
+          index = ind;
+          return true;
+        }
+      })
+    ) {
+      clickHandle(type, index, target[index]);
+    }
+  });
 }
 
 onMounted(() => {
@@ -256,6 +370,11 @@ onMounted(() => {
         font-size: 16px;
         display: flex;
         align-items: center;
+        cursor: pointer;
+        &.m-transfer-content-disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
       }
     }
     main {
@@ -271,14 +390,14 @@ onMounted(() => {
         height: 34px;
         align-items: center;
         padding-left: 5px;
-        &.disabled {
+        &.m-transfer-li-disabled {
           color: rgb(194, 194, 194);
           cursor: not-allowed;
+          opacity: 0.5;
         }
       }
     }
     .m-transfer-rect {
-      cursor: pointer;
       display: inline-block;
       width: 14px;
       height: 14px;

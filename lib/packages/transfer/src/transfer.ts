@@ -1,8 +1,7 @@
 export interface Info {
   selection: number[];
-  optionAll: number;
-  optionSelect: number;
   selectStatus: "select" | "has" | "none";
   options: any[];
-  scroll: any
+  scroll: any;
+  disableds: number;
 }
