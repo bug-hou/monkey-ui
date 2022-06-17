@@ -7,8 +7,10 @@
     >
     </cpn-header-vue>
     <m-transfer
-      :originOptions="originOptions"
-      :targetOptions="targetOttions"
+      v-model:originOptions="originOptions"
+      :originValue="originValue"
+      :targetValue="targetValue"
+      v-model:targetOptions="targetOttions"
     ></m-transfer>
     <div class="layout"></div>
   </div>
@@ -16,6 +18,7 @@
 
 <script lang="ts" setup>
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import { reactive, watch } from "vue";
 // import effectVue from "./cpn/effect.vue";
 // import triggerVue from "./cpn/trigger.vue";
 // import delayVue from "./cpn/delay.vue";
@@ -30,7 +33,7 @@ function getOptions(prefix = "option") {
   for (let i = 0; i < 10; i++) {
     const obj: any = {
       label: prefix + (i + 1),
-      value: "v" + prefix + (i + 1),
+      value: "v-" + prefix + (i + 1),
       disabled: !Math.round(Math.random() * 3)
     };
     options.push(obj);
@@ -38,7 +41,10 @@ function getOptions(prefix = "option") {
   return options;
 }
 
-const originOptions = getOptions();
-const targetOttions = getOptions("target");
+const originOptions = reactive(getOptions());
+const targetOttions = reactive(getOptions("target"));
+
+const originValue = ["v-option5"];
+const targetValue = ["v-target1"];
 </script>
 <style scoped lang="less"></style>

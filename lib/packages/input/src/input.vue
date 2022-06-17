@@ -281,6 +281,7 @@ const upHandler = () => {
   overflow: hidden;
   height: 100%;
   display: flex;
+  align-items: center;
   border-radius: var(--input-radius);
   position: relative;
   font-size: 0;
@@ -328,12 +329,10 @@ const upHandler = () => {
     }
   }
   .clear {
-    transform: translate(-10px, 20%);
+    transform: translateX(-10px);
     font-size: inherit;
     color: inherit;
-  }
-  > * {
-    height: 100%;
+    cursor: pointer;
   }
   div {
     background: var(--input-pre-color);

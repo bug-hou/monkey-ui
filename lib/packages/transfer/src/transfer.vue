@@ -1,5 +1,11 @@
 <template>
-  <div class="m-transfer">
+  <div
+    class="m-transfer"
+    :style="[
+      { ['--m-transfer-height']: height },
+      { ['--m-transfer-width']: width }
+    ]"
+  >
     <div class="m-transfer-origin m-transfer-common">
       <header>
         <div
@@ -16,14 +22,31 @@
           <span>{{ originInfo.options.length }}</span>
         </div>
       </header>
+      <nav v-if="filterable">
+        <m-input-vue
+          class="m-transfer-input"
+          placeholder="请输入"
+          v-model="originInfo.inputValue"
+          clear
+        ></m-input-vue>
+      </nav>
       <main ref="originRef">
-        <ul>
-          <transition-group name="mTransferItemLeave" mode="out-in">
+        <ul
+          v-if="
+            processFilter(originInfo.options, labelName, originInfo.inputValue)
+              .length !== 0
+          "
+        >
+          <transition-group
+            :name="showAnimation ? 'mTransferItemLeave' : ''"
+            mode="out-in"
+          >
             <li
               v-for="(item, index) in originInfo.options"
               :key="item[props.valueName]"
               :class="item.disabled && 'm-transfer-li-disabled'"
               @click="clickHandle('origin', index, item)"
+              v-show="item[labelName].includes(originInfo.inputValue)"
             >
               <span
                 class="m-transfer-rect"
@@ -33,6 +56,10 @@
             </li>
           </transition-group>
         </ul>
+        <div class="m-transfer-null" v-else>
+          <m-null-vue></m-null-vue>
+          <span>无数据</span>
+        </div>
       </main>
       <footer></footer>
     </div>
@@ -72,23 +99,46 @@
           <span>{{ targetInfo.options.length }}</span>
         </div>
       </header>
+      <nav v-if="filterable">
+        <m-input-vue
+          class="m-transfer-input"
+          placeholder="请输入"
+          v-model="targetInfo.inputValue"
+          clear
+        ></m-input-vue>
+      </nav>
       <main ref="targetRef">
-        <ul>
-          <transition-group name="mTransferItemLeaveRight" mode="out-in">
-            <li
-              v-for="(item, index) in targetInfo.options"
-              :class="item.disabled && 'm-transfer-li-disabled'"
-              :key="item[props.valueName]"
-              @click="clickHandle('target', index, item)"
+        <div
+          v-if="
+            processFilter(targetInfo.options, labelName, targetInfo.inputValue)
+              .length !== 0
+          "
+        >
+          <ul>
+            <transition-group
+              :name="showAnimation ? 'mTransferItemLeaveRight' : ''"
+              mode="out-in"
             >
-              <span
-                class="m-transfer-rect"
-                :class="targetInfo.selection.includes(index) && 'select'"
-              ></span>
-              <p>{{ processObject(labelName, item) }}</p>
-            </li>
-          </transition-group>
-        </ul>
+              <li
+                v-for="(item, index) in targetInfo.options"
+                :class="item.disabled && 'm-transfer-li-disabled'"
+                :key="item[props.valueName]"
+                @click="clickHandle('target', index, item)"
+                v-show="item[labelName].includes(targetInfo.inputValue)"
+              >
+                <span
+                  class="m-transfer-rect"
+                  :class="targetInfo.selection.includes(index) && 'select'"
+                ></span>
+                <p>{{ processObject(labelName, item) }}</p>
+              </li>
+            </transition-group>
+          </ul>
+        </div>
+        <div class="m-transfer-null" v-else>
+          <m-null-vue></m-null-vue>
+          <span>无数据</span>
+        </div>
       </main>
       <footer></footer>
     </div>
@@ -102,8 +152,10 @@
  * @Description: 创建一个m-transfer组件
  */
 // 从下载的组件中导入函数
-import { ref, onMounted, defineProps, reactive } from "vue";
+import { ref, onMounted, defineProps, reactive, watch } from "vue";
 import mButtonVue from "../../button/src/button.vue";
+import mInputVue from "../../input/src/input.vue";
+import mNullVue from "../../../common/svg/null.vue";
 import { useScroll } from "../../../hooks";
 import { Info } from "./transfer";
 
@@ -117,26 +169,45 @@ const props = withDefaults(
     valueName?: string;
     targetValue?: any[];
     originValue?: any[];
+    filterable?: boolean;
+    height?: number;
+    width?: number;
+    filter?: (m: any[], value: string) => any[];
   }>(),
   {
-    originLabel: "原项",
+    originLabel: "源项",
     targetLabel: "目标项",
     labelName: "label",
-    valueName: "value"
+    valueName: "value",
+    filterable: false,
+    targetValue: () => [],
+    originValue: () => [],
+    width: 180,
+    height: 220,
+    filter: (m: any[], value: string) => {
+      return m.filter((item) => {
+        if (typeof item[props.labelName] === "string") {
+          return item[props.labelName].includes(value);
+        }
+      });
+    }
   }
 );
 
-const emits = defineEmits(["update:targetValue", "update:originValue"]);
+const emits = defineEmits(["update:targetOptions", "update:originOptions"]);
 
 const originRef = ref<HTMLElement>();
 const targetRef = ref<HTMLElement>();
+
+const showAnimation = ref(false);
 
 const originInfo = reactive<Info>({
   selectStatus: "none",
   selection: [],
   options: props.originOptions,
   scroll: undefined,
-  disableds: processDisableds(props.originOptions)
+  disableds: processDisableds(props.originOptions),
+  inputValue: ""
 });
 
 const originValues = ref<any[]>([]);
@@ -147,8 +218,12 @@ const targetInfo = reactive<Info>({
   selection: [],
   options: props.targetOptions,
   scroll: undefined,
-  disableds: processDisableds(props.targetOptions)
+  disableds: processDisableds(props.targetOptions),
+  inputValue: ""
 });
+
+processInitialValue(props.originOptions, props.originValue, "origin");
+processInitialValue(props.targetOptions, props.targetValue, "target");
 
 function clickHandle(type: "origin" | "target", index: number, item: any) {
   if (typeof item === "object" && item.disabled) {
@@ -185,13 +260,15 @@ function clickHandle(type: "origin" | "target", index: number, item: any) {
     }
   }
   if (type === "origin") {
-    emits("update:originValue", values);
+    emits("update:originOptions", values);
   } else {
-    emits("update:targetValue", values);
+    emits("update:targetOptions", values);
   }
 }
 
 function buttonHandle(type: "origin" | "target") {
+  showAnimation.value = true;
+
   let target: any[];
   let curInfo: Info;
   let changeInfo: Info;
@@ -205,17 +282,23 @@ function buttonHandle(type: "origin" | "target") {
     curInfo = targetInfo;
   }
   target.sort((a, b) => b - a);
-  for (let i = 0; i < target.length; i++) {
+  const len = target.length;
+  for (let i = 0; i < len; i++) {
     const option = curInfo.options[target[i]];
     curInfo.options.splice(target[i], 1);
     changeInfo.options.unshift(option);
   }
   setTimeout(() => {
+    showAnimation.value = false;
     targetInfo.scroll.refresh();
     originInfo.scroll.refresh();
   }, 500);
   curInfo.selection = [];
   curInfo.selectStatus = "none";
+
+  for (let i = 0; i < changeInfo.selection.length; i++) {
+    changeInfo.selection[i] += len;
+  }
 
   originInfo.disableds = processDisableds(originInfo.options);
   targetInfo.disableds = processDisableds(targetInfo.options);
@@ -248,9 +331,9 @@ function changeStatusHandle(type: "target" | "origin") {
     info.selectStatus = "none";
   }
   if (type === "origin") {
-    emits("update:originValue", values);
+    emits("update:originOptions", values);
   } else {
-    emits("update:targetValue", values);
+    emits("update:targetOptions", values);
   }
 }
 
@@ -283,7 +366,7 @@ function processInitialValue(
   options.forEach((item) => {
     if (
       target.some((i, ind) => {
-        if (i.value === item.value) {
+        if (i.value === item) {
           index = ind;
           return true;
         }
@@ -294,14 +377,41 @@ function processInitialValue(
   });
 }
 
+function processFilter(options: any[], key: string, value: string) {
+  return props.filter(options, value);
+}
+
 onMounted(() => {
   originInfo.scroll = useScroll(originRef.value as any, {
     bounce: false
   });
   targetInfo.scroll = useScroll(targetRef.value as any, { bounce: false });
 });
+
+watch(
+  () => originInfo.inputValue,
+  () => {
+    console.log("bughou");
+    setTimeout(() => {
+      originInfo.scroll.refresh();
+    }, 100);
+  }
+);
+
+watch(
+  () => targetInfo.inputValue,
+  () => {
+    console.log("bughou");
+    setTimeout(() => {
+      targetInfo.scroll.refresh();
+    }, 100);
+  }
+);
 </script>
 <style scoped lang="less">
+@bgColor: (rgb(224, 224, 230));
+@borderColor: (rgb(250, 250, 252));
+@color: (rgb(50, 48, 52));
 @keyframes leftToBottom {
   0% {
     height: 0px;
@@ -351,21 +461,20 @@ onMounted(() => {
 .m-transfer {
   display: flex;
   gap: 10px;
-  height: 240px;
   .m-transfer-common {
-    width: 200px;
-    border: 1px solid rgb(224, 224, 230);
+    width: calc(var(--m-transfer-width) * 1px);
+    border: 1px solid @bgColor;
     border-radius: 10px;
     overflow: hidden;
     header {
-      background-color: rgb(250, 250, 252);
+      background-color: @borderColor;
       height: 36px;
       display: flex;
       justify-content: space-between;
       box-sizing: border-box;
       padding: 0 10px;
       align-items: center;
-      color: rgb(50, 48, 52);
+      color: @color;
       .m-transfer-content {
         font-size: 16px;
         display: flex;
@@ -377,10 +486,20 @@ onMounted(() => {
         }
       }
     }
+    nav {
+      background-color: @borderColor;
+      height: 36px;
+      padding: 5px 10px;
+      box-sizing: border-box;
+      .m-transfer-input {
+        width: 100%;
+        height: 22px;
+      }
+    }
     main {
       width: 100%;
       overflow: hidden;
-      height: calc(100% - 36px);
+      height: calc(var(--m-transfer-height) * 1px);
       position: relative;
       color: #666;
       li {
@@ -436,8 +555,16 @@ onMounted(() => {
     display: flex;
     gap: 20px;
     flex-direction: column;
-    height: 100%;
     justify-content: center;
+  }
+  .m-transfer-null {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    height: 100%;
+    cursor: pointer;
   }
 }
 </style>
