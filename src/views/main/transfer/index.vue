@@ -6,45 +6,18 @@
       description="标签用来对一些特殊事物起强调作用"
     >
     </cpn-header-vue>
-    <m-transfer
-      v-model:originOptions="originOptions"
-      :originValue="originValue"
-      :targetValue="targetValue"
-      v-model:targetOptions="targetOttions"
-    ></m-transfer>
-    <div class="layout"></div>
+    <div class="layout">
+      <base-vue></base-vue>
+      <initial-vue></initial-vue>
+      <filter-vue></filter-vue>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
-import { reactive, watch } from "vue";
-// import effectVue from "./cpn/effect.vue";
-// import triggerVue from "./cpn/trigger.vue";
-// import delayVue from "./cpn/delay.vue";
-// import arrowVue from "./cpn/arrow.vue";
-// import listVue from "./cpn/list.vue";
-// import scrollVue from "./cpn/scroll.vue";
-// import headerVue from "./cpn/header.vue";
-// import directionVue from "./cpn/direction.vue";
-
-function getOptions(prefix = "option") {
-  let options = [];
-  for (let i = 0; i < 10; i++) {
-    const obj: any = {
-      label: prefix + (i + 1),
-      value: "v-" + prefix + (i + 1),
-      disabled: !Math.round(Math.random() * 3)
-    };
-    options.push(obj);
-  }
-  return options;
-}
-
-const originOptions = reactive(getOptions());
-const targetOttions = reactive(getOptions("target"));
-
-const originValue = ["v-option5"];
-const targetValue = ["v-target1"];
+import baseVue from "./src/base.vue";
+import filterVue from "./src/filter.vue";
+import InitialVue from "./src/initial.vue";
 </script>
 <style scoped lang="less"></style>

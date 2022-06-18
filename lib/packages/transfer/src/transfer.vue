@@ -172,7 +172,7 @@ const props = withDefaults(
     filterable?: boolean;
     height?: number;
     width?: number;
-    filter?: (m: any[], value: string) => any[];
+    filter?: (m: any[], key: string, value: string) => any[];
   }>(),
   {
     originLabel: "源项",
@@ -184,10 +184,10 @@ const props = withDefaults(
     originValue: () => [],
     width: 180,
     height: 220,
-    filter: (m: any[], value: string) => {
+    filter: (m: any[], key: string, value: string): any[] => {
       return m.filter((item) => {
-        if (typeof item[props.labelName] === "string") {
-          return item[props.labelName].includes(value);
+        if (typeof item[key] === "string") {
+          return item[key].includes(value);
         }
       });
     }
@@ -378,7 +378,7 @@ function processInitialValue(
 }
 
 function processFilter(options: any[], key: string, value: string) {
-  return props.filter(options, value);
+  return props.filter(options, key, value);
 }
 
 onMounted(() => {
