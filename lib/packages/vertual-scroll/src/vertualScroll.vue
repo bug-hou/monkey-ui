@@ -13,7 +13,10 @@
       :style="[{ height: containHeight + 'px' }]"
     >
       <ul :style="{ transform: `translateY(${translateY}px)` }">
-        <li v-for="item in showOptions" @click="clickHandle(item)">
+        <li
+          v-for="(item, index) in showOptions"
+          @click="clickHandle(item, index)"
+        >
           <slot :value="item">{{ labelName ? item[labelName] : item }}</slot>
         </li>
       </ul>
@@ -91,8 +94,8 @@ function settingOptions(y: number = props.start) {
   showOptions.value = options;
 }
 
-function clickHandle(item) {
-  emits("option", item);
+function clickHandle(item, index) {
+  emits("option", item, index);
 }
 </script>
 <style scoped lang="less">

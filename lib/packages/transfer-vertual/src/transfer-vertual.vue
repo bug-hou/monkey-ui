@@ -1,11 +1,5 @@
-<template>
-  <div
-    class="m-transfer"
-    :style="[
-      { ['--m-transfer-height']: height },
-      { ['--m-transfer-width']: width }
-    ]"
-  >
+<!-- <template>
+  <div class="m-transfer-vertual">
     <div class="m-transfer-origin m-transfer-common">
       <header>
         <div
@@ -31,37 +25,26 @@
         ></m-input-vue>
       </nav>
       <main ref="originRef">
-        <ul
-          v-if="
-            processFilter(originInfo.options, labelName, originInfo.inputValue)
-              .length !== 0
-          "
-        >
-          <transition-group
-            :name="showAnimation ? 'mTransferItemLeave' : ''"
-            mode="out-in"
+        <div>
+          <m-vertual-scroll
+            :options="originInfo.options"
+            :height="34"
+            style="width: 100%"
+            @option="optionHandle"
           >
-            <li
-              v-for="(item, index) in originInfo.options"
-              :key="item[props.valueName]"
-              :class="item.disabled && 'm-transfer-li-disabled'"
-              @click="clickHandle('origin', index, item)"
-              v-show="item[labelName].includes(originInfo.inputValue)"
-            >
-              <span
-                class="m-transfer-rect"
-                :class="originInfo.selection.includes(index) && 'select'"
-              ></span>
-              <p>{{ processObject(labelName, item) }}</p>
-            </li>
-          </transition-group>
-        </ul>
-        <div class="m-transfer-null" v-else>
-          <m-null-vue></m-null-vue>
-          <span>无数据</span>
+            <template #default="{ value }">
+              <li :class="value.disable && 'm-transfer-li-disabled'">
+                <span
+                  class="m-transfer-rect"
+                  :class="originInfo.selection.includes(index) && 'select'"
+                ></span>
+                <p>{{ processObject(value) }}</p>
+              </li>
+            </template>
+          </m-vertual-scroll>
         </div>
       </main>
-      <footer>{{ originFooter }}</footer>
+      <footer></footer>
     </div>
     <div class="m-transfer-operate">
       <m-button-vue
@@ -83,79 +66,21 @@
         <m-icon name="m-toLeft"></m-icon>
       </m-button-vue>
     </div>
-    <div class="m-transfer-target m-transfer-common">
-      <header>
-        <div
-          class="m-transfer-content"
-          :class="targetInfo.disableds === 0 && 'm-transfer-content-disabled'"
-          @click="changeStatusHandle('target')"
-        >
-          <span :class="targetInfo.selectStatus" class="m-transfer-rect"></span>
-          <span>{{ targetLabel }}</span>
-        </div>
-        <div>
-          <span>{{ targetInfo.selection.length }}</span>
-          <span>/</span>
-          <span>{{ targetInfo.options.length }}</span>
-        </div>
-      </header>
-      <nav v-if="filterable">
-        <m-input-vue
-          class="m-transfer-input"
-          placeholder="请输入"
-          v-model="targetInfo.inputValue"
-          clear
-        ></m-input-vue>
-      </nav>
-      <main ref="targetRef">
-        <div
-          v-if="
-            processFilter(targetInfo.options, labelName, targetInfo.inputValue)
-              .length !== 0
-          "
-        >
-          <ul>
-            <transition-group
-              :name="showAnimation ? 'mTransferItemLeaveRight' : ''"
-              mode="out-in"
-            >
-              <li
-                v-for="(item, index) in targetInfo.options"
-                :class="item.disabled && 'm-transfer-li-disabled'"
-                :key="item[props.valueName]"
-                @click="clickHandle('target', index, item)"
-                v-show="item[labelName].includes(targetInfo.inputValue)"
-              >
-                <span
-                  class="m-transfer-rect"
-                  :class="targetInfo.selection.includes(index) && 'select'"
-                ></span>
-                <p>{{ processObject(labelName, item) }}</p>
-              </li>
-            </transition-group>
-          </ul>
-        </div>
-        <div class="m-transfer-null" v-else>
-          <m-null-vue></m-null-vue>
-          <span>无数据</span>
-        </div>
-      </main>
-      <footer>{{ targetFooter }}</footer>
-    </div>
   </div>
 </template>
 
-<script lang="ts" setup name="m-transfer">
+<script lang="ts" setup name="m-transfer-vertual">
 /*
  * @Author: bughou
- * @Date: 2022-06-15 21:16:24
- * @Description: 创建一个m-transfer组件
+ * @Date: 2022-06-18 14:33:29
+ * @Description: 创建一个m-transfer-vertual组件
  */
 // 从下载的组件中导入函数
 import { ref, onMounted, defineProps, reactive, watch } from "vue";
 import mButtonVue from "../../button/src/button.vue";
 import mInputVue from "../../input/src/input.vue";
 import mNullVue from "../../../common/svg/null.vue";
+import mVertualScroll from "../../vertual-scroll/src/vertualScroll.vue";
 import { useScroll } from "../../../hooks";
 import { Info } from "./transfer";
 
@@ -173,8 +98,6 @@ const props = withDefaults(
     height?: number;
     width?: number;
     filter?: (m: any[], key: string, value: string) => any[];
-    originFooter?: string;
-    targetFooter?: string;
   }>(),
   {
     originLabel: "源项",
@@ -209,7 +132,8 @@ const originInfo = reactive<Info>({
   options: props.originOptions,
   scroll: undefined,
   disableds: processDisableds(props.originOptions),
-  inputValue: ""
+  inputValue: "",
+  height: 0
 });
 
 const originValues = ref<any[]>([]);
@@ -226,47 +150,6 @@ const targetInfo = reactive<Info>({
 
 processInitialValue(props.originOptions, props.originValue, "origin");
 processInitialValue(props.targetOptions, props.targetValue, "target");
-
-function clickHandle(type: "origin" | "target", index: number, item: any) {
-  if (typeof item === "object" && item.disabled) {
-    return;
-  }
-  let target: number[];
-  let curInfo: Info;
-  let values: any[];
-  if (type === "origin") {
-    target = originInfo.selection;
-    curInfo = originInfo;
-    values = originValues.value;
-  } else {
-    target = targetInfo.selection;
-    curInfo = targetInfo;
-    values = targetValues.value;
-  }
-  const value = processObject(props.valueName, item);
-  if (target.includes(index)) {
-    target.splice(target.indexOf(index), 1);
-    values.splice(values.indexOf(value), 1);
-    if (curInfo.selection.length === 0) {
-      curInfo.selectStatus = "none";
-    } else {
-      curInfo.selectStatus = "has";
-    }
-  } else {
-    target.push(index);
-    values.push(value);
-    if (curInfo.selection.length === curInfo.disableds) {
-      curInfo.selectStatus = "select";
-    } else {
-      curInfo.selectStatus = "has";
-    }
-  }
-  if (type === "origin") {
-    emits("update:originOptions", values);
-  } else {
-    emits("update:targetOptions", values);
-  }
-}
 
 function buttonHandle(type: "origin" | "target") {
   showAnimation.value = true;
@@ -383,6 +266,25 @@ function processFilter(options: any[], key: string, value: string) {
   return props.filter(options, key, value);
 }
 
+function optionHandle(item) {
+  let index: number = 0;
+  originInfo.options.forEach((option, ind) => {
+    if (option[props.valueName] === item[props.valueName]) {
+      index = ind;
+    }
+  });
+  if (originInfo.selection.includes(index)) {
+    originInfo.selection.splice(index, 1);
+  } else {
+    originInfo.selection.push(index);
+  }
+}
+
+function processHeight(type: "target" | "origin") {
+  const info: Info = type === "origin" ? originInfo : targetInfo;
+  info.height =
+}
+
 onMounted(() => {
   originInfo.scroll = useScroll(originRef.value as any, {
     bounce: false
@@ -458,7 +360,7 @@ watch(
 .mTransferItemLeaveRight-leave-from {
   transform: translateX(0);
 }
-.m-transfer {
+.m-transfer-vertual {
   display: flex;
   gap: 10px;
   .m-transfer-common {
@@ -516,11 +418,6 @@ watch(
         }
       }
     }
-    footer {
-      background-color: @bgColor;
-      text-align: center;
-      line-height: 34px;
-    }
     .m-transfer-rect {
       display: inline-block;
       width: 14px;
@@ -572,4 +469,4 @@ watch(
     cursor: pointer;
   }
 }
-</style>
+</style> -->

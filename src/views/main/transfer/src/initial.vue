@@ -26,7 +26,7 @@ import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 
 function getOptions(prefix = "option") {
   let options = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 50; i++) {
     const obj: any = {
       label: prefix + (i + 1),
       value: "v-" + prefix + (i + 1),

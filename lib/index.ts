@@ -52,7 +52,9 @@ import { mAutoComplete } from "./packages/autoComplete";
 
 import { mVertualScroll } from "./packages/vertual-scroll";
 
-import { mTransfer } from "./packages/transfer"
+import { mTransfer } from "./packages/transfer";
+
+import { mColorPicker } from "./packages/color-picker"
 
 import { App } from "vue";
 
@@ -91,7 +93,8 @@ const monkeysUI = [
   mCascader,
   mAutoComplete,
   mVertualScroll,
-  mTransfer
+  mTransfer,
+  mColorPicker
 ]
 
 export default (app: App, opt?: any) => {
@@ -135,5 +138,6 @@ export {
   mCascader,
   mAutoComplete,
   mVertualScroll,
-  mTransfer
+  mTransfer,
+  mColorPicker
 }

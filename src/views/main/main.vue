@@ -63,6 +63,10 @@ const base = [
   {
     name: "自动填充Transfer",
     path: "/transfer"
+  },
+  {
+    name: "颜色选择器ColorPicker",
+    path: "/colorPicker"
   }
 ];
 </script>
