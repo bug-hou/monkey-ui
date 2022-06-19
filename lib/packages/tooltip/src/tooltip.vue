@@ -46,7 +46,7 @@
           </div>
           <m-divider></m-divider>
           <template v-for="(item, index) in list" :key="index">
-            <slot name="tooltip" :item="item">
+            <slot name="tooltip" :value="item">
               <p @click="itemClick(item, index)">{{ item }}</p>
             </slot>
           </template>

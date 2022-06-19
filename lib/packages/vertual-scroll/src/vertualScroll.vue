@@ -1,7 +1,7 @@
 <template>
   <div
-    class="m-vertualScroll"
-    ref="vertucalScrollRef"
+    class="m-vertualScroll scroll"
+    @scroll="scrollHandle"
     :style="[
       { height: maxHeight + 'px' },
       { width: width + 'px' },
@@ -31,8 +31,7 @@
  * @Description: 创建一个vertualScroll组件
  */
 // 从下载的组件中导入函数
-import { defineProps, onMounted, ref } from "vue";
-import { useScroll } from "../../../hooks";
+import { defineProps, ref } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -62,24 +61,11 @@ const translateY = ref(0);
 
 const showOptions = ref<any[]>([]);
 
-const vertucalScrollRef = ref<HTMLElement>();
-
-onMounted(() => {
-  const bscroll = useScroll(vertucalScrollRef.value as any, {
-    bounce: false
-  });
-
-  let timer;
-
-  bscroll.on("scroll", ({ y }) => {
-    clearInterval(timer);
-    translateY.value = Math.abs(y);
-
-    timer = setTimeout(() => {
-      settingOptions(Math.abs(y));
-    }, 30);
-  });
-});
+function scrollHandle(event) {
+  const y = event.target.scrollTop;
+  translateY.value = Math.abs(y);
+  settingOptions(Math.abs(y));
+}
 settingOptions();
 function settingOptions(y: number = props.start) {
   const minLen = Math.floor(y / props.height);
@@ -100,7 +86,7 @@ function clickHandle(item, index) {
 </script>
 <style scoped lang="less">
 .m-vertualScroll {
-  overflow: hidden;
+  overflow: auto;
   position: relative;
   .m-vertual-scroll-contain {
     padding: 0;
