@@ -1,15 +1,16 @@
 <template>
   <div class="m-dropdown">
-    <m-tooltip-vue>
+    <m-tooltip-vue :tooltip-text="options" arrow direction="right">
       <slot></slot>
       <template #tooltip="{ value }">
         <div v-if="((value as any).children)">
-          <m-tooltip-vue>
-            <p>{{ value[labelName] }}</p>
-          </m-tooltip-vue>
+          <m-dropdown-item-vue
+            :options="(value as any).children"
+            :content="value[labelName]"
+          ></m-dropdown-item-vue>
         </div>
         <div v-else>
-          <p>{{ value[labelName] }}</p>
+          <p class="m-dropdown-label">{{ value[labelName] }}</p>
         </div>
       </template>
     </m-tooltip-vue>
@@ -23,8 +24,9 @@
  * @Description: 创建一个m-dropdown组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import { defineProps } from "vue";
 import mTooltipVue from "../../tooltip/src/tooltip.vue";
+import mDropdownItemVue from "./dropdownItem.vue";
 const props = withDefaults(
   defineProps<{
     options: any[];
@@ -43,5 +45,15 @@ const props = withDefaults(
 </script>
 <style scoped lang="less">
 .m-dropdown {
+  .m-dropdown-label {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    &:hover {
+      background-color: #6666;
+    }
+  }
 }
 </style>

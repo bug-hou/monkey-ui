@@ -67,6 +67,10 @@ const base = [
   {
     name: "颜色选择器ColorPicker",
     path: "/colorPicker"
+  },
+  {
+    name: "下拉选择Dropdown",
+    path: "/dropdown"
   }
 ];
 </script>

@@ -168,7 +168,7 @@ onMounted(() => {
     transform: translateX(-50%);
     padding: 10px;
     left: 50%;
-    overflow: hidden;
+    // overflow: hidden;
     height: var(--m-tooltip-height);
     &.m-tooltip-arrow::before {
       content: "";
