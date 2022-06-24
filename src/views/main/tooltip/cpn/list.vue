@@ -8,7 +8,7 @@
       <m-button>tooltipText为一个数组</m-button>
     </m-tooltip>
     <span></span>
-    <m-tooltip :tooltipText="list" :columns="2">
+    <m-tooltip :tooltipText="list" :columns="1">
       <m-button>tooltipText为一个数组</m-button>
     </m-tooltip>
   </cpn-play-vue>

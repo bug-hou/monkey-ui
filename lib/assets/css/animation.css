@@ -1,4 +1,4 @@
-/* 
+/*
 列表从上到下，透明度从0~1变化
 */
 .listPositionOpacity-leave-from,
@@ -9,6 +9,9 @@
 .listPositionOpacity-enter-active,
 .listPositionOpacity-leave-active {
   transition: opacity 0.5s, transform 0.5s;
+}
+.listPositionOpacity-leave-active {
+  pointer-events: none;
 }
 .listPositionOpacity-enter-from,
 .listPositionOpacity-leave-to {
@@ -21,7 +24,7 @@
 .listPositionOpacity-move {
   transition: all 0.5s linear;
 }
-/* 
+/*
 列表从下到上
 */
 .listPositionBottomOpacity-leave-from,
@@ -33,6 +36,9 @@
 .listPositionBottomOpacity-leave-active {
   transition: opacity 0.5s, transform 0.5s;
 }
+.listPositionBottomOpacity-leave-active {
+  pointer-events: none;
+}
 .listPositionBottomOpacity-enter-from,
 .listPositionBottomOpacity-leave-to {
   opacity: 0;
@@ -42,10 +48,10 @@
   transition: all 0.5s linear;
 }
 
-/* 
+/*
 列表从左到右移动，透明度从0~1
 */
-/* 
+/*
 列表从上到下，透明度从0~1变化
 */
 .listPositionLeftOpacity-enter-to {
@@ -74,7 +80,7 @@
 .listPositionLeftOpacity-move {
   transition: transform 0.5s linear;
 }
-/* 
+/*
 从左向右平移和显示
 */
 .lefttranslateXOpacity-leave-from,
@@ -92,7 +98,7 @@
   transform: translateX(-100%);
 }
 
-/* 
+/*
 从左向右平移和显示
 */
 .righttranslateOpacity-leave-from,
@@ -110,7 +116,7 @@
   transform: translateX(100%);
 }
 
-/* 
+/*
 从左向右平移和显示
 */
 .Opacity-leave-from,

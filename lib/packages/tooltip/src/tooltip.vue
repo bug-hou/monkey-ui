@@ -11,7 +11,8 @@
       { ['--m-tooltip-height']: height },
       { ['--m-tooltip-background']: background },
       { ['--m-tooltip-color']: color },
-      { ['--m-tooltip-hover']: hoverColor }
+      { ['--m-tooltip-hover']: hoverColor },
+      { ['--m-tooltip-overflow']: overflow ? 'hidden' : 'visible' }
     ]"
   >
     <slot></slot>
@@ -47,7 +48,9 @@
           <m-divider></m-divider>
           <template v-for="(item, index) in list" :key="index">
             <slot name="tooltip" :value="item">
-              <p @click="itemClick(item, index)">{{ item }}</p>
+              <p @click="itemClick(item, index)">
+                {{ item }}
+              </p>
             </slot>
           </template>
         </div>
@@ -78,6 +81,7 @@ const props = withDefaults(
     duration?: number;
     keepAliveOnHover?: boolean;
     header?: string;
+    overflow?: boolean;
   }>(),
   {
     tooltipShow: true,
@@ -91,12 +95,13 @@ const props = withDefaults(
     delay: 0,
     duration: 0,
     keepAliveOnHover: true,
-    tooltipText: ""
+    tooltipText: "",
+    overflow: true
   }
 );
 const fatherShow = ref(false);
 const selfShow = ref(false);
-const list = reactive([]);
+const list = reactive<any[]>([]);
 const showTooltip = ref(false);
 
 const tooltipRef = ref<HTMLElement>();
@@ -124,7 +129,6 @@ const tooltipLeaveHandle = () => {
 };
 
 const itemClick = (item, index) => {
-
   // emits("itemClick", item, index);
 };
 function enterHandle() {
@@ -168,7 +172,7 @@ onMounted(() => {
     transform: translateX(-50%);
     padding: 10px;
     left: 50%;
-    // overflow: hidden;
+    overflow: var(--m-tooltip-overflow);
     height: var(--m-tooltip-height);
     &.m-tooltip-arrow::before {
       content: "";

@@ -6,7 +6,9 @@
       description="将两个内容分隔开来，为什么就不能在一起了"
     >
     </cpn-header-vue>
-    <m-dropdown :options="options"> 请选择 </m-dropdown>
+    <m-dropdown :options="options">
+      <m-button>请选择</m-button>
+    </m-dropdown>
     <div class="layout"></div>
   </div>
 </template>
