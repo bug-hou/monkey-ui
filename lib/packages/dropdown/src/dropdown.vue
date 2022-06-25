@@ -32,7 +32,7 @@ const props = withDefaults(
   }
 );
 function clickHandle(event: Event) {
-  console.log((event.target as any).children);
+  // console.log((event.target as any).children);
 }
 </script>
 <style scoped lang="less">

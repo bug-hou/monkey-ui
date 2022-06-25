@@ -1,7 +1,11 @@
 <template>
   <ul class="m-dropdown-item">
     <li v-for="(item, index) in options" class="m-dropdown-item-li">
-      <m-dropdown-child v-if="item.children" :options="item"></m-dropdown-child>
+      <m-dropdown-child
+        @focus="focusHandle"
+        v-if="item.children"
+        :options="item"
+      ></m-dropdown-child>
       <p v-else>{{ item[labelName] }}</p>
     </li>
   </ul>
@@ -14,8 +18,9 @@
  * @Description: 创建一个m-dropdown-item组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import { defineProps } from "vue";
 import mDropdownChild from "./dropdownChild.vue";
+const emits = defineEmits(["focus"]);
 const props = withDefaults(
   defineProps<{
     options: any[];
@@ -25,6 +30,10 @@ const props = withDefaults(
     labelName: "label"
   }
 );
+
+function focusHandle(){
+  emits("focus")
+}
 </script>
 <style scoped lang="less">
 .m-dropdown-item {
