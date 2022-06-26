@@ -57,7 +57,23 @@ const options = [
   },
   {
     label: "bughou",
-    value: "houxiagny"
+    value: "houxiagny",
+    children: [
+      {
+        label: "侯湘仪",
+        value: 18,
+        children: [
+          {
+            label: "YL",
+            value: "802399"
+          }
+        ]
+      },
+      {
+        label: "侯湘仪",
+        value: 18
+      }
+    ]
   }
 ];
 </script>

@@ -5,4 +5,6 @@ const menuMitt = Mitt();
 
 const collapseMitt = mitt();
 
-export { menuMitt, collapseMitt };
+const dropdownMitt = mitt();
+
+export { menuMitt, collapseMitt, dropdownMitt };

@@ -4,7 +4,7 @@
     <m-dropdown-item
       :options="options"
       class="m-dropdown-item"
-      @click="clickHandle"
+      @hidden="hiddenHandle"
     ></m-dropdown-item>
   </div>
 </template>
@@ -33,6 +33,9 @@ const props = withDefaults(
 );
 function clickHandle(event: Event) {
   // console.log((event.target as any).children);
+}
+function hiddenHandle(option) {
+  console.log(option);
 }
 </script>
 <style scoped lang="less">

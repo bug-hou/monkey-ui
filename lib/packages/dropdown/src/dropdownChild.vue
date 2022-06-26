@@ -1,15 +1,24 @@
 <template>
-  <label class="m-dropdown-child">
-    <input type="text" ref="inputRef" />
-    <p>{{ options[labelName] }}</p>
+  <div class="m-dropdown-child">
+    <div
+      class="m-dropdown-child-content"
+      @mouseenter="enterContentHandle"
+      @mouseleave="leaveContentHandle"
+    >
+      <p>{{ options[labelName] }}</p>
+    </div>
     <p class="m-dropdown-child-arrow"></p>
-    <m-dropdown-item
-      class="m-dropdown-child-item"
-      :options="options.children"
-      @focus="focusHandle"
-      @mousedown="clickHandle"
-    ></m-dropdown-item>
-  </label>
+    <transition name="mDropdownOpacity">
+      <m-dropdown-item
+        v-show="isMove || showChild"
+        @mouseenter="enterHandle"
+        @mouseleave="leaveHandle"
+        class="m-dropdown-child-item"
+        :options="options.children"
+        @hidden="hiddenHandle"
+      ></m-dropdown-item>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts" setup name="m-dropdown-child">
@@ -19,9 +28,8 @@
  * @Description: 创建一个m-dropdown-child组件
  */
 // 从下载的组件中导入函数
-import { ref, defineProps, onMounted, nextTick } from "vue";
+import { ref, defineProps, onMounted } from "vue";
 import mDropdownItem from "./dropdownItem.vue";
-const emits = defineEmits(["focus"]);
 const props = withDefaults(
   defineProps<{
     options: any;
@@ -31,23 +39,33 @@ const props = withDefaults(
     labelName: "label"
   }
 );
+const emits = defineEmits(["hidden"]);
 
-const inputRef = ref<HTMLElement>();
+const showChild = ref(false);
+const isMove = ref(false);
 
-function clickHandle() {
-  // console.log(inputRef.value);
-  // emits("focus");
-  inputRef.value?.focus();
-  console.log("first");
+function enterContentHandle() {
+  showChild.value = true;
 }
-
-function focusHandle() {
-  console.log("first");
-  console.log(inputRef.value);
-  inputRef.value?.focus();
+function leaveContentHandle() {
+  setTimeout(() => {
+    showChild.value = false;
+  }, 10);
 }
-
-function moveHandle() {}
+function enterHandle() {
+  isMove.value = true;
+  setTimeout(() => {
+    showChild.value = true;
+  }, 20);
+}
+function leaveHandle() {
+  isMove.value = false;
+}
+function hiddenHandle(option) {
+  isMove.value = false;
+  showChild.value = false;
+  emits("hidden", option);
+}
 onMounted(() => {
   // inputRef.value?.focus();
 });
@@ -56,10 +74,24 @@ onMounted(() => {
 .m-dropdown-child {
   display: flex;
   position: relative;
-  input {
-    position: absolute;
-    z-index: -9999px;
-    left: -9999px;
+  .m-dropdown-child-content {
+    height: 100%;
+    padding-left: 0;
+    white-space: nowrap;
+    display: flex;
+    border-radius: 5px;
+    p {
+      padding: 5px 13px;
+    }
+    &:hover {
+      background-color: rgb(243, 243, 245);
+    }
+    &::before,
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 2px;
+    }
   }
   .m-dropdown-child-arrow {
     border: 2px solid transparent;
@@ -69,16 +101,13 @@ onMounted(() => {
     height: 7px;
     margin-left: 7px;
     transform: rotate(45deg) translateY(-50%);
-    position: relative;
-    top: 12px;
+    position: absolute;
+    top: 50%;
+    right: 10px;
   }
   .m-dropdown-child-item {
-    top: -7px;
+    top: 0px;
     left: 100%;
-    display: none;
-  }
-  input:focus ~ .m-dropdown-child-item {
-    display: block;
   }
 }
 </style>
