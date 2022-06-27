@@ -1,13 +1,23 @@
 <template>
-  <ul class="m-dropdown-item">
+  <ul
+    class="m-dropdown-item"
+    @mouseenter="enterHandle"
+    @mouseleave="leaveHandle"
+  >
     <li v-for="(item, index) in options" class="m-dropdown-item-li">
       <m-dropdown-child
         v-if="item.children"
         :options="item"
+        :flag="flag"
         @hidden="clickHandle"
+        :default-value="defaultValue"
       ></m-dropdown-child>
       <div v-else @click="clickHandle(item)">
-        <p>
+        <p
+          :class="
+            defaultValue?.includes(item[valueName]) && 'm-dropwon-item-active'
+          "
+        >
           {{ item[labelName] }}
         </p>
       </div>
@@ -22,23 +32,35 @@
  * @Description: 创建一个m-dropdown-item组件
  */
 // 从下载的组件中导入函数
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import mDropdownChild from "./dropdownChild.vue";
 const props = withDefaults(
   defineProps<{
     options: any[];
     labelName?: string;
+    valueName?: string;
+    defaultValue?: any[];
   }>(),
   {
-    labelName: "label"
+    labelName: "label",
+    valueName: "value"
   }
 );
 const emits = defineEmits(["hidden"]);
+
+let flag = ref(false);
 function clickHandle(option: any) {
   emits("hidden", option);
 }
+function enterHandle() {
+  flag.value = true;
+}
+function leaveHandle() {
+  flag.value = false;
+}
 </script>
 <style scoped lang="less">
+@distance: 20px;
 .m-dropdown-item {
   position: absolute;
   border-radius: 8px;
@@ -58,13 +80,19 @@ function clickHandle(option: any) {
   .m-dropdown-item-li {
     cursor: pointer;
     div {
+      width: 100%;
       height: 100%;
       padding-left: 0;
       white-space: nowrap;
       display: flex;
       p {
+        &.m-dropwon-item-active {
+          color: #18a058;
+          background-color: #18a05866;
+        }
+        flex: 1;
         height: 100%;
-        padding: 5px 15px;
+        padding: 5px @distance;
         border-radius: 5px;
         &:hover {
           background-color: rgb(243, 243, 245);

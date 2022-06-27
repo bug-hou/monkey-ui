@@ -6,7 +6,7 @@
       description="将两个内容分隔开来，为什么就不能在一起了"
     >
     </cpn-header-vue>
-    <m-dropdown :options="options">
+    <m-dropdown :options="options" :defaultValue="['dm', 'dy', 'wjzdy']">
       <m-button>请选择</m-button>
     </m-dropdown>
     <div class="layout"></div>
@@ -24,56 +24,40 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 
 const options = [
   {
-    label: "bughou",
-    value: "houxiagny"
+    label: "华尔街之狼",
+    value: "hejzl"
   },
   {
-    label: "bughou",
-    value: "houxiagny"
+    label: "肖申克的救赎",
+    value: "jskdjs"
   },
   {
-    label: "bughou",
-    value: "houxiagny",
+    label: "动漫",
+    value: "dm",
     children: [
       {
-        label: "侯湘仪",
-        value: 18,
-        children: [
-          {
-            label: "YL",
-            value: "802399"
-          }
-        ]
+        label: "斗破苍穹",
+        value: "dpcq"
       },
       {
-        label: "侯湘仪",
-        value: 18
+        label: "电影",
+        value: "dy",
+        children: [
+          {
+            label: "灵魂小提琴",
+            value: "lhxtq"
+          },
+          {
+            label: "玩具总动员",
+            value: "wjzdy"
+          }
+        ]
       }
     ]
   },
   {
-    label: "bughou",
-    value: "houxiagny"
-  },
-  {
-    label: "bughou",
-    value: "houxiagny",
-    children: [
-      {
-        label: "侯湘仪",
-        value: 18,
-        children: [
-          {
-            label: "YL",
-            value: "802399"
-          }
-        ]
-      },
-      {
-        label: "侯湘仪",
-        value: 18
-      }
-    ]
+    label: "摔跤吧爸爸",
+    value: "sjbbb"
   }
 ];
 </script>
