@@ -12,7 +12,12 @@
         @hidden="clickHandle"
         :default-value="defaultValue"
       ></m-dropdown-child>
-      <div v-else @click="clickHandle(item)">
+      <div v-else @click.stop="clickHandle(item)">
+        <m-icon
+          v-if="item[iconName]"
+          :name="item[iconName]"
+          class="m-dropdown-item-icon"
+        ></m-icon>
         <p
           :class="
             defaultValue?.includes(item[valueName]) && 'm-dropwon-item-active'
@@ -34,16 +39,19 @@
 // 从下载的组件中导入函数
 import { defineProps, ref } from "vue";
 import mDropdownChild from "./dropdownChild.vue";
+import mIcon from "../../icon/src/icon.vue";
 const props = withDefaults(
   defineProps<{
     options: any[];
     labelName?: string;
     valueName?: string;
     defaultValue?: any[];
+    iconName?: string;
   }>(),
   {
     labelName: "label",
-    valueName: "value"
+    valueName: "value",
+    iconName: "icon"
   }
 );
 const emits = defineEmits(["hidden"]);
@@ -85,6 +93,16 @@ function leaveHandle() {
       padding-left: 0;
       white-space: nowrap;
       display: flex;
+      color: #666;
+      position: relative;
+      .m-dropdown-item-icon {
+        position: absolute;
+        z-index: 9999;
+        font-size: 16px;
+        left: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
       p {
         &.m-dropwon-item-active {
           color: #18a058;

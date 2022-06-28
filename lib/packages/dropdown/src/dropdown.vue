@@ -1,6 +1,6 @@
 <template>
   <div class="m-dropdown" @mouseenter="enterHandle" @mouseleave="leaveHandle">
-    <div @click="clickHandle">
+    <div @click.stop="clickHandle">
       <slot></slot>
     </div>
     <transition name="fade">
@@ -12,6 +12,7 @@
         :defaultValue="defaultValue"
         :value-name="valueName"
         :label-name="labelName"
+        @mouseenter="enterHandle"
       ></m-dropdown-item>
     </transition>
   </div>
@@ -24,7 +25,7 @@
  * @Description: 创建一个m-dropdown组件
  */
 // 从下载的组件中导入函数
-import { defineProps, ref, unref } from "vue";
+import { defineProps, onMounted, ref, unref } from "vue";
 import mDropdownItem from "./dropdownItem.vue";
 const props = withDefaults(
   defineProps<{
@@ -32,14 +33,16 @@ const props = withDefaults(
     labelName?: string;
     valueName?: string;
     direction?: "left" | "right" | "top" | "bottom";
-    trigger?: "click" | "hover";
+    trigger?: "click" | "hover" | "auto";
     defaultValue?: any[];
+    iconName?: string;
   }>(),
   {
-    direction: "right",
+    direction: "bottom",
     labelName: "label",
     valueName: "value",
-    trigger: "hover"
+    trigger: "hover",
+    iconName: "icon"
   }
 );
 
@@ -49,7 +52,7 @@ const emits = defineEmits<{
 
 const isShow = ref(false);
 function clickHandle() {
-  if (props.trigger === "click") {
+  if (props.trigger !== "hover") {
     isShow.value = !unref(isShow);
   }
 }
@@ -67,28 +70,29 @@ function leaveHandle() {
     isShow.value = false;
   }
 }
+if (props.trigger === "auto") {
+  window.addEventListener("click", () => {
+    isShow.value = false;
+  });
+}
 </script>
 <style scoped lang="less">
 .fade-leave-from,
 .fade-enter-to {
-  scale: 1;
   opacity: 1;
 }
 .fade-leave-active,
 .fade-enter-active {
   transition: all 0.3s;
-  transform-origin: 0 0;
 }
 .fade-leave-to,
 .fade-enter-from {
   opacity: 0;
-  scale: 0;
 }
 .m-dropdown {
   display: inline-block;
   position: relative;
   .m-dropdown-item-top {
-    margin-bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
     bottom: 100%;
@@ -96,18 +100,16 @@ function leaveHandle() {
   .m-dropdown-item-right {
     left: 100%;
     top: 0;
-    margin-left: 5px;
     transform: none;
   }
   .m-dropdown-item-bottom {
-    margin-top: 5px;
     left: 50%;
     transform: translateX(-50%);
   }
   .m-dropdown-item-left {
     right: 100%;
-    margin-right: 5px;
     transform: none;
+    top: 0;
   }
 }
 </style>

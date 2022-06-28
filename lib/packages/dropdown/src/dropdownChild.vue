@@ -8,7 +8,11 @@
         defaultValue?.includes(options[valueName]) && 'm-dropwon-item-active'
       "
     >
-      <m-icon name="m-star" class="m-dropdown-item-icon"></m-icon>
+      <m-icon
+        v-if="options[iconName]"
+        :name="options[iconName]"
+        class="m-dropdown-item-icon"
+      ></m-icon>
       <p>
         {{ options[labelName] }}
       </p>
