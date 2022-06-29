@@ -58,6 +58,8 @@ import { mColorPicker } from "./packages/color-picker";
 
 import { mDropdown } from "./packages/dropdown";
 
+import { mTree } from "./packages/tree";
+
 import { App } from "vue";
 
 const monkeysUI = [
@@ -97,7 +99,8 @@ const monkeysUI = [
   mVertualScroll,
   mTransfer,
   mColorPicker,
-  mDropdown
+  mDropdown,
+  mTree
 ]
 
 export default (app: App, opt?: any) => {
@@ -143,5 +146,6 @@ export {
   mVertualScroll,
   mTransfer,
   mColorPicker,
-  mDropdown
+  mDropdown,
+  mTree
 }

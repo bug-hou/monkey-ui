@@ -3,7 +3,7 @@
 */
 import { readonly, ref } from "vue";
 
-function scrollParent(element: HTMLElement): HTMLElement | null {
+export function scrollParent(element: HTMLElement): HTMLElement | null {
   const parent = element.parentElement;
   if (!parent) {
     return null;

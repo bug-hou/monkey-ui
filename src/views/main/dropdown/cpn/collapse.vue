@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="collapse"
     description="在options数据设置了children就自动显示多级"
-    :code="triggerCode"
+    :code="collapseCode"
   >
     <m-dropdown :options="options">
       <m-button>练级选择</m-button>
@@ -18,7 +18,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { triggerCode } from "../doc";
+import { collapseCode } from "../doc";
 
 const options = [
   {

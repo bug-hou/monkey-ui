@@ -71,6 +71,10 @@ const base = [
   {
     name: "下拉选择Dropdown",
     path: "/dropdown"
+  },
+  {
+    name: "树形选择Tree",
+    path: "/tree"
   }
 ];
 </script>

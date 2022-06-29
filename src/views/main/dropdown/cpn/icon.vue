@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="icon"
     description="只用在options中添加对应的iconName"
-    :code="triggerCode"
+    :code="iconCode"
   >
     <m-dropdown :options="options">
       <m-button>图标显示</m-button>
@@ -18,7 +18,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { triggerCode } from "../doc";
+import { iconCode } from "../doc";
 
 const options = [
   {

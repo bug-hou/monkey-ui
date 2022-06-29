@@ -2,7 +2,7 @@
   <cpn-play-vue
     title="direction"
     description="direction设置显示的方向left，right，bottom，top"
-    :code="triggerCode"
+    :code="directionCode"
   >
     <p></p>
     <m-dropdown :options="options" direction="left">
@@ -31,7 +31,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { triggerCode } from "../doc";
+import { directionCode } from "../doc";
 
 const options = [
   {
