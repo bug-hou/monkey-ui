@@ -1,15 +1,27 @@
 <template>
   <div class="m-tree-child">
-    <div class="m-tree-child-content" @click.stop="clickHandle">
+    <div
+      class="m-tree-child-content"
+      :class="path.get(option.children) && 'm-tree-child-content-hover'"
+      @click.stop="clickHandle"
+    >
       <span
         class="m-tree-child-signal"
-        :class="showChild && 'm-tree-child-active'"
+        :class="path.get(option.children) && 'm-tree-child-active'"
       ></span>
       <p class="m-tree-child-label">{{ option[labelName] }}</p>
     </div>
-    <ul class="m-tree-child-list" :class="showChild && 'm-tree-child-show'">
+    <ul
+      class="m-tree-child-list"
+      :class="path.get(option.children) && 'm-tree-child-show'"
+    >
       <li v-for="item in option.children">
-        <tree-item-vue :option="item"></tree-item-vue>
+        <tree-item-vue
+          :path="path"
+          :option="item"
+          :level="level + 1"
+          @expand="expandHandle"
+        ></tree-item-vue>
       </li>
     </ul>
   </div>
@@ -22,25 +34,36 @@
  * @Description: 创建一个m-tree-child组件
  */
 // 从下载的组件中导入函数
-import { defineProps, ref, unref } from "vue";
+import { defineProps, ref, unref, watch } from "vue";
 import { useInject } from "../../../hooks";
 import treeItemVue from "./treeItem.vue";
 const props = withDefaults(
   defineProps<{
     option: any;
+    level: number;
+    path: WeakMap<any, boolean>;
   }>(),
   {}
 );
 
-const emits = defineEmits(["expand"]);
+const emits = defineEmits<{
+  (e: "expand", level: number, options: any[], signal: boolean): void;
+}>();
+
 const labelName = useInject(undefined, "labelName", "label");
 const valueName = useInject(undefined, "valueName", "value");
 
-const showChild = ref(false);
-
 function clickHandle() {
-  showChild.value = !unref(showChild);
-  emits("expand");
+  emits(
+    "expand",
+    props.level,
+    props.option.children,
+    !(props.path.get(props.option.children) ?? false)
+  );
+}
+
+function expandHandle(level: number, option: any[], signal: boolean) {
+  emits("expand", level, option, signal);
 }
 </script>
 <style scoped lang="less">
@@ -61,7 +84,8 @@ function clickHandle() {
   .m-tree-child-content {
     margin-left: -30px;
     padding-left: 30px;
-    &:hover {
+    &:hover,
+    &.m-tree-child-content-hover {
       background-color: #e7f5ee;
       border-radius: 5px;
     }
@@ -70,11 +94,10 @@ function clickHandle() {
     font-size: 18px;
   }
   .m-tree-child-list {
-    max-height: 0;
+    height: 0;
     overflow: hidden;
-    transition: all 0.3s;
     &.m-tree-child-show {
-      max-height: 400px;
+      height: auto;
     }
   }
 }

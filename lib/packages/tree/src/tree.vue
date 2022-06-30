@@ -9,6 +9,8 @@
             :is="item.children ? treeChildVue : treeItemVue"
             :option="item"
             @expand="expandHandle"
+            :level="0"
+            :path="markInfo.path"
           ></component>
         </li>
       </ul>
@@ -23,9 +25,16 @@
  * @Description: 创建一个m-tree组件
  */
 // 从下载的组件中导入函数
-import { ref, defineEmits, defineProps, provide, onMounted } from "vue";
+import {
+  ref,
+  defineEmits,
+  defineProps,
+  provide,
+  onMounted,
+  reactive
+} from "vue";
 import { useScroll } from "../../../hooks";
-import { computedPosition, scrollParent } from "../../../utils";
+import { computedPosition } from "../../../utils";
 
 import treeChildVue from "./treeChild.vue";
 import treeItemVue from "./treeItem.vue";
@@ -49,16 +58,37 @@ provide("valueName", props.valueName);
 const listRef = ref<HTMLElement>();
 const inputRef = ref<HTMLElement>();
 
+const markInfo = reactive({
+  path: new WeakMap(),
+  levels: new Map<number, any>()
+});
+
+const selectInfo = reactive({
+  path: new WeakMap(),
+  selectAll: new WeakMap(),
+  levels: new Map<number, any>()
+});
+
 let scroll: any;
 
 function downHandle(event: Event) {
   inputRef.value?.focus();
 }
 
-function expandHandle() {
+function expandHandle(level: number, option: any[], signal: boolean) {
+  if (markInfo.levels.has(level)) {
+    for (const l of markInfo.levels) {
+      if (level <= l[0]) {
+        markInfo.path.delete(l[1]);
+      }
+    }
+  }
+  console.log(signal);
+  markInfo.levels.set(level, option);
+  markInfo.path.set(option, signal);
   setTimeout(() => {
     scroll.refresh();
-  }, 300);
+  }, 200);
 }
 
 onMounted(() => {
@@ -94,7 +124,7 @@ onMounted(() => {
     z-index: -999;
     left: -999px;
   }
-  input:focus ~ .m-tree-list {
+  input ~ .m-tree-list {
     opacity: 1;
     max-height: 400px;
   }
