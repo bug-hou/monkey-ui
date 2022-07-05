@@ -8,9 +8,11 @@
           <component
             :is="item.children ? treeChildVue : treeItemVue"
             :option="item"
-            @expand="expandHandle"
             :level="0"
             :path="markInfo.path"
+            @expand="expandHandle"
+            @choose="chooseHandle"
+            @transfer="transferHandle"
           ></component>
         </li>
       </ul>
@@ -43,10 +45,12 @@ const props = withDefaults(
     options: any[];
     labelName?: string;
     valueName?: string;
+    separatist?: string;
   }>(),
   {
     labelName: "label",
-    valueName: "value"
+    valueName: "value",
+    separatist: "/"
   }
 );
 
@@ -69,13 +73,21 @@ const selectInfo = reactive({
   levels: new Map<number, any>()
 });
 
+const showLabel = reactive({
+  labels: new Map<string, any>(),
+  values: new Array<string>(),
+  labelToValue: new Map<string, string>()
+});
+
+provide("hasMap", selectInfo.path);
+provide("selectMap", selectInfo.selectAll);
 let scroll: any;
 
 function downHandle(event: Event) {
   inputRef.value?.focus();
 }
 
-function expandHandle(level: number, option: any[], signal: boolean) {
+function expandHandle(level: number, option: any, signal: boolean) {
   if (markInfo.levels.has(level)) {
     for (const l of markInfo.levels) {
       if (level <= l[0]) {
@@ -83,7 +95,7 @@ function expandHandle(level: number, option: any[], signal: boolean) {
       }
     }
   }
-  console.log(signal);
+
   markInfo.levels.set(level, option);
   markInfo.path.set(option, signal);
   setTimeout(() => {
@@ -91,8 +103,118 @@ function expandHandle(level: number, option: any[], signal: boolean) {
   }, 200);
 }
 
+function chooseHandle(level: number, option: any) {
+  processWeakMap(selectInfo.selectAll, option, level);
+  if (selectInfo.path.get(option)) {
+    selectInfo.path.set(option, false);
+  }
+}
+
+function transferHandle(level: number, option: any) {
+  processWeakMap(selectInfo.path, option, level);
+}
+
+function processWeakMap(
+  map: WeakMap<any, boolean>,
+  option: any,
+  level: number
+) {
+  if (map.get(option)) {
+    map.set(option, false);
+    processChild(selectInfo.selectAll, option, false);
+  } else {
+    map.set(option, true);
+    processChild(selectInfo.selectAll, option, true);
+  }
+  processSelectParent(level - 1);
+  processHasParent(level - 1);
+}
+
+function processChild(
+  map: WeakMap<any, boolean>,
+  option: any,
+  signal: boolean,
+  values: string[] = []
+) {
+  if (Array.isArray(option.children) && option.children.length !== 0) {
+    for (let o of option.children) {
+      if (!o.disabled) {
+        map.set(o, signal);
+        values.push(o.value);
+        processChild(map, o, signal, values);
+      }
+    }
+  }
+}
+
+function processSelectParent(level: number) {
+  while (level >= 0) {
+    const option = markInfo.levels.get(level);
+    if (option) {
+      let i = 0;
+      for (const o of option.children) {
+        if (!o.disabled && !selectInfo.selectAll.get(o)) {
+          break;
+        }
+        i++;
+      }
+      if (i === option.children.length) {
+        selectInfo.selectAll.set(option, true);
+      } else {
+        selectInfo.selectAll.set(option, false);
+      }
+    }
+    level--;
+  }
+}
+
+function processHasParent(level: number) {
+  while (level >= 0) {
+    const option = markInfo.levels.get(level);
+    if (option) {
+      let i = 0;
+      for (const o of option.children) {
+        if (!o.disabled && selectInfo.selectAll.get(o)) {
+          break;
+        }
+        i++;
+      }
+      if (i === option.children.length) {
+        selectInfo.path.set(option, false);
+      } else {
+        selectInfo.path.set(option, true);
+      }
+    }
+    level--;
+  }
+}
+function processLable(level: number, curOption: string[]) {
+  const labels = new Array<string>();
+  labels.unshift(...curOption);
+  while (level >= 0) {
+    const option = markInfo.levels.get(level--);
+    labels.unshift(option.value);
+  }
+  return labels.join(props.separatist);
+}
+function processAddLabel(level: number, curOption: string[]) {
+  const value = processLable(level, curOption);
+  showLabel.values.push(value);
+  return value;
+}
+
+function processDelLabel(level: number, curOption: string[]) {
+  const value = processLable(level, curOption);
+  showLabel.values.splice(showLabel.values.indexOf(value), 1);
+  return value;
+}
+
 onMounted(() => {
-  scroll = useScroll(listRef.value as any, { bounce: false });
+  scroll = useScroll(listRef.value as any, {
+    bounce: false,
+    scrollX: true,
+    scrollY: true
+  });
 });
 </script>
 <style scoped lang="less">
@@ -100,13 +222,16 @@ onMounted(() => {
 @shadowColor: (rgb(48, 170, 105));
 .m-tree {
   position: relative;
+  display: inline-block;
   .m-tree-label {
+    width: 100%;
     min-height: 38px;
     border: 0.0625rem solid @color;
     padding: 5px 8px;
     border-radius: 10px;
   }
   .m-tree-showValue {
+    width: 100%;
     grid-gap: 5px;
     display: flex;
     flex-wrap: wrap;
@@ -129,12 +254,13 @@ onMounted(() => {
     max-height: 400px;
   }
   .m-tree-list {
-    width: 100%;
+    min-width: 100%;
     overflow: hidden;
     max-height: 0;
     position: absolute;
     top: 110%;
     overflow: hidden;
+    white-space: nowrap;
     left: 0;
     opacity: 0;
     border-radius: 0.625rem;

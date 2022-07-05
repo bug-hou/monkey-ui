@@ -1,5 +1,5 @@
 import { inject } from "vue";
 
-export function useInject(name: any, key: string | symbol, value?: any) {
-  return name ?? inject(key, value) ?? value;
+export function useInject<T>(name: any, key: string | symbol, value?: T): T {
+  return name ?? inject<T>(key) ?? value;
 }

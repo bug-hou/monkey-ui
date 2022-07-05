@@ -6,7 +6,7 @@
       description="用起来还是挺好用的"
     >
     </cpn-header-vue>
-    <m-tree :options="options"></m-tree>
+    <m-tree :options="options" style="width: 300px"></m-tree>
     <div class="layout"></div>
   </div>
 </template>
@@ -19,8 +19,9 @@ const options = [
     key: "Rubber Soul",
     children: [
       {
-        label: "Everybody's Got Something to Hide Except Me and My Monkey",
-        key: "Everybody's Got Something to Hide Except Me and My Monkey",
+        label: "Everybody's Got",
+        key: "Everybody's Got",
+        disabled: true,
         children: [
           {
             label: "jklfjdsklfj"
