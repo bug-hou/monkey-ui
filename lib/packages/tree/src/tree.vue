@@ -121,10 +121,10 @@ function processWeakMap(
 ) {
   if (map.get(option)) {
     map.set(option, false);
-    processChild(selectInfo.selectAll, option, false);
+    processChild(selectInfo.selectAll, option, false, level);
   } else {
     map.set(option, true);
-    processChild(selectInfo.selectAll, option, true);
+    processChild(selectInfo.selectAll, option, true, level);
   }
   processSelectParent(level - 1);
   processHasParent(level - 1);
@@ -134,14 +134,23 @@ function processChild(
   map: WeakMap<any, boolean>,
   option: any,
   signal: boolean,
+  level: number,
   values: string[] = []
 ) {
   if (Array.isArray(option.children) && option.children.length !== 0) {
     for (let o of option.children) {
       if (!o.disabled) {
+        const curValues = [...values];
         map.set(o, signal);
         values.push(o.value);
-        processChild(map, o, signal, values);
+        curValues.push(o.value);
+        if (o.children) {
+          processChild(map, o, signal, level, curValues);
+        } else {
+          signal
+            ? processAddLabel(level, curValues)
+            : processDelLabel(level, curValues);
+        }
       }
     }
   }
