@@ -16,11 +16,11 @@ import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 const options = [
   {
     label: "Rubber Soul",
-    key: "Rubber Soul",
+    value: "Rubber Soul",
     children: [
       {
         label: "Everybody's Got",
-        key: "Everybody's Got",
+        value: "Everybody's Got",
         disabled: true,
         children: [
           {
@@ -30,108 +30,108 @@ const options = [
       },
       {
         label: "Drive My Car",
-        key: "Drive My Car",
+        value: "Drive My Car",
         disabled: true
       },
       {
         label: "Norwegian Wood",
-        key: "Norwegian Wood"
+        value: "Norwegian Wood"
       },
       {
         label: "You Won't See",
-        key: "You Won't See",
+        value: "You Won't See",
         disabled: true
       },
       {
         label: "Nowhere Man",
-        key: "Nowhere Man"
+        value: "Nowhere Man"
       },
       {
         label: "Think For Yourself",
-        key: "Think For Yourself"
+        value: "Think For Yourself"
       },
       {
         label: "The Word",
-        key: "The Word"
+        value: "The Word"
       },
       {
         label: "Michelle",
-        key: "Michelle",
+        value: "Michelle",
         disabled: true
       },
       {
         label: "What goes on",
-        key: "What goes on"
+        value: "What goes on"
       },
       {
         label: "Girl",
-        key: "Girl"
+        value: "Girl"
       },
       {
         label: "I'm looking through you",
-        key: "I'm looking through you"
+        value: "I'm looking through you"
       },
       {
         label: "In My Life",
-        key: "In My Life"
+        value: "In My Life"
       },
       {
         label: "Wait",
-        key: "Wait"
+        value: "Wait"
       }
     ]
   },
   {
     label: "Let It Be",
-    key: "Let It Be Album",
+    value: "Let It Be Album",
     children: [
       {
         label: "Two Of Us",
-        key: "Two Of Us"
+        value: "Two Of Us"
       },
       {
         label: "Dig A Pony",
-        key: "Dig A Pony"
+        value: "Dig A Pony"
       },
       {
         label: "Across The Universe",
-        key: "Across The Universe"
+        value: "Across The Universe"
       },
       {
         label: "I Me Mine",
-        key: "I Me Mine"
+        value: "I Me Mine"
       },
       {
         label: "Dig It",
-        key: "Dig It"
+        value: "Dig It"
       },
       {
         label: "Let It Be",
-        key: "Let It Be"
+        value: "Let It Be"
       },
       {
         label: "Maggie Mae",
-        key: "Maggie Mae"
+        value: "Maggie Mae"
       },
       {
         label: "I've Got A Feeling",
-        key: "I've Got A Feeling"
+        value: "I've Got A Feeling"
       },
       {
         label: "One After 909",
-        key: "One After 909"
+        value: "One After 909"
       },
       {
         label: "The Long And Winding Road",
-        key: "The Long And Winding Road"
+        value: "The Long And Winding Road"
       },
       {
         label: "For You Blue",
-        key: "For You Blue"
+        value: "For You Blue"
       },
       {
         label: "Get Back",
-        key: "Get Back"
+        value: "Get Back"
       }
     ]
   }
