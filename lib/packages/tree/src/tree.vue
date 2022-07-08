@@ -3,8 +3,8 @@
     <input type="text" ref="inputRef" />
     <div class="m-tree-label">
       <ul class="m-tree-label-list">
-        <li v-for="item in showLabel.labels.values()">
-          <m-tag>{{ item }}</m-tag>
+        <li v-for="item in showLabel.labels.keys()">
+          <m-tag closabled @close="closeHandle(item)">{{ item }}</m-tag>
         </li>
       </ul>
     </div>
@@ -85,7 +85,7 @@ const selectInfo = reactive({
 
 const showLabel = reactive({
   // label和对象的关系
-  labels: new Map<any, string>(),
+  labels: new Map<string, any>(),
   // 所有的values
   values: new Array<string>(),
   // value对应的label
@@ -158,6 +158,10 @@ function processChild(
   values: string[] = [],
   labels: string[] = []
 ) {
+  if (!markInfo.levels.has(level)) {
+    values.push(option[props.valueName]);
+    labels.push(option[props.labelName]);
+  }
   if (Array.isArray(option.children) && option.children.length !== 0) {
     for (let o of option.children) {
       if (!o.disabled) {
@@ -174,13 +178,11 @@ function processChild(
       }
     }
   } else {
-    processLabelValue(
-      level - 1,
-      [option[props.valueName]],
-      [option[props.labelName]],
-      option,
-      signal
-    );
+    if (markInfo.levels.has(level)) {
+      values.push(option[props.valueName]);
+      labels.push(option[props.labelName]);
+    }
+    processLabelValue(level - 1, values, labels, option, signal);
   }
 }
 
@@ -195,13 +197,14 @@ function processLabelValue(
     const label = processAddLabel(level, labels);
     const value = processAddLabel(level, values, props.valueName);
     showLabel.values.push(value);
-    showLabel.labels.set(o, label);
-    showLabel.labelToValue.set(value, label);
+    showLabel.labels.set(label, o);
+    showLabel.labelToValue.set(label, value);
   } else {
+    const label = processAddLabel(level, labels);
     const value = processDelLabel(level, values, props.valueName);
-    showLabel.values.splice(showLabel.values.indexOf(value), 1);
-    showLabel.labels.delete(o);
-    showLabel.labelToValue.delete(value);
+    arrayToSplice(showLabel.values, value);
+    showLabel.labels.delete(label);
+    showLabel.labelToValue.delete(label);
   }
 }
 
@@ -253,10 +256,11 @@ function processLable(
 ) {
   const labels = new Array<string>();
   labels.unshift(...curOption);
-  debugger;
   while (level >= 0) {
     const option = markInfo.levels.get(level--);
-    debugger;
+    if (!option) {
+      break;
+    }
     labels.unshift(option[key]);
   }
   return labels.join(props.separatist);
@@ -275,6 +279,22 @@ function processDelLabel(
   key: string = props.labelName
 ) {
   return processLable(level, curOption, key);
+}
+
+function closeHandle(item: string) {
+  const option = showLabel.labels.get(item);
+  const value = showLabel.labelToValue.get(item);
+  arrayToSplice(showLabel.values, value);
+
+  const values = value?.split(props.separatist);
+}
+
+function arrayToSplice<T>(target: T[], value: T) {
+  target.splice(target.indexOf(value), 1);
+}
+function processOption(options: any[], values: string[]) {
+  const results: any[] = [];
+
 }
 
 onMounted(() => {
