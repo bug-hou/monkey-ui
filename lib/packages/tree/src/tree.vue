@@ -294,7 +294,41 @@ function arrayToSplice<T>(target: T[], value: T) {
 }
 function processOption(options: any[], values: string[]) {
   const results: any[] = [];
+  values.forEach((value) => {
+    const option = options.find((option) => option[props.valueName] === value);
+    results.unshift(option);
+    options = option;
+  });
+  return results;
+}
 
+function processSelectAll(options: any[]) {
+  let superior = false;
+  options.forEach((option) => {
+    selectInfo.selectAll.set(option, false);
+    if (option.children) {
+      if (superior) {
+        selectInfo.path.set(option, true);
+      } else {
+        let len = option.children.length;
+        for (let i = 0; i < len; i++) {
+          const item = option.children[i];
+          if (
+            i === len - 1 &&
+            (!selectInfo.path.get(item) || !selectInfo.selectAll.get(item))
+          ) {
+            selectInfo.path.set(option, false);
+          } else {
+            if (!selectInfo.path.get(item) || !selectInfo.selectAll.get(item)) {
+              selectInfo.path.set(option, true);
+              superior = true;
+              break;
+            }
+          }
+        }
+      }
+    }
+  });
 }
 
 onMounted(() => {
