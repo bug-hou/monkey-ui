@@ -4,7 +4,9 @@
     <div class="m-tree-label">
       <ul class="m-tree-label-list">
         <li v-for="item in showLabel.labels.keys()">
-          <m-tag closabled @close="closeHandle(item)">{{ item }}</m-tag>
+          <m-tag closabled @close="closeHandle(item)">{{
+            processLabelRule(labelRule, item)
+          }}</m-tag>
         </li>
       </ul>
     </div>
@@ -39,7 +41,8 @@ import {
   defineProps,
   provide,
   onMounted,
-  reactive
+  reactive,
+  watch
 } from "vue";
 import { useScroll } from "../../../hooks";
 import { computedPosition } from "../../../utils";
@@ -48,21 +51,29 @@ import treeChildVue from "./treeChild.vue";
 import treeItemVue from "./treeItem.vue";
 
 import mTag from "../../tag/src/tag.vue";
+
+type Rule = "parent" | "all" | "child";
+
 const props = withDefaults(
   defineProps<{
     options: any[];
     labelName?: string;
     valueName?: string;
     separatist?: string;
+    labelRule?: Rule;
+    modelValue: string[];
+    filter?: (str: string) => string;
   }>(),
   {
     labelName: "label",
     valueName: "value",
-    separatist: "/"
+    separatist: "/",
+    labelRule: "all",
+    filter: (str) => str
   }
 );
 
-const emits = defineEmits(["select"]);
+const emits = defineEmits(["change", "update:modelValue"]);
 
 provide("labelName", props.labelName);
 provide("valueName", props.valueName);
@@ -95,6 +106,32 @@ const showLabel = reactive({
 provide("hasMap", selectInfo.path);
 provide("selectMap", selectInfo.selectAll);
 let scroll: any;
+
+watch(
+  () => showLabel.values,
+  (newValue) => {
+    emits("change", newValue);
+    emits("update:modelValue", newValue);
+  }
+);
+// 对modelValue中的值，默认处理
+// console.log(props.modelValue);
+preProcessing(props.options, props.modelValue);
+
+function preProcessing(options: any[], modelValues: string[]) {
+  modelValues.forEach((value) => {
+    const values = value.split(props.separatist);
+    const option = processOption(options, values);
+    const labels: any[] = [];
+    option.forEach((item) => {
+      labels.unshift(item[props.labelName]);
+    });
+    const label = labels.join(props.separatist);
+    showLabel.labels.set(label, option[0]);
+    showLabel.labelToValue.set(label, value);
+    processSelect(option);
+  });
+}
 
 // 防止点击取消聚焦
 function downHandle() {
@@ -282,11 +319,13 @@ function processDelLabel(
 }
 
 function closeHandle(item: string) {
-  const option = showLabel.labels.get(item);
   const value = showLabel.labelToValue.get(item);
+  showLabel.labels.delete(item);
   arrayToSplice(showLabel.values, value);
 
   const values = value?.split(props.separatist);
+  const options = processOption(props.options, values ?? []);
+  processSelectAll(options);
 }
 
 function arrayToSplice<T>(target: T[], value: T) {
@@ -295,15 +334,18 @@ function arrayToSplice<T>(target: T[], value: T) {
 function processOption(options: any[], values: string[]) {
   const results: any[] = [];
   values.forEach((value) => {
-    const option = options.find((option) => option[props.valueName] === value);
+    const option = options.find(
+      (option: any) => option[props.valueName] === value
+    );
     results.unshift(option);
-    options = option;
+    options = option.children;
   });
   return results;
 }
 
 function processSelectAll(options: any[]) {
   let superior = false;
+  debugger;
   options.forEach((option) => {
     selectInfo.selectAll.set(option, false);
     if (option.children) {
@@ -315,11 +357,12 @@ function processSelectAll(options: any[]) {
           const item = option.children[i];
           if (
             i === len - 1 &&
-            (!selectInfo.path.get(item) || !selectInfo.selectAll.get(item))
+            !selectInfo.path.get(item) &&
+            !selectInfo.selectAll.get(item)
           ) {
             selectInfo.path.set(option, false);
           } else {
-            if (!selectInfo.path.get(item) || !selectInfo.selectAll.get(item)) {
+            if (selectInfo.path.get(item) || selectInfo.selectAll.get(item)) {
               selectInfo.path.set(option, true);
               superior = true;
               break;
@@ -329,6 +372,37 @@ function processSelectAll(options: any[]) {
       }
     }
   });
+}
+
+function processSelect(options: any[]) {
+  options.forEach((option) => {
+    if (option.children) {
+      selectInfo.path.set(option, true);
+      const len = option.children.length;
+      for (let i = 0; i < len; i++) {
+        const item = option.children[i];
+        if (len === i + 1 && selectInfo.selectAll.get(item)) {
+          selectInfo.selectAll.set(option, true);
+        } else {
+          break;
+        }
+      }
+    } else {
+      selectInfo.selectAll.set(option, true);
+    }
+  });
+}
+
+function processLabelRule(type: Rule, str: string) {
+  const strs = str.split(props.separatist).map((item) => props.filter(item));
+  switch (type) {
+    case "all":
+      return strs.join(props.separatist);
+    case "child":
+      return strs[strs.length - 1];
+    case "parent":
+      return strs.slice(-2).join(props.separatist);
+  }
 }
 
 onMounted(() => {
@@ -345,6 +419,7 @@ onMounted(() => {
 .m-tree {
   position: relative;
   display: inline-block;
+  width: 100%;
   .m-tree-label {
     width: 100%;
     min-height: 38px;
@@ -376,11 +451,12 @@ onMounted(() => {
     z-index: -999;
     left: -999px;
   }
-  input ~ .m-tree-list {
+  input:focus ~ .m-tree-list {
     opacity: 1;
     max-height: 400px;
   }
   .m-tree-list {
+    z-index: 1000;
     min-width: 100%;
     overflow: hidden;
     max-height: 0;

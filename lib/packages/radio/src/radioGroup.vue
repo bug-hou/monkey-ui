@@ -30,6 +30,12 @@ const value = ref(props.modelValue);
 watch(value, (newValue) => {
   emits("update:modelValue", newValue);
 });
+// provide(radioConfig.name, props.name);
+// provide(radioConfig.modelValue, value);
+// provide(radioConfig.size, props.size ?? "small");
+// provide(radioConfig.button, props.button ?? false);
+// provide(radioConfig.disabled, props.disabled ?? false);
+
 provide(radioConfig.name, props.name);
 provide(radioConfig.modelValue, value);
 provide(radioConfig.size, props.size ?? "small");

@@ -6,13 +6,16 @@
       description="用起来还是挺好用的"
     >
     </cpn-header-vue>
-    <m-tree :options="options" style="width: 300px"></m-tree>
-    <div class="layout"></div>
+    <!-- <m-tree :options="options" style="width: 300px"></m-tree> -->
+    <div class="layout">
+      <base-vue style="width: 100%"></base-vue>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import baseVue from "./cpn/base.vue";
 const options = [
   {
     label: "Rubber Soul",

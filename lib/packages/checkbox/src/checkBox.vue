@@ -52,13 +52,13 @@ const props = withDefaults(
 );
 
 const emits = defineEmits(["update:modelValue"]);
-const check = useInject(props.modelValue, radioConfig.modelValue);
+const check = useInject(props.modelValue, radioConfig.modelValue, ref(""));
 const hasBorder = useInject(props.border, "border", false);
 const isButton = useInject(props.button, radioConfig.button, false);
 const mSize = useInject(props.size, radioConfig.size, "small");
 const disabled = useInject(props.disabled, radioConfig.disabled, false);
 
-const isSelect = useInject(undefined, radioConfig.select);
+const isSelect = useInject(undefined, radioConfig.select, false);
 
 let isChecked = ref(props.isRadio ? true : check.value.includes(props.value));
 
