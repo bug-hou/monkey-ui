@@ -1,0 +1,98 @@
+<template>
+  <div class="m-carousel">
+    <main class="m-carousel-main" ref="carouselRef">
+      <slot></slot>
+    </main>
+    <ul class="m-carousel-dot" :class="'m-carousel-dot-' + dotPlacement">
+      <slot name="dot">
+        <li v-for="item in len" :key="item" @click="dotClickHandle(item)"></li>
+      </slot>
+    </ul>
+    <div class="m-carousel-operate"></div>
+  </div>
+</template>
+
+<script lang="ts" setup name="carousel">
+/*
+ * @Author: bughou
+ * @Date: 2022-07-11 15:55:48
+ * @Description: 创建一个carousel组件
+ */
+// 从下载的组件中导入函数
+import { ref, defineProps, provide, onMounted, unref } from "vue";
+
+type Mode = "slider";
+const props = withDefaults(
+  defineProps<{
+    defaultIndex?: number;
+    mode?: Mode;
+    duration?: number;
+    direction?: "vertical" | "horization";
+    dotPlacement?: "left" | "right" | "top" | "bottom";
+    dotStyle?: "round" | "line";
+    autoplay?: boolean;
+    delay?: number;
+  }>(),
+  {
+    defaultIndex: 0,
+    duration: 3000,
+    direction: "vertical",
+    mode: "slider",
+    autoplay: true,
+    delay: 4000
+  }
+);
+
+provide("initial", props.defaultIndex);
+
+const carouselRef = ref<HTMLElement>();
+
+const len = ref(0);
+
+function processDotChange() {}
+
+function dotClickHandle(item: number) {}
+
+onMounted(() => {
+  len.value = carouselRef.value?.children.length ?? 0;
+
+  setInterval(() => {}, props.delay);
+});
+</script>
+<style scoped lang="less">
+.m-carousel {
+  position: relative;
+  .m-carousel-dot {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    transform: translate(-50%, -50%);
+    &.m-carousel-dot-left {
+      left: 15%;
+      top: 50%;
+    }
+    &.m-carousel-dot-right {
+      right: 15%;
+      top: 50%;
+    }
+    &.m-carousel-dot-top {
+      right: 50%;
+      top: 15%;
+    }
+    &.m-carousel-dot-bottom {
+      right: 50%;
+      bottom: 15%;
+    }
+    &.m-carousel-dot-line li {
+      width: 16px;
+      height: 5px;
+      border-radius: 5px;
+    }
+    &.m-carousel-dot-round li {
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+    }
+  }
+}
+</style>
