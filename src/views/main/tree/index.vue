@@ -9,6 +9,9 @@
     <!-- <m-tree :options="options" style="width: 300px"></m-tree> -->
     <div class="layout">
       <base-vue style="width: 100%"></base-vue>
+      <label-vue></label-vue>
+      <filter-vue></filter-vue>
+      <separatist-vue></separatist-vue>
     </div>
   </div>
 </template>
@@ -16,6 +19,9 @@
 <script lang="ts" setup>
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import baseVue from "./cpn/base.vue";
+import labelVue from "./cpn/label.vue";
+import filterVue from "./cpn/filter.vue";
+import separatistVue from "./cpn/separatist.vue";
 const options = [
   {
     label: "Rubber Soul",

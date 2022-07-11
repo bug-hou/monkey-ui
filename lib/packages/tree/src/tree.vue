@@ -107,13 +107,10 @@ provide("hasMap", selectInfo.path);
 provide("selectMap", selectInfo.selectAll);
 let scroll: any;
 
-watch(
-  () => showLabel.values,
-  (newValue) => {
-    emits("change", newValue);
-    emits("update:modelValue", newValue);
-  }
-);
+watch(showLabel.values, (newValue) => {
+  emits("change", newValue);
+  emits("update:modelValue", newValue);
+});
 // 对modelValue中的值，默认处理
 // console.log(props.modelValue);
 preProcessing(props.options, props.modelValue);
@@ -129,6 +126,7 @@ function preProcessing(options: any[], modelValues: string[]) {
     const label = labels.join(props.separatist);
     showLabel.labels.set(label, option[0]);
     showLabel.labelToValue.set(label, value);
+    showLabel.values.push(value);
     processSelect(option);
   });
 }
@@ -136,6 +134,9 @@ function preProcessing(options: any[], modelValues: string[]) {
 // 防止点击取消聚焦
 function downHandle() {
   inputRef.value?.focus();
+  setTimeout(() => {
+    scroll.refresh();
+  }, 500);
 }
 
 // 保存路径
@@ -219,6 +220,7 @@ function processChild(
       values.push(option[props.valueName]);
       labels.push(option[props.labelName]);
     }
+    debugger;
     processLabelValue(level - 1, values, labels, option, signal);
   }
 }
@@ -272,12 +274,12 @@ function processHasParent(level: number) {
     if (option) {
       let i = 0;
       for (const o of option.children) {
-        if (!o.disabled && selectInfo.selectAll.get(o)) {
-          break;
+        if (selectInfo.path.get(o) || selectInfo.selectAll.get(o)) {
+          i++;
+          continue;
         }
-        i++;
       }
-      if (i === option.children.length) {
+      if (i === 0) {
         selectInfo.path.set(option, false);
       } else {
         selectInfo.path.set(option, true);
@@ -294,9 +296,10 @@ function processLable(
   const labels = new Array<string>();
   labels.unshift(...curOption);
   while (level >= 0) {
-    const option = markInfo.levels.get(level--);
+    const option = markInfo.levels.get(level);
+    level -= 1;
     if (!option) {
-      break;
+      continue;
     }
     labels.unshift(option[key]);
   }
@@ -453,7 +456,7 @@ onMounted(() => {
   }
   input:focus ~ .m-tree-list {
     opacity: 1;
-    max-height: 400px;
+    max-height: 300px;
   }
   .m-tree-list {
     z-index: 1000;

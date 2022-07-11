@@ -1,20 +1,14 @@
 <template>
   <cpn-play-vue
-    title="labelRule"
-    description="labelRule设置如何显示值child，all(默认)，parent三种类型"
-    :code="baseCode"
+    title="filter"
+    description="定义filter函数来对内容进行过滤"
+    :code="filterCode"
   >
-    <m-radio-group name="buttonmini" v-model="labelRule" button>
-      <m-radio value="all">ALL</m-radio>
-      <m-radio value="child">CHILD</m-radio>
-      <m-radio value="parent">PARENT</m-radio>
-    </m-radio-group>
-    <br />
     <m-tree
       :options="options"
       v-model="value"
-      multiple
-      :labelRule="labelRule"
+      labelRule="child"
+      :filter="filter"
     ></m-tree>
   </cpn-play-vue>
 </template>
@@ -27,7 +21,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { baseCode } from "../doc";
+import { filterCode } from "../doc";
 import { reactive, ref } from "vue";
 function getOptions(depth = 3, iterator = 1, prefix = ""): any {
   const length = 12;
@@ -61,5 +55,8 @@ const value = reactive(["v-1/v-1-1/v-1-1-1", "v-1/v-1-1/v-1-1-2"]);
 
 const options = getOptions();
 
-const labelRule = ref("all");
+function filter(str: string) {
+  return "monkeysUI/" + str;
+}
 </script>
+
