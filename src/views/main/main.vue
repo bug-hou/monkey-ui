@@ -75,6 +75,10 @@ const base = [
   {
     name: "树形选择Tree",
     path: "/tree"
+  },
+  {
+    name: "轮播图Carousel",
+    path: "/carousel"
   }
 ];
 </script>
@@ -139,3 +143,4 @@ const base = [
   }
 }
 </style>
+

@@ -11,3 +11,5 @@ export * from "./eventBus";
 export * from "./computePosition";
 
 export * from "./tween";
+
+export * from "./cssUnitConversion"

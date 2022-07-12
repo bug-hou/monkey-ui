@@ -3,7 +3,16 @@
     <main class="m-carousel-main" ref="carouselRef">
       <slot></slot>
     </main>
-    <ul class="m-carousel-dot" :class="'m-carousel-dot-' + dotPlacement">
+    <ul
+      class="m-carousel-dot"
+      :class="'m-carousel-dot-' + dotPlacement"
+      :style="[
+        {
+          left: customDotPosition && cssUnitConversion(customDotPosition[0])
+        },
+        { top: customDotPosition && cssUnitConversion(customDotPosition[1]) }
+      ]"
+    >
       <slot name="dot">
         <li v-for="item in len" :key="item" @click="dotClickHandle(item)"></li>
       </slot>
@@ -20,6 +29,7 @@
  */
 // 从下载的组件中导入函数
 import { ref, defineProps, provide, onMounted, unref } from "vue";
+import { cssUnitConversion } from "../../../utils";
 
 type Mode = "slider";
 const props = withDefaults(
@@ -32,6 +42,7 @@ const props = withDefaults(
     dotStyle?: "round" | "line";
     autoplay?: boolean;
     delay?: number;
+    customDotPosition?: [number | string, number | string];
   }>(),
   {
     defaultIndex: 0,
@@ -61,6 +72,8 @@ onMounted(() => {
 </script>
 <style scoped lang="less">
 .m-carousel {
+  width: 300px;
+  height: 200px;
   position: relative;
   .m-carousel-dot {
     position: absolute;
@@ -93,6 +106,11 @@ onMounted(() => {
       height: 10px;
       border-radius: 5px;
     }
+  }
+  .m-carousel-main {
+    width: 100%;
+    height: 100%;
+    display: flex;
   }
 }
 </style>

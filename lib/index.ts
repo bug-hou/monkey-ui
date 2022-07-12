@@ -60,6 +60,8 @@ import { mDropdown } from "./packages/dropdown";
 
 import { mTree } from "./packages/tree";
 
+import { mCarousel, mCarouselItem } from "./packages/carousel";
+
 import { App } from "vue";
 
 const monkeysUI = [
@@ -100,7 +102,9 @@ const monkeysUI = [
   mTransfer,
   mColorPicker,
   mDropdown,
-  mTree
+  mTree,
+  mCarousel,
+  mCarouselItem
 ]
 
 export default (app: App, opt?: any) => {
@@ -147,5 +151,7 @@ export {
   mTransfer,
   mColorPicker,
   mDropdown,
-  mTree
+  mTree,
+  mCarousel,
+  mCarouselItem
 }
