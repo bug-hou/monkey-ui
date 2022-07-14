@@ -28,7 +28,7 @@
  * @Description: 创建一个carousel组件
  */
 // 从下载的组件中导入函数
-import { ref, defineProps, provide, onMounted, unref } from "vue";
+import { ref, defineProps, provide, onMounted, unref, reactive } from "vue";
 import { cssUnitConversion } from "../../../utils";
 
 type Mode = "slider";
@@ -45,18 +45,22 @@ const props = withDefaults(
     customDotPosition?: [number | string, number | string];
   }>(),
   {
-    defaultIndex: 0,
+    defaultIndex: 1,
     duration: 3000,
     direction: "vertical",
     mode: "slider",
     autoplay: true,
-    delay: 4000
+    delay: 2000
   }
 );
 
-provide("initial", props.defaultIndex);
-
 const carouselRef = ref<HTMLElement>();
+
+const currentIndex = ref(props.defaultIndex);
+
+const carouselInfo = reactive({});
+
+provide("currentIndex", currentIndex);
 
 const len = ref(0);
 
@@ -67,7 +71,13 @@ function dotClickHandle(item: number) {}
 onMounted(() => {
   len.value = carouselRef.value?.children.length ?? 0;
 
-  setInterval(() => {}, props.delay);
+  const timer = setInterval(() => {
+    currentIndex.value++;
+    console.log(currentIndex);
+    if (currentIndex.value === len.value - 1) {
+      currentIndex.value = 0;
+    }
+  }, props.delay);
 });
 </script>
 <style scoped lang="less">
@@ -110,7 +120,6 @@ onMounted(() => {
   .m-carousel-main {
     width: 100%;
     height: 100%;
-    display: flex;
   }
 }
 </style>
