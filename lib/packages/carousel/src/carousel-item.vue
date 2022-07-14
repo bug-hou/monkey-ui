@@ -1,5 +1,5 @@
 <template>
-  <transition :name="animationMap[mode]" mode="out-in" appear>
+  <transition :name="animationMap[mode] + direction" mode="out-in" appear>
     <div
       class="carouselItem"
       ref="carouselItemRef"
@@ -36,14 +36,13 @@ const carouselItemRef = ref<HTMLElement>();
 
 const key = ref<number>();
 
-console.log(key.value === undefined);
-
 const currentIndex = useInject(undefined, "currentIndex", 0);
+const direction = useInject(undefined, "direction", "to");
 const mode = useInject(undefined, "mode", "vertical");
 watch(
   () => currentIndex,
-  (newValue) => {
-    console.log(newValue);
+  (newValue, oldValue) => {
+    console.log(newValue.value);
   }
 );
 onMounted(() => {
@@ -63,23 +62,23 @@ onMounted(() => {
   flex: 0 0;
   width: 100%;
   height: 100%;
+  position: absolute;
 }
-.vertical-enter-active,
-.vertical-leave-active {
-  transition: absolute;
+.verticalto-enter-active,
+.verticalto-leave-active {
   transition: all 1s;
   top: 0%;
 }
-.vertical-enter-to {
-  right: 100%;
-}
-.vertical-enter-from {
+.verticalto-enter-to {
   right: 0;
 }
-.vertical-leave-to {
-  right: 0;
-}
-.vertical-leave-from {
+.verticalto-enter-from {
   right: 100%;
+}
+.verticalto-leave-to {
+  right: -100%;
+}
+.verticalto-leave-from {
+  right: 0;
 }
 </style>

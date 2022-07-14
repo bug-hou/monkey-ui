@@ -17,7 +17,16 @@
         <li v-for="item in len" :key="item" @click="dotClickHandle(item)"></li>
       </slot>
     </ul>
-    <div class="m-carousel-operate"></div>
+    <slot name="operateLeft">
+      <div class="m-carousel-operate m-carousel-operate-left">
+        <m-icon name="m-toLeft"></m-icon>
+      </div>
+    </slot>
+    <slot name="operateRight">
+      <div class="m-carousel-operate m-carousel-operate-right">
+        <m-icon name="m-toRight"></m-icon>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -28,8 +37,18 @@
  * @Description: 创建一个carousel组件
  */
 // 从下载的组件中导入函数
-import { ref, defineProps, provide, onMounted, unref, reactive } from "vue";
+import {
+  ref,
+  defineProps,
+  provide,
+  onMounted,
+  unref,
+  reactive,
+  watch
+} from "vue";
 import { cssUnitConversion } from "../../../utils";
+
+import mIcon from "../../icon/src/icon.vue";
 
 type Mode = "slider";
 const props = withDefaults(
@@ -50,7 +69,7 @@ const props = withDefaults(
     direction: "vertical",
     mode: "slider",
     autoplay: true,
-    delay: 2000
+    delay: 4000
   }
 );
 
@@ -58,9 +77,12 @@ const carouselRef = ref<HTMLElement>();
 
 const currentIndex = ref(props.defaultIndex);
 
+const direction = ref<"from" | "to">("from");
+
 const carouselInfo = reactive({});
 
 provide("currentIndex", currentIndex);
+provide("direction", direction);
 
 const len = ref(0);
 
@@ -73,11 +95,23 @@ onMounted(() => {
 
   const timer = setInterval(() => {
     currentIndex.value++;
-    console.log(currentIndex);
-    if (currentIndex.value === len.value - 1) {
+    if (currentIndex.value === len.value) {
       currentIndex.value = 0;
     }
   }, props.delay);
+
+  watch(currentIndex, (newValue, oldValue) => {
+    if (oldValue === len.value - 1) {
+      direction.value = "to";
+    } else {
+      const diff = unref(newValue) - unref(oldValue);
+      if (diff > 0) {
+        direction.value = "to";
+      } else {
+        direction.value = "from";
+      }
+    }
+  });
 });
 </script>
 <style scoped lang="less">
@@ -85,6 +119,7 @@ onMounted(() => {
   width: 300px;
   height: 200px;
   position: relative;
+  overflow: hidden;
   .m-carousel-dot {
     position: absolute;
     display: flex;
@@ -120,6 +155,29 @@ onMounted(() => {
   .m-carousel-main {
     width: 100%;
     height: 100%;
+  }
+  .m-carousel-operate {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-item: center;
+    font-size: 24px;
+    background: #6666;
+    color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    &:hover{
+      &::before{
+        content:"";
+        position:absolute;
+      }
+    }
+  }
+  .m-carousel-operate-right {
+    right: 0%;
   }
 }
 </style>

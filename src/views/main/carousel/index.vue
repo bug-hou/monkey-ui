@@ -7,10 +7,10 @@
     >
     </cpn-header-vue>
     <m-carousel>
-      <m-carousel-item style="background-color: #0ff"></m-carousel-item>
-      <m-carousel-item style="background-color: #f0f"></m-carousel-item>
-      <m-carousel-item style="background-color: #ff0"></m-carousel-item>
-      <m-carousel-item style="background-color: #fff"></m-carousel-item>
+      <m-carousel-item style="background-color: #0ff">1</m-carousel-item>
+      <m-carousel-item style="background-color: #f0f">2</m-carousel-item>
+      <m-carousel-item style="background-color: #ff0">3</m-carousel-item>
+      <m-carousel-item style="background-color: #fff">4</m-carousel-item>
     </m-carousel>
     <div class="layout"></div>
   </div>
