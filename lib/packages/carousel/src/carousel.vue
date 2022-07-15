@@ -9,7 +9,7 @@
     </main>
     <ul
       class="m-carousel-dot"
-      :class="'m-carousel-dot-' + dotPlacement"
+      :class="['m-carousel-dot-' + dotPlacement, 'm-carousel-dot-' + dotStyle]"
       :style="[
         {
           left: customDotPosition && cssUnitConversion(customDotPosition[0])
@@ -18,7 +18,12 @@
       ]"
     >
       <slot name="dot">
-        <li v-for="item in len" :key="item" @click="dotClickHandle(item)"></li>
+        <li
+          v-for="item in len"
+          :key="item"
+          @click="dotClickHandle(item - 1)"
+          :class="[currentIndex + 1 == item && 'm-carousel-li-active']"
+        ></li>
       </slot>
     </ul>
     <slot name="operateLeft" :execHandle="leftClickHandle">
@@ -74,12 +79,12 @@ const props = withDefaults(
   }>(),
   {
     defaultIndex: 1,
-    duration: 3000,
+    duration: 1000,
     mode: "slider",
     autoplay: true,
-    dotPlacement: "bottom",
+    dotPlacement: "top",
     delay: 4000,
-    customDotPosition: undefined
+    dotStyle: "round"
   }
 );
 
@@ -91,23 +96,46 @@ const direction = ref<"from" | "to">("from");
 
 let timer: any;
 
+let isChange: boolean = true;
+
 const carouselInfo = reactive({});
 
 provide("currentIndex", currentIndex);
 provide("direction", direction);
+provide("duration", props.duration);
 
 const len = ref(0);
 
 function processDotChange() {}
 
-function dotClickHandle(item: number) {}
+function dotClickHandle(index: number) {
+  if (index > currentIndex.value) {
+    processClickHandle("right", "from", index);
+  } else {
+    processClickHandle("left", "to", index);
+  }
+}
 
 function leftClickHandle() {
-  changeIndex("left");
+  processClickHandle("left", "to");
 }
 
 function rightClickHandle() {
-  changeIndex("right");
+  processClickHandle("right", "from");
+}
+function processClickHandle(
+  button: "right" | "left",
+  directive: "from" | "to",
+  index?: number
+) {
+  if (isChange) {
+    isChange = false;
+    direction.value = directive;
+    changeIndex(button, index);
+    setTimeout(() => {
+      isChange = true;
+    }, props.duration);
+  }
 }
 
 function cancelTimeEnterHandle() {
@@ -120,16 +148,20 @@ function recoverTimeEnterHandle() {
   timer = startInterval();
 }
 
-function changeIndex(opacity: "right" | "left" = "right") {
-  if (opacity === "right") {
-    currentIndex.value++;
-    if (currentIndex.value === len.value) {
-      currentIndex.value = 0;
-    }
+function changeIndex(opacity: "right" | "left" = "right", index?: number) {
+  if (index) {
+    currentIndex.value = index;
   } else {
-    currentIndex.value--;
-    if (currentIndex.value === -1) {
-      currentIndex.value = len.value - 1;
+    if (opacity === "right") {
+      currentIndex.value++;
+      if (currentIndex.value === len.value) {
+        currentIndex.value = 0;
+      }
+    } else {
+      currentIndex.value--;
+      if (currentIndex.value === -1) {
+        currentIndex.value = len.value - 1;
+      }
     }
   }
 }
@@ -138,7 +170,7 @@ function startInterval() {
   let timer: any;
   if (props.autoplay) {
     timer = setInterval(() => {
-      changeIndex();
+      processClickHandle("right", "from");
     }, props.delay);
   }
   return timer;
@@ -147,21 +179,11 @@ function startInterval() {
 onMounted(() => {
   len.value = carouselRef.value?.children.length ?? 0;
   timer = startInterval();
-  watch(currentIndex, (newValue, oldValue) => {
-    if (oldValue === len.value - 1) {
-      direction.value = "to";
-    } else {
-      const diff = unref(newValue) - unref(oldValue);
-      if (diff > 0) {
-        direction.value = "to";
-      } else {
-        direction.value = "from";
-      }
-    }
-  });
 });
 </script>
 <style scoped lang="less">
+@bgColor: #0009;
+@color: #fff;
 .m-carousel {
   width: 300px;
   height: 200px;
@@ -170,23 +192,23 @@ onMounted(() => {
   .m-carousel-dot {
     position: absolute;
     display: flex;
-    gap: 10px;
+    gap: 8px;
     transform: translate(-50%, -50%);
     &.m-carousel-dot-left {
-      left: 15%;
+      left: 10%;
       top: 50%;
     }
     &.m-carousel-dot-right {
-      right: 15%;
+      left: 90%;
       top: 50%;
     }
     &.m-carousel-dot-top {
-      right: 50%;
-      top: 15%;
+      left: 50%;
+      top: 10%;
     }
     &.m-carousel-dot-bottom {
-      right: 50%;
-      bottom: 15%;
+      left: 50%;
+      top: 90%;
     }
     &.m-carousel-dot-line li {
       width: 16px;
@@ -197,6 +219,13 @@ onMounted(() => {
       width: 10px;
       height: 10px;
       border-radius: 5px;
+    }
+    li {
+      cursor: pointer;
+      background-color: @bgColor;
+      &.m-carousel-li-active {
+        background-color: @color;
+      }
     }
   }
   .m-carousel-main {
@@ -211,11 +240,12 @@ onMounted(() => {
     height: 40px;
     display: flex;
     justify-content: center;
-    align-item: center;
+    align-items: center;
     font-size: 24px;
-    background: #6666;
-    color: rgba(0, 0, 0, 0.8);
+    background: @bgColor;
+    color: @color;
     cursor: pointer;
+    border-radius: 10px;
     &:hover {
       &::before {
         content: "";

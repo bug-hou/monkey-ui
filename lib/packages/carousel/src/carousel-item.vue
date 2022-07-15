@@ -4,6 +4,7 @@
       class="carouselItem"
       ref="carouselItemRef"
       v-if="key === undefined || key === currentIndex"
+      :style="{ ['--carousel-duration']: duration + 'ms' }"
     >
       <slot></slot>
     </div>
@@ -38,7 +39,8 @@ const key = ref<number>();
 
 const currentIndex = useInject(undefined, "currentIndex", 0);
 const direction = useInject(undefined, "direction", "to");
-const mode = useInject(undefined, "mode", "vertical");
+const mode = useInject(undefined, "mode", "horization");
+const duration = useInject(undefined, "duration", 1000);
 
 onMounted(() => {
   const parent = carouselItemRef.value?.parentElement;
@@ -58,10 +60,10 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   position: absolute;
+  transition: all var(--carousel-duration);
 }
 .verticalto-enter-active,
 .verticalto-leave-active {
-  transition: all 1s;
   top: 0%;
 }
 .verticalto-enter-to {
@@ -79,7 +81,6 @@ onMounted(() => {
 
 .verticalfrom-enter-active,
 .verticalfrom-leave-active {
-  transition: all 1s;
   top: 0%;
 }
 .verticalfrom-enter-to {
@@ -93,5 +94,40 @@ onMounted(() => {
 }
 .verticalfrom-leave-from {
   left: 0;
+}
+
+
+.horizationto-enter-active,
+.horizationto-leave-active {
+  left: 0%;
+}
+.horizationto-enter-to {
+  bottom: 0;
+}
+.horizationto-enter-from {
+  bottom: 100%;
+}
+.horizationto-leave-to {
+  bottom: -100%;
+}
+.horizationto-leave-from {
+  bottom: 0;
+}
+
+.horizationfrom-enter-active,
+.horizationfrom-leave-active {
+  left: 0%;
+}
+.horizationfrom-enter-to {
+  top: 0;
+}
+.horizationfrom-enter-from {
+  top: 100%;
+}
+.horizationfrom-leave-to {
+  top: -100%;
+}
+.horizationfrom-leave-from {
+  top: 0;
 }
 </style>
