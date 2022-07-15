@@ -18,7 +18,12 @@
       </slot>
     </ul>
     <slot name="operateLeft">
-      <div class="m-carousel-operate m-carousel-operate-left">
+      <div
+        class="m-carousel-operate m-carousel-operate-left"
+        @click="leftClickHandle"
+        @mouseenter=""
+        @mouseleave=""
+      >
         <m-icon name="m-toLeft"></m-icon>
       </div>
     </slot>
@@ -69,7 +74,9 @@ const props = withDefaults(
     direction: "vertical",
     mode: "slider",
     autoplay: true,
-    delay: 4000
+    dotPlacement: "bottom",
+    delay: 4000,
+    customDotPosition: undefined
   }
 );
 
@@ -90,14 +97,33 @@ function processDotChange() {}
 
 function dotClickHandle(item: number) {}
 
-onMounted(() => {
-  len.value = carouselRef.value?.children.length ?? 0;
+function leftClickHandle() {
+  changeIndex("left");
+}
 
-  const timer = setInterval(() => {
+function rightClickHandle() {
+  changeIndex("right");
+}
+
+function changeIndex(opacity: "right" | "left" = "right") {
+  if (opacity === "right") {
     currentIndex.value++;
     if (currentIndex.value === len.value) {
       currentIndex.value = 0;
     }
+  } else {
+    currentIndex.value--;
+    if (currentIndex.value === -1) {
+      currentIndex.value = len.value - 1;
+    }
+  }
+}
+
+onMounted(() => {
+  len.value = carouselRef.value?.children.length ?? 0;
+
+  const timer = setInterval(() => {
+    changeIndex();
   }, props.delay);
 
   watch(currentIndex, (newValue, oldValue) => {
@@ -169,10 +195,10 @@ onMounted(() => {
     background: #6666;
     color: rgba(0, 0, 0, 0.8);
     cursor: pointer;
-    &:hover{
-      &::before{
-        content:"";
-        position:absolute;
+    &:hover {
+      &::before {
+        content: "";
+        position: absolute;
       }
     }
   }

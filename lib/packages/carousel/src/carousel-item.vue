@@ -39,12 +39,7 @@ const key = ref<number>();
 const currentIndex = useInject(undefined, "currentIndex", 0);
 const direction = useInject(undefined, "direction", "to");
 const mode = useInject(undefined, "mode", "vertical");
-watch(
-  () => currentIndex,
-  (newValue, oldValue) => {
-    console.log(newValue.value);
-  }
-);
+
 onMounted(() => {
   const parent = carouselItemRef.value?.parentElement;
   const children = parent?.children ?? [];
