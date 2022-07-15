@@ -76,4 +76,22 @@ onMounted(() => {
 .verticalto-leave-from {
   right: 0;
 }
+
+.verticalfrom-enter-active,
+.verticalfrom-leave-active {
+  transition: all 1s;
+  top: 0%;
+}
+.verticalfrom-enter-to {
+  left: 0;
+}
+.verticalfrom-enter-from {
+  left: 100%;
+}
+.verticalfrom-leave-to {
+  left: -100%;
+}
+.verticalfrom-leave-from {
+  left: 0;
+}
 </style>

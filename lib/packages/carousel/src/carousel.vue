@@ -1,5 +1,9 @@
 <template>
-  <div class="m-carousel">
+  <div
+    class="m-carousel"
+    @mouseenter="cancelTimeEnterHandle"
+    @mouseleave="recoverTimeEnterHandle"
+  >
     <main class="m-carousel-main" ref="carouselRef">
       <slot></slot>
     </main>
@@ -17,18 +21,19 @@
         <li v-for="item in len" :key="item" @click="dotClickHandle(item)"></li>
       </slot>
     </ul>
-    <slot name="operateLeft">
+    <slot name="operateLeft" :execHandle="leftClickHandle">
       <div
         class="m-carousel-operate m-carousel-operate-left"
         @click="leftClickHandle"
-        @mouseenter=""
-        @mouseleave=""
       >
         <m-icon name="m-toLeft"></m-icon>
       </div>
     </slot>
-    <slot name="operateRight">
-      <div class="m-carousel-operate m-carousel-operate-right">
+    <slot name="operateRight" :execHandle="rightClickHandle">
+      <div
+        class="m-carousel-operate m-carousel-operate-right"
+        @click="rightClickHandle"
+      >
         <m-icon name="m-toRight"></m-icon>
       </div>
     </slot>
@@ -61,7 +66,6 @@ const props = withDefaults(
     defaultIndex?: number;
     mode?: Mode;
     duration?: number;
-    direction?: "vertical" | "horization";
     dotPlacement?: "left" | "right" | "top" | "bottom";
     dotStyle?: "round" | "line";
     autoplay?: boolean;
@@ -71,7 +75,6 @@ const props = withDefaults(
   {
     defaultIndex: 1,
     duration: 3000,
-    direction: "vertical",
     mode: "slider",
     autoplay: true,
     dotPlacement: "bottom",
@@ -85,6 +88,8 @@ const carouselRef = ref<HTMLElement>();
 const currentIndex = ref(props.defaultIndex);
 
 const direction = ref<"from" | "to">("from");
+
+let timer: any;
 
 const carouselInfo = reactive({});
 
@@ -105,6 +110,16 @@ function rightClickHandle() {
   changeIndex("right");
 }
 
+function cancelTimeEnterHandle() {
+  if (timer) {
+    clearInterval(timer);
+  }
+}
+
+function recoverTimeEnterHandle() {
+  timer = startInterval();
+}
+
 function changeIndex(opacity: "right" | "left" = "right") {
   if (opacity === "right") {
     currentIndex.value++;
@@ -119,13 +134,19 @@ function changeIndex(opacity: "right" | "left" = "right") {
   }
 }
 
+function startInterval() {
+  let timer: any;
+  if (props.autoplay) {
+    timer = setInterval(() => {
+      changeIndex();
+    }, props.delay);
+  }
+  return timer;
+}
+
 onMounted(() => {
   len.value = carouselRef.value?.children.length ?? 0;
-
-  const timer = setInterval(() => {
-    changeIndex();
-  }, props.delay);
-
+  timer = startInterval();
   watch(currentIndex, (newValue, oldValue) => {
     if (oldValue === len.value - 1) {
       direction.value = "to";

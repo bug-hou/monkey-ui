@@ -10,7 +10,7 @@
       <m-carousel-item style="background-color: #0ff">1</m-carousel-item>
       <m-carousel-item style="background-color: #f0f">2</m-carousel-item>
       <m-carousel-item style="background-color: #ff0">3</m-carousel-item>
-      <m-carousel-item style="background-color: #fff">4</m-carousel-item>
+      <m-carousel-item style="background-color: #00f">4</m-carousel-item>
     </m-carousel>
     <div class="layout"></div>
   </div>
