@@ -1,10 +1,25 @@
 <template>
-  <transition :name="animationMap[mode] + direction" mode="out-in" appear>
+  <transition
+    :name="
+      animationMap[mode] +
+      direction +
+      ((attachment && mode === 'vartical') || mode === 'horization'
+        ? 'attachment'
+        : '')
+    "
+    mode="out-in"
+    appear
+  >
     <div
       class="carouselItem"
+      :class="[
+        mode === 'slider' && 'carousel-item-slider',
+        key === currentIndex && 'carousel-item-active'
+      ]"
       ref="carouselItemRef"
-      v-if="key === undefined || key === currentIndex"
+      v-if="mode === 'slider' || key === undefined || key === currentIndex"
       :style="{ ['--carousel-duration']: duration + 'ms' }"
+      @click="clickHandle"
     >
       <slot></slot>
     </div>
@@ -30,7 +45,8 @@ const props = withDefaults(
 const animationMap = {
   vertical: "vertical",
   horization: "horization",
-  attachment: "attachment"
+  attachment: "attachment",
+  scale: "scale"
 };
 
 const carouselItemRef = ref<HTMLElement>();
@@ -41,6 +57,16 @@ const currentIndex = useInject(undefined, "currentIndex", 0);
 const direction = useInject(undefined, "direction", "to");
 const mode = useInject(undefined, "mode", "horization");
 const duration = useInject(undefined, "duration", 1000);
+const attachment = useInject(undefined, "attachment", false);
+const itemClickHandle = useInject(
+  undefined,
+  "itemClickHandle",
+  (index: number) => {}
+);
+
+function clickHandle() {
+  itemClickHandle(key.value);
+}
 
 onMounted(() => {
   const parent = carouselItemRef.value?.parentElement;
@@ -60,16 +86,30 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   position: absolute;
+  transform-origin: 50% 50%;
   transition: all var(--carousel-duration);
+  &.carousel-item-slider {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+  &.carousel-item-active {
+    width: 100%;
+    flex: 3;
+  }
 }
 .verticalto-enter-active,
 .verticalto-leave-active {
   top: 0%;
 }
-.verticalto-enter-to {
+.verticalto-enter-to,
+.verticaltoattachment-enter-to {
   right: 0;
 }
-.verticalto-enter-from {
+.verticalto-enter-from,
+.verticaltoattachment-enter-from {
   right: 100%;
 }
 .verticalto-leave-to {
@@ -83,10 +123,15 @@ onMounted(() => {
 .verticalfrom-leave-active {
   top: 0%;
 }
-.verticalfrom-enter-to {
+.verticalfromattachment-enter-active {
+  z-index: 10;
+}
+.verticalfrom-enter-to,
+.verticalfromattachment-enter-to {
   left: 0;
 }
-.verticalfrom-enter-from {
+.verticalfrom-enter-from,
+.verticalfromattachment-enter-from {
   left: 100%;
 }
 .verticalfrom-leave-to {
@@ -95,7 +140,6 @@ onMounted(() => {
 .verticalfrom-leave-from {
   left: 0;
 }
-
 
 .horizationto-enter-active,
 .horizationto-leave-active {
@@ -129,5 +173,20 @@ onMounted(() => {
 }
 .horizationfrom-leave-from {
   top: 0;
+}
+
+.scaleto-leave-from,
+.scalefrom-leave-from,
+.scaleto-enter-to,
+.scalefrom-enter-to {
+  transform: scale(1);
+  opacity: 1;
+}
+.scaleto-leave-to,
+.scalefrom-leave-to,
+.scalefrom-enter-from,
+.scaleto-enter-from {
+  transform: scale(0.7);
+  opacity: 0;
 }
 </style>

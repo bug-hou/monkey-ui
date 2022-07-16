@@ -4,12 +4,19 @@
     @mouseenter="cancelTimeEnterHandle"
     @mouseleave="recoverTimeEnterHandle"
   >
-    <main class="m-carousel-main" ref="carouselRef">
+    <main
+      class="m-carousel-main"
+      :class="[mode === 'slider' && 'm-carousel-slide']"
+      ref="carouselRef"
+      @mousedown="downHandle"
+      @mouseup="upHandle"
+    >
       <slot></slot>
     </main>
     <ul
       class="m-carousel-dot"
       :class="['m-carousel-dot-' + dotPlacement, 'm-carousel-dot-' + dotStyle]"
+      v-if="showDot"
       :style="[
         {
           left: customDotPosition && cssUnitConversion(customDotPosition[0])
@@ -30,6 +37,7 @@
       <div
         class="m-carousel-operate m-carousel-operate-left"
         @click="leftClickHandle"
+        v-if="showArrow"
       >
         <m-icon name="m-toLeft"></m-icon>
       </div>
@@ -38,6 +46,7 @@
       <div
         class="m-carousel-operate m-carousel-operate-right"
         @click="rightClickHandle"
+        v-if="showArrow"
       >
         <m-icon name="m-toRight"></m-icon>
       </div>
@@ -52,20 +61,14 @@
  * @Description: 创建一个carousel组件
  */
 // 从下载的组件中导入函数
-import {
-  ref,
-  defineProps,
-  provide,
-  onMounted,
-  unref,
-  reactive,
-  watch
-} from "vue";
+import { ref, defineProps, provide, onMounted, reactive } from "vue";
 import { cssUnitConversion } from "../../../utils";
+
+import { processProvides } from "../utils/provides";
 
 import mIcon from "../../icon/src/icon.vue";
 
-type Mode = "slider";
+type Mode = "vertical" | "horization" | "scale" | "slider";
 const props = withDefaults(
   defineProps<{
     defaultIndex?: number;
@@ -73,9 +76,14 @@ const props = withDefaults(
     duration?: number;
     dotPlacement?: "left" | "right" | "top" | "bottom";
     dotStyle?: "round" | "line";
+    dotColor?: string;
+    dotBGColor?: string;
     autoplay?: boolean;
     delay?: number;
     customDotPosition?: [number | string, number | string];
+    showDot?: boolean;
+    showArrow?: boolean;
+    attachment?: boolean;
   }>(),
   {
     defaultIndex: 1,
@@ -84,7 +92,10 @@ const props = withDefaults(
     autoplay: true,
     dotPlacement: "top",
     delay: 4000,
-    dotStyle: "round"
+    dotStyle: "round",
+    showArrow: false,
+    showDot: false,
+    attachment: false
   }
 );
 
@@ -98,15 +109,24 @@ let timer: any;
 
 let isChange: boolean = true;
 
-const carouselInfo = reactive({});
-
-provide("currentIndex", currentIndex);
-provide("direction", direction);
-provide("duration", props.duration);
+const mouseInfo = {
+  x: 0,
+  y: 0,
+  has: false
+};
 
 const len = ref(0);
 
-function processDotChange() {}
+const provideInfo = [
+  ["currentIndex", currentIndex],
+  ["direction", direction],
+  ["duration", props.duration],
+  ["mode", props.mode],
+  ["attachment", props.attachment],
+  ["itemClickHandle", dotClickHandle]
+] as any;
+
+processProvides(provideInfo);
 
 function dotClickHandle(index: number) {
   if (index > currentIndex.value) {
@@ -145,6 +165,7 @@ function cancelTimeEnterHandle() {
 }
 
 function recoverTimeEnterHandle() {
+  mouseInfo.has = false;
   timer = startInterval();
 }
 
@@ -176,19 +197,47 @@ function startInterval() {
   return timer;
 }
 
+function downHandle(event: MouseEvent) {
+  mouseInfo.has = true;
+  mouseInfo.x = event.offsetX;
+  mouseInfo.y = event.offsetY;
+}
+
+function upHandle(event: MouseEvent) {
+  if (mouseInfo.has) {
+    mouseInfo.has = false;
+    const curX = event.offsetX;
+    const curY = event.offsetY;
+    if (props.mode === "horization" && Math.abs(curY - mouseInfo.y) >= 50) {
+      if (curY > mouseInfo.y) {
+        processClickHandle("left", "to");
+      } else {
+        processClickHandle("right", "from");
+      }
+    } else if (
+      props.mode === "vertical" &&
+      Math.abs(curX - mouseInfo.x) >= 50
+    ) {
+      if (curX > mouseInfo.x) {
+        processClickHandle("left", "to");
+      } else {
+        processClickHandle("right", "from");
+      }
+    }
+  }
+}
+
 onMounted(() => {
   len.value = carouselRef.value?.children.length ?? 0;
   timer = startInterval();
 });
 </script>
 <style scoped lang="less">
-@bgColor: #0009;
+@bgColor: (rgba(255, 255, 255, 0.3));
 @color: #fff;
 .m-carousel {
-  width: 300px;
-  height: 200px;
   position: relative;
-  overflow: hidden;
+  display: inline-block;
   .m-carousel-dot {
     position: absolute;
     display: flex;
@@ -229,8 +278,15 @@ onMounted(() => {
     }
   }
   .m-carousel-main {
-    width: 100%;
-    height: 100%;
+    height: 200px;
+    width: 300px;
+    overflow: hidden;
+    &.m-carousel-slide {
+      display: flex;
+      gap: 10px;
+      width: 600px;
+      justify-content: space-between;
+    }
   }
   .m-carousel-operate {
     position: absolute;
