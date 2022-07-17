@@ -1,8 +1,21 @@
 <template>
   <div
     class="m-carousel"
-    @mouseenter="cancelTimeEnterHandle"
-    @mouseleave="recoverTimeEnterHandle"
+    @wheel.prevent="wheelHandle"
+    :style="[
+      {
+        ['--carousel-dot-color']: dotColor
+      },
+      {
+        ['--carousel-dot-bg-color']: dotBgColor
+      },
+      {
+        ['--carousel-arrow-color']: arrowColor
+      },
+      {
+        ['--carousel-arrow-bg-color']: arrowBgColor
+      }
+    ]"
   >
     <main
       class="m-carousel-main"
@@ -37,6 +50,7 @@
       <div
         class="m-carousel-operate m-carousel-operate-left"
         @click="leftClickHandle"
+        :class="mode === 'horization' && 'm-carousel-operate-rotate'"
         v-if="showArrow"
       >
         <m-icon name="m-toLeft"></m-icon>
@@ -45,6 +59,7 @@
     <slot name="operateRight" :execHandle="rightClickHandle">
       <div
         class="m-carousel-operate m-carousel-operate-right"
+        :class="mode === 'horization' && 'm-carousel-operate-rotate'"
         @click="rightClickHandle"
         v-if="showArrow"
       >
@@ -61,7 +76,7 @@
  * @Description: 创建一个carousel组件
  */
 // 从下载的组件中导入函数
-import { ref, defineProps, provide, onMounted, reactive } from "vue";
+import { ref, defineProps, onMounted, watch, provide } from "vue";
 import { cssUnitConversion } from "../../../utils";
 
 import { processProvides } from "../utils/provides";
@@ -69,6 +84,11 @@ import { processProvides } from "../utils/provides";
 import mIcon from "../../icon/src/icon.vue";
 
 type Mode = "vertical" | "horization" | "scale" | "slider";
+
+interface MouseWheel extends WheelEvent {
+  wheelDelta: number;
+}
+
 const props = withDefaults(
   defineProps<{
     defaultIndex?: number;
@@ -77,25 +97,33 @@ const props = withDefaults(
     dotPlacement?: "left" | "right" | "top" | "bottom";
     dotStyle?: "round" | "line";
     dotColor?: string;
-    dotBGColor?: string;
+    dotBgColor?: string;
     autoplay?: boolean;
     delay?: number;
     customDotPosition?: [number | string, number | string];
     showDot?: boolean;
     showArrow?: boolean;
+    arrowColor?: string;
+    arrowBgColor?: string;
     attachment?: boolean;
+    mosueWheel?: boolean;
   }>(),
   {
-    defaultIndex: 1,
+    defaultIndex: 0,
     duration: 1000,
-    mode: "slider",
-    autoplay: true,
-    dotPlacement: "top",
+    mode: "vertical",
+    autoplay: false,
+    dotPlacement: "bottom",
     delay: 4000,
     dotStyle: "round",
     showArrow: false,
-    showDot: false,
-    attachment: false
+    showDot: true,
+    attachment: false,
+    mosueWheel: false,
+    dotBgColor: "rgba(255, 255, 255, 0.3)",
+    dotColor: "#fff",
+    arrowBgColor: "rgba(255, 255, 255, 0.3)",
+    arrowColor: "#fff"
   }
 );
 
@@ -125,7 +153,6 @@ const provideInfo = [
   ["attachment", props.attachment],
   ["itemClickHandle", dotClickHandle]
 ] as any;
-
 processProvides(provideInfo);
 
 function dotClickHandle(index: number) {
@@ -158,19 +185,18 @@ function processClickHandle(
   }
 }
 
-function cancelTimeEnterHandle() {
-  if (timer) {
-    clearInterval(timer);
+function wheelHandle(event: MouseWheel) {
+  if (props.mosueWheel) {
+    if (event.wheelDelta > 0) {
+      leftClickHandle();
+    } else {
+      rightClickHandle();
+    }
   }
 }
 
-function recoverTimeEnterHandle() {
-  mouseInfo.has = false;
-  timer = startInterval();
-}
-
 function changeIndex(opacity: "right" | "left" = "right", index?: number) {
-  if (index) {
+  if (typeof index === "number") {
     currentIndex.value = index;
   } else {
     if (opacity === "right") {
@@ -233,37 +259,67 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="less">
-@bgColor: (rgba(255, 255, 255, 0.3));
-@color: #fff;
 .m-carousel {
   position: relative;
-  display: inline-block;
+  height: 200px;
+  width: 300px;
+  overflow: hidden;
   .m-carousel-dot {
     position: absolute;
     display: flex;
     gap: 8px;
     transform: translate(-50%, -50%);
     &.m-carousel-dot-left {
-      left: 10%;
+      left: 2%;
       top: 50%;
+      flex-direction: column;
+      &.m-carousel-dot-line li {
+        width: 5px;
+        height: 10px;
+        border-radius: 5px;
+        &.m-carousel-li-active {
+          height: 18px;
+        }
+      }
     }
     &.m-carousel-dot-right {
-      left: 90%;
+      left: 98%;
       top: 50%;
+      flex-direction: column;
+      &.m-carousel-dot-line li {
+        width: 5px;
+        height: 10px;
+        border-radius: 5px;
+        &.m-carousel-li-active {
+          height: 18px;
+        }
+      }
     }
     &.m-carousel-dot-top {
       left: 50%;
       top: 10%;
+      &.m-carousel-dot-line li {
+        width: 10px;
+        height: 5px;
+        border-radius: 5px;
+        &.m-carousel-li-active {
+          width: 18px;
+        }
+      }
     }
     &.m-carousel-dot-bottom {
       left: 50%;
       top: 90%;
+      &.m-carousel-dot-line li {
+        width: 10px;
+        height: 5px;
+        border-radius: 5px;
+        &.m-carousel-li-active {
+          width: 18px;
+        }
+      }
     }
-    &.m-carousel-dot-line li {
-      width: 16px;
-      height: 5px;
-      border-radius: 5px;
-    }
+
     &.m-carousel-dot-round li {
       width: 10px;
       height: 10px;
@@ -271,20 +327,17 @@ onMounted(() => {
     }
     li {
       cursor: pointer;
-      background-color: @bgColor;
+      transition: all 0.5s;
+      background-color: var(--carousel-dot-bg-color);
       &.m-carousel-li-active {
-        background-color: @color;
+        background-color: var(--carousel-dot-color);
       }
     }
   }
   .m-carousel-main {
-    height: 200px;
-    width: 300px;
-    overflow: hidden;
     &.m-carousel-slide {
       display: flex;
       gap: 10px;
-      width: 600px;
       justify-content: space-between;
     }
   }
@@ -292,25 +345,25 @@ onMounted(() => {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
-    background: @bgColor;
-    color: @color;
+    font-size: 18px;
+    line-height: 30px;
+    background: var(--carousel-arrow-bg-color);
+    color: var(--carousel-arrow-color);
     cursor: pointer;
     border-radius: 10px;
-    &:hover {
-      &::before {
-        content: "";
-        position: absolute;
-      }
+    left: 3%;
+    &.m-carousel-operate-rotate {
+      transform: rotate(90deg);
     }
   }
   .m-carousel-operate-right {
-    right: 0%;
+    right: 3%;
+    left: auto;
   }
 }
 </style>

@@ -3,7 +3,7 @@
     :name="
       animationMap[mode] +
       direction +
-      ((attachment && mode === 'vartical') || mode === 'horization'
+      (attachment && (mode === 'vartical' || mode === 'horization')
         ? 'attachment'
         : '')
     "
@@ -14,7 +14,7 @@
       class="carouselItem"
       :class="[
         mode === 'slider' && 'carousel-item-slider',
-        key === currentIndex && 'carousel-item-active'
+        mode === 'slider' && key === currentIndex && 'carousel-item-active'
       ]"
       ref="carouselItemRef"
       v-if="mode === 'slider' || key === undefined || key === currentIndex"
@@ -65,7 +65,7 @@ const itemClickHandle = useInject(
 );
 
 function clickHandle() {
-  itemClickHandle(key.value);
+  itemClickHandle(key.value ?? 0);
 }
 
 onMounted(() => {
@@ -88,17 +88,17 @@ onMounted(() => {
   position: absolute;
   transform-origin: 50% 50%;
   transition: all var(--carousel-duration);
-  &.carousel-item-slider {
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-  }
-  &.carousel-item-active {
-    width: 100%;
-    flex: 3;
-  }
+  // &.carousel-item-slider {
+  //   position: relative;
+  //   flex: 1;
+  //   overflow: hidden;
+  //   display: flex;
+  //   justify-content: center;
+  // }
+  // &.carousel-item-active {
+  //   width: 100%;
+  //   flex: 3;
+  // }
 }
 .verticalto-enter-active,
 .verticalto-leave-active {

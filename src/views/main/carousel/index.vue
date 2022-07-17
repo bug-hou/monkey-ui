@@ -6,33 +6,12 @@
       description="卡片这个应用场景还是挺多的吧"
     >
     </cpn-header-vue>
-    <m-carousel showArrow showDot attachment>
-      <m-carousel-item>
-        <img
-          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg"
-          alt=""
-        />
-      </m-carousel-item>
-      <m-carousel-item>
-        <img
-          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg"
-          alt=""
-        />
-      </m-carousel-item>
-      <m-carousel-item>
-        <img
-          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg"
-          alt=""
-        />
-      </m-carousel-item>
-      <m-carousel-item>
-        <img
-          src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg"
-          alt=""
-        />
-      </m-carousel-item>
-    </m-carousel>
-    <div class="layout"></div>
+    <div class="layout">
+      <base-vue></base-vue>
+      <arrow-vue></arrow-vue>
+      <dot-vue></dot-vue>
+      <autoplay-vue></autoplay-vue>
+    </div>
   </div>
 </template>
 
@@ -44,11 +23,8 @@
  */
 // 从下载的组件中导入函数
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import baseVue from "./cpn/base.vue";
+import arrowVue from "./cpn/arrow.vue";
+import dotVue from "./cpn/dot.vue";
+import autoplayVue from "./cpn/autoplay.vue";
 </script>
-
-<style scoped>
-img {
-  width: 300px;
-  height: 200px;
-}
-</style>
