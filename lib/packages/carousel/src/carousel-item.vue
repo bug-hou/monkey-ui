@@ -3,7 +3,7 @@
     :name="
       animationMap[mode] +
       direction +
-      (attachment && (mode === 'vartical' || mode === 'horization')
+      (attachment && (mode === 'vertical' || mode === 'horization')
         ? 'attachment'
         : '')
     "
@@ -88,17 +88,17 @@ onMounted(() => {
   position: absolute;
   transform-origin: 50% 50%;
   transition: all var(--carousel-duration);
-  // &.carousel-item-slider {
-  //   position: relative;
-  //   flex: 1;
-  //   overflow: hidden;
-  //   display: flex;
-  //   justify-content: center;
-  // }
-  // &.carousel-item-active {
-  //   width: 100%;
-  //   flex: 3;
-  // }
+  &.carousel-item-slider {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+  &.carousel-item-active {
+    width: 100%;
+    flex: 3;
+  }
 }
 .verticalto-enter-active,
 .verticalto-leave-active {

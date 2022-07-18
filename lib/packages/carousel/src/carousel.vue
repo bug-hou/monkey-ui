@@ -1,7 +1,7 @@
 <template>
   <div
     class="m-carousel"
-    @wheel.prevent="wheelHandle"
+    @wheel="wheelHandle"
     :style="[
       {
         ['--carousel-dot-color']: dotColor
@@ -187,6 +187,7 @@ function processClickHandle(
 
 function wheelHandle(event: MouseWheel) {
   if (props.mosueWheel) {
+    event.preventDefault();
     if (event.wheelDelta > 0) {
       leftClickHandle();
     } else {
@@ -261,8 +262,6 @@ onMounted(() => {
 <style scoped lang="less">
 .m-carousel {
   position: relative;
-  height: 200px;
-  width: 300px;
   overflow: hidden;
   .m-carousel-dot {
     position: absolute;
@@ -336,6 +335,8 @@ onMounted(() => {
   }
   .m-carousel-main {
     &.m-carousel-slide {
+      width: 100%;
+      height: 100%;
       display: flex;
       gap: 10px;
       justify-content: space-between;

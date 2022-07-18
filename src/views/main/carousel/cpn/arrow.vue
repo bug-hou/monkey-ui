@@ -1,5 +1,9 @@
 <template>
-  <cpn-play-vue title="show-arrow" description="设置show-arrow为true时显示箭头" :code="baseCode">
+  <cpn-play-vue
+    title="show-arrow"
+    description="设置show-arrow为true时显示箭头"
+    :code="arrowCode"
+  >
     <m-carousel style="width: 100%; height: 300px" show-arrow>
       <m-carousel-item>
         <img
@@ -37,7 +41,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { baseCode } from "../doc";
+import { arrowCode } from "../doc";
 </script>
 <style scoped>
 img {
@@ -45,4 +49,3 @@ img {
   height: 100%;
 }
 </style>
-
