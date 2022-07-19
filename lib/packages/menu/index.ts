@@ -7,7 +7,6 @@ const mMenu = withInstall(Menu, "mMenu");
 const mMenuItem = withInstall(MenuItem, "mMenuItem");
 
 export {
-
+  mMenu,
+  mMenuItem
 }
-
-export const a = 12;

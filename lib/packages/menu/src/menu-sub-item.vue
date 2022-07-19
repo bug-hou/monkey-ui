@@ -1,5 +1,9 @@
 <template>
-  <div class="m-menu-sub-item"></div>
+    <menu-content-vue
+      :options="options"
+      :level="level + 1"
+      ref="menuContentRef"
+    ></menu-content-vue>
 </template>
 
 <script lang="ts" setup name="m-menu-sub-item">
@@ -9,9 +13,14 @@
  * @Description: 创建一个m-menu-sub-item组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import menuContentVue from "./menu-content.vue";
+import { ref, onMounted, defineProps } from "vue";
+const props = withDefaults(
+  defineProps<{
+    options: any;
+    level: number;
+  }>(),
+  {}
+);
+
 </script>
-<style scoped lang="less">
-.m-menu-sub-item {
-}
-</style>

@@ -24,8 +24,8 @@ const props = withDefaults(
 </script>
 <style scoped lang="less">
 .m-menu-title {
-  width: 200px;
-  height: 40px;
+  width: 100%;
+  height: var(--menu-item-height);
   transition: width 0.5s;
   display: flex;
   gap: 10px;

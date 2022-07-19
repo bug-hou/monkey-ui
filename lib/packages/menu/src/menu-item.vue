@@ -1,5 +1,5 @@
 <template>
-  <div class="m-menu-item">
+  <div class="m-menu-item" ref="menuItemRef">
     <m-icon v-if="options[iconName]" :name="options[iconName]"></m-icon>
     <span>{{ options[lableName] }}</span>
   </div>
@@ -13,7 +13,14 @@
  */
 // 从下载的组件中导入函数
 import mIcon from "../../icon/src/icon.vue";
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import {
+  ref,
+  reactive,
+  defineEmits,
+  defineExpose,
+  defineProps,
+  onMounted
+} from "vue";
 import { useInject } from "../../../hooks";
 const props = withDefaults(
   defineProps<{
@@ -26,14 +33,23 @@ const props = withDefaults(
 const lableName = useInject(undefined, "labelName", "label");
 const valueName = useInject(undefined, "valueName", "value");
 const iconName = useInject(undefined, "iconName", "icon");
+const itemHeight = useInject(undefined, "itemHeight", 40);
+const menuItemRef = ref<HTMLElement>();
+onMounted(() => {
+  if (menuItemRef.value) {
+    menuItemRef.value.dataset.height = String(itemHeight);
+  }
+});
 </script>
 <style scoped lang="less">
 .m-menu-item {
-  width: 200px;
+  width: 100%;
   height: 40px;
   transition: width 0.5s;
   display: flex;
   gap: 10px;
-  justify-content: center;
+  color: #666;
+  align-items: center;
+  cursor: pointer;
 }
 </style>

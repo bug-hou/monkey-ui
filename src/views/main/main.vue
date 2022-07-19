@@ -79,6 +79,10 @@ const base = [
   {
     name: "轮播图Carousel",
     path: "/carousel"
+  },
+  {
+    name: "菜单Menu",
+    path: "/menu"
   }
 ];
 </script>
