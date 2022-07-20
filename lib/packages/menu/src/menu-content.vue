@@ -3,12 +3,12 @@
     class="m-menu-content"
     :class="[
       expand && 'm-menu-content-expand',
-      level === 1 && collapsed && 'm-menu-content-collapse'
+      level === 1 && collapse && 'm-menu-content-collapse'
     ]"
     ref="menuContentRef"
     :style="[{ ['--menu-content-height']: allHeight + 'px' }]"
   >
-    <div v-if="level === 1 && collapsed" style="width: 100%">
+    <div v-if="level === 1 && collapse" style="width: 100%">
       <m-dropdown
         :options="options.children"
         :label-name="labelName"
@@ -16,8 +16,14 @@
         :icon-name="iconName"
         direction="right"
         style="width: 100%"
+        :default-value="showValue"
       >
-        <div class="m-menu-content-title">
+        <div
+          class="m-menu-content-title"
+          :class="
+            showValue[0] === options[valueName] && 'm-menu-content-title-active'
+          "
+        >
           <m-icon v-if="options[iconName]" :name="options[iconName]"></m-icon>
           <span>{{ options[labelName] }}</span>
           <m-icon class="m-menu-content-icon" name="m-right"></m-icon>
@@ -25,7 +31,14 @@
       </m-dropdown>
     </div>
     <div v-else>
-      <div class="m-menu-content-title" @click="clickHandle">
+      <div
+        class="m-menu-content-title"
+        @click="clickHandle"
+        :class="
+          showValue[level - 1] === options[valueName] &&
+          'm-menu-content-title-active'
+        "
+      >
         <m-icon v-if="options[iconName]" :name="options[iconName]"></m-icon>
         <span>{{ options[labelName] }}</span>
         <m-icon
@@ -41,6 +54,7 @@
           :is="item.children ? menuSubItemVue : menuItemVue"
           :level="level + 1"
           :options="item"
+          @checkValue="checkValueHandle"
         ></component>
       </ul>
     </div>
@@ -68,12 +82,15 @@ const props = withDefaults(
   {}
 );
 
+const emits = defineEmits(["checkValue"]);
+
 const labelName = useInject(undefined, "labelName", "label");
 const valueName = useInject(undefined, "valueName", "value");
 const iconName = useInject(undefined, "iconName", "icon");
 const itemHeight = useInject(undefined, "itemHeight", 40);
+const showValue = useInject(undefined, "showValue", []);
 
-const collapsed = useInject(undefined, "collapsed", ref(false));
+const collapse = useInject(undefined, "collapse", ref(false));
 
 const expand = ref(false);
 const allHeight = ref(0);
@@ -83,6 +100,11 @@ const menuContentRef = ref<HTMLElement>();
 function clickHandle() {
   expand.value = !expand.value;
 }
+
+function checkValueHandle(values: string[], level: number) {
+  values.unshift(props.options[valueName]);
+  emits("checkValue", values, props.level);
+}
 defineExpose({
   allHeight
 });
@@ -90,13 +112,11 @@ onMounted(() => {
   if (contentRef.value) {
     let maxHeight = itemHeight;
     const len = contentRef.value.children.length;
-    console.log("first");
     for (let i = 0; i < len; i++) {
       const element = contentRef.value.children[i] as HTMLLIElement;
       maxHeight += +(element?.dataset.height ?? 0);
     }
     allHeight.value = maxHeight;
-    console.log(maxHeight);
     if (menuContentRef.value) {
       menuContentRef.value.dataset.height = String(maxHeight);
     }
@@ -123,6 +143,11 @@ onMounted(() => {
     align-items: center;
     position: relative;
     cursor: pointer;
+    border-radius: 7px;
+    padding: 0 10px;
+    &.m-menu-content-title-active {
+      color: #4b9d5f;
+    }
     .m-menu-content-icon {
       transition: all 0.5s;
       transform: translateY(-50%);

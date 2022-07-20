@@ -1,5 +1,10 @@
 <template>
-  <div class="m-menu-item" ref="menuItemRef">
+  <div
+    class="m-menu-item"
+    ref="menuItemRef"
+    @click="clickHandle"
+    :class="showValue[level - 1] === options[valueName] && 'm-menu-item-active'"
+  >
     <m-icon v-if="options[iconName]" :name="options[iconName]"></m-icon>
     <span>{{ options[lableName] }}</span>
   </div>
@@ -15,7 +20,7 @@
 import mIcon from "../../icon/src/icon.vue";
 import {
   ref,
-  reactive,
+  watch,
   defineEmits,
   defineExpose,
   defineProps,
@@ -30,11 +35,25 @@ const props = withDefaults(
   {}
 );
 
+const emits = defineEmits(["checkValue"]);
+
 const lableName = useInject(undefined, "labelName", "label");
 const valueName = useInject(undefined, "valueName", "value");
 const iconName = useInject(undefined, "iconName", "icon");
 const itemHeight = useInject(undefined, "itemHeight", 40);
+const showValue = useInject(undefined, "showValue", []);
+const navigator = useInject(undefined, "navigator", (path: string) => {});
 const menuItemRef = ref<HTMLElement>();
+
+function clickHandle() {
+  if (props.options.disabled) {
+    return;
+  }
+  if (props.options.path) {
+    navigator(props.options.path);
+  }
+  emits("checkValue", [props.options[valueName]], props.level);
+}
 onMounted(() => {
   if (menuItemRef.value) {
     menuItemRef.value.dataset.height = String(itemHeight);
@@ -51,5 +70,15 @@ onMounted(() => {
   color: #666;
   align-items: center;
   cursor: pointer;
+  padding: 0 20px;
+  border-radius: 7px;
+  &.m-menu-item-active {
+    color: #4b9d5f;
+    background-color: #ebf5ef;
+  }
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 </style>
