@@ -5,7 +5,7 @@
       name="输入框"
       description="用来做文字的输入"
     ></cpn-header-vue>
-    <m-menu :options="menuList"></m-menu>
+    <m-menu :options="menuList" capture="国内大厂" icon="m-star"></m-menu>
     <div class="layout"></div>
   </div>
 </template>
@@ -22,6 +22,7 @@ const menuList = [
   {
     label: "腾讯",
     value: "tencent",
+    icon: "m-star",
     children: [
       {
         label: "天美",
@@ -40,6 +41,7 @@ const menuList = [
   {
     label: "字节",
     value: "zijie",
+    icon: "m-star",
     children: [
       {
         label: "抖音",
@@ -58,6 +60,7 @@ const menuList = [
   {
     label: "阿里",
     value: "al",
+    icon: "m-star",
     children: [
       {
         label: "淘宝",

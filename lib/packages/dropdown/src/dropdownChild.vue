@@ -84,11 +84,12 @@ function leaveHandle() {
   isMove.value = false;
   showChild.value = false;
 }
-function hiddenHandle(option) {
+function hiddenHandle(option, values: string[]) {
   isMove.value = false;
   showChild.value = false;
   isShow.value = false;
-  emits("hidden", option);
+  values.unshift(props.options[props.valueName]);
+  emits("hidden", option, values);
 }
 
 watch(

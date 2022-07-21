@@ -1,7 +1,7 @@
 <template>
   <div class="m-menu-title">
-    <m-icon v-if="icon" :name="icon"></m-icon>
-    <span>{{ title }}</span>
+    <m-icon v-if="icon" :name="icon" class="m-menu-title-icon"></m-icon>
+    <span v-if="!collapse">{{ title }}</span>
   </div>
 </template>
 
@@ -13,6 +13,7 @@
  */
 // 从下载的组件中导入函数
 import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import { useInject } from "../../../hooks";
 import mIcon from "../../icon/src/icon.vue";
 const props = withDefaults(
   defineProps<{
@@ -21,13 +22,25 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+const collapse = useInject(undefined, "collapse", ref(false));
 </script>
 <style scoped lang="less">
 .m-menu-title {
+  cursor: pointer;
   width: 100%;
   height: var(--menu-item-height);
   transition: width 0.5s;
   display: flex;
   gap: 10px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  justify-content: center;
+  white-space: no-wrap;
+  .m-menu-title-icon {
+    color: var(--menu-icon-color);
+    font-size: var(--menu-icon-size);
+  }
 }
 </style>

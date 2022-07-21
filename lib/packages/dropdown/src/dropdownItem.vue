@@ -9,7 +9,11 @@
         v-if="item.children"
         :options="item"
         :flag="flag"
-        @hidden="clickHandle"
+        @hidden="
+          (option, values) => {
+            hiddenHandle(option, values, item);
+          }
+        "
         :default-value="defaultValue"
       ></m-dropdown-child>
       <div v-else @click.stop="clickHandle(item)">
@@ -57,14 +61,18 @@ const props = withDefaults(
 const emits = defineEmits(["hidden"]);
 
 let flag = ref(false);
-function clickHandle(option: any) {
-  emits("hidden", option);
+function clickHandle(option) {
+  emits("hidden", option, [option[props.valueName]]);
 }
 function enterHandle() {
   flag.value = true;
 }
 function leaveHandle() {
   flag.value = false;
+}
+function hiddenHandle(option, values, item) {
+  // values.unshift(item[props.valueName]);
+  emits("hidden", option, values);
 }
 </script>
 <style scoped lang="less">

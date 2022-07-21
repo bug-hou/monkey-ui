@@ -47,7 +47,7 @@ const props = withDefaults(
 );
 
 const emits = defineEmits<{
-  (e: "select", option: any): void;
+  (e: "select", option: any, values: string[]): void;
 }>();
 
 const isShow = ref(false);
@@ -56,9 +56,9 @@ function clickHandle() {
     isShow.value = !unref(isShow);
   }
 }
-function hiddenHandle(option) {
+function hiddenHandle(option, values: string[]) {
   isShow.value = false;
-  emits("select", option);
+  emits("select", option, values);
 }
 function enterHandle() {
   if (props.trigger === "hover") {
@@ -113,3 +113,4 @@ if (props.trigger === "auto") {
   }
 }
 </style>
+

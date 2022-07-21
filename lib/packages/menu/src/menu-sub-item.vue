@@ -1,7 +1,7 @@
 <template>
   <menu-content-vue
     :options="options"
-    :level="level + 1"
+    :level="level"
     ref="menuContentRef"
     @checkValue="checkValueHandle"
   ></menu-content-vue>
@@ -15,7 +15,7 @@
  */
 // 从下载的组件中导入函数
 import menuContentVue from "./menu-content.vue";
-import { ref, onMounted, defineProps } from "vue";
+import { defineProps } from "vue";
 import { useInject } from "../../../hooks";
 const props = withDefaults(
   defineProps<{
@@ -28,7 +28,6 @@ const emits = defineEmits(["checkValue"]);
 const labelName = useInject(undefined, "labelName", "label");
 const valueName = useInject(undefined, "valueName", "value");
 function checkValueHandle(values: string[], level: number) {
-  values.unshift(props.options[valueName]);
   emits("checkValue", values, level);
 }
 </script>

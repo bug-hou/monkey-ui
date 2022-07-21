@@ -5,7 +5,11 @@
     @click="clickHandle"
     :class="showValue[level - 1] === options[valueName] && 'm-menu-item-active'"
   >
-    <m-icon v-if="options[iconName]" :name="options[iconName]"></m-icon>
+    <m-icon
+      v-if="options[iconName]"
+      :name="options[iconName]"
+      class="m-menu-item-icon"
+    ></m-icon>
     <span>{{ options[lableName] }}</span>
   </div>
 </template>
@@ -52,8 +56,10 @@ function clickHandle() {
   if (props.options.path) {
     navigator(props.options.path);
   }
+  console.log("first");
   emits("checkValue", [props.options[valueName]], props.level);
 }
+
 onMounted(() => {
   if (menuItemRef.value) {
     menuItemRef.value.dataset.height = String(itemHeight);
@@ -72,6 +78,11 @@ onMounted(() => {
   cursor: pointer;
   padding: 0 20px;
   border-radius: 7px;
+  color: var(--menu-item-color);
+  .m-menu-item-icon {
+    color: var(--menu-icon-color);
+    font-size: var(--menu-icon-size);
+  }
   &.m-menu-item-active {
     color: #4b9d5f;
     background-color: #ebf5ef;
