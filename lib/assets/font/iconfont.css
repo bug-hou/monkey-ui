@@ -12,6 +12,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.m-al:before {
+  content: "\e603";
+}
+
+.m-dy:before {
+  content: "\e8db";
+}
+
+.m-tx:before {
+  content: "\e613";
+}
+
 .m-toLeft::before {
   content: "\e601";
 }
@@ -162,3 +174,4 @@
 .m-loader:before {
   content: "\e6a2";
 }
+
