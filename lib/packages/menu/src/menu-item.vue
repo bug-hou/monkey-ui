@@ -28,6 +28,7 @@ import {
   defineEmits,
   defineExpose,
   defineProps,
+  nextTick,
   onMounted
 } from "vue";
 import { useInject } from "../../../hooks";
@@ -56,7 +57,6 @@ function clickHandle() {
   if (props.options.path) {
     navigator(props.options.path);
   }
-  console.log("first");
   emits("checkValue", [props.options[valueName]], props.level);
 }
 

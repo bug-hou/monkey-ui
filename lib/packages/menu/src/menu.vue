@@ -42,7 +42,7 @@ import menuTitleVue from "./menu-title.vue";
 import menuContentVue from "./menu-content.vue";
 import menuItemVue from "./menu-item.vue";
 import { useRouter } from "vue-router";
-import { ref, defineProps, withDefaults, unref } from "vue";
+import { ref, defineProps, withDefaults, unref, watch } from "vue";
 import { processUnit } from "../../../hooks";
 const props = withDefaults(
   defineProps<{
@@ -58,6 +58,8 @@ const props = withDefaults(
     iconSize?: string | number;
     color?: string;
     itemColor?: string;
+    isCollapse?: boolean;
+    collapse?: boolean;
     navigator?: (path: string) => void;
   }>(),
   {
@@ -69,12 +71,11 @@ const props = withDefaults(
     iconSize: 20,
     itemColor: "#666",
     color: "#000",
-    navigator: (path: string) => {
-      const router = useRouter();
-      router.push(path);
-    }
+    collapse:false,
+    isCollapse: false
   }
 );
+const router = useRouter();
 
 const showValue = ref(props.showValue ?? []);
 
@@ -87,7 +88,7 @@ const provideValue = [
   ["iconName", props.iconName],
   ["itemHeight", props.itemHeight],
   ["showValue", showValue],
-  ["navigator", props.navigator],
+  ["navigator", props.navigator ?? navigatorHandle],
   ["collapse", collapse],
   ["accordion", accordion]
 ] as any;
@@ -99,7 +100,15 @@ function setAccordion() {
 }
 
 function clickHandle() {
-  collapse.value = !unref(collapse);
+  if (props.isCollapse) {
+    collapse.value = !unref(collapse);
+  }
+}
+
+if(props.isCollapse){
+  watch(()=>props.collapse,(newValue)=>{
+    collapse.value = newValue;
+  })
 }
 
 function checkValueHandle(values: string[], level: number) {
@@ -107,6 +116,9 @@ function checkValueHandle(values: string[], level: number) {
     showValue.value = values;
     setAccordion();
   }
+}
+function navigatorHandle(path: string) {
+  router.push(path);
 }
 </script>
 <style scoped lang="less">

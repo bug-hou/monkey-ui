@@ -1,6 +1,19 @@
 <template>
   <div class="m-menu-title">
-    <m-icon v-if="icon" :name="icon" class="m-menu-title-icon"></m-icon>
+    <tooltip-vue
+      :tooltip-text="title"
+      effect="dark"
+      v-if="collapse"
+      class="m-menu-title-tooltip"
+    >
+      <m-icon v-if="icon" :name="icon" class="m-menu-title-icon"></m-icon>
+    </tooltip-vue>
+    <m-icon
+      v-if="icon && !collapse"
+      :name="icon"
+      class="m-menu-title-icon"
+    ></m-icon>
+
     <span v-if="!collapse">{{ title }}</span>
   </div>
 </template>
@@ -12,7 +25,8 @@
  * @Description: 创建一个m-menu-title组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
+import { ref, defineProps } from "vue";
+import tooltipVue from "../../tooltip/src/tooltip.vue";
 import { useInject } from "../../../hooks";
 import mIcon from "../../icon/src/icon.vue";
 const props = withDefaults(
@@ -38,6 +52,9 @@ const collapse = useInject(undefined, "collapse", ref(false));
   font-weight: bold;
   justify-content: center;
   white-space: no-wrap;
+  .m-menu-title-tooltip{
+    font-size: 14px;
+  }
   .m-menu-title-icon {
     color: var(--menu-icon-color);
     font-size: var(--menu-icon-size);

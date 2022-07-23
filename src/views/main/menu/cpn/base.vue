@@ -1,6 +1,6 @@
 <template>
-  <cpn-play-vue title="base" description="菜单简单实用" :code="baseCode">
-    <m-menu :options="menuList" capture="梦中情厂" icon="m-info"></m-menu>
+  <cpn-play-vue title="isCollapse" description="isCollapse为true可以折叠菜单" :code="baseCode">
+    <m-menu :options="menuList" capture="梦中情厂" icon="m-info" isCollapse></m-menu>
   </cpn-play-vue>
 </template>
 
@@ -13,7 +13,6 @@
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
 import { baseCode } from "../doc";
-import { ref } from "vue";
 const menuList = [
   {
     label: "腾讯",

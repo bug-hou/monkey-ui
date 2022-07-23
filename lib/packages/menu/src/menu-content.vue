@@ -97,6 +97,7 @@ const iconName = useInject(undefined, "iconName", "icon");
 const itemHeight = useInject(undefined, "itemHeight", 40);
 const showValue = useInject(undefined, "showValue", []);
 const accordion = useInject(undefined, "accordion", ref(false));
+const navigator = useInject(undefined, "navigator", (path: string) => {});
 
 const collapse = useInject(undefined, "collapse", ref(false));
 
@@ -112,7 +113,6 @@ function clickHandle() {
 
 watch(accordion, () => {
   if (transfer) {
-    console.log("first");
     transfer = false;
   } else {
     expand.value = false;
@@ -127,6 +127,9 @@ function checkValueHandle(values: string[], level: number) {
 }
 
 function selectHandle(option, path: string[]) {
+  if (option.path) {
+    navigator(option.path);
+  }
   checkValueHandle(path, props.level);
 }
 defineExpose({

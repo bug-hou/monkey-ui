@@ -8,6 +8,7 @@
     <div class="layout">
       <base-vue></base-vue>
       <icon-vue></icon-vue>
+      <path-vue></path-vue>
     </div>
   </div>
 </template>
@@ -22,4 +23,5 @@
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 import baseVue from "./cpn/base.vue";
 import iconVue from "./cpn/icon.vue";
+import pathVue from "./cpn/path.vue";
 </script>

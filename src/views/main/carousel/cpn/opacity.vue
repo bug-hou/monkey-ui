@@ -1,10 +1,10 @@
 <template>
   <cpn-play-vue
-    title="opacity"
-    description="设置mode值为opacity时可以有一种渐渐淡如和淡出"
+    title="scale"
+    description="设置mode值为scale时可以有一种渐渐淡如和淡出"
     :code="opacityCode"
   >
-    <m-carousel style="width: 100%; height: 300px" mode="opacity" show-arrow>
+    <m-carousel style="width: 100%; height: 300px" mode="scale" show-arrow>
       <m-carousel-item>
         <img
           src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg"

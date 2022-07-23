@@ -1,5 +1,5 @@
 <template>
-  <cpn-play-vue title="icon" description="每一项添加上icon属性就可以显示图标" :code="iconCode">
+  <cpn-play-vue title="path" description="给每一个对象添加上path就可以实现路径的跳转" :code="pathCode">
     <m-menu
       isCollapse
       :options="menuList"
@@ -19,7 +19,7 @@
  */
 // 从下载的组件中导入函数
 import cpnPlayVue from "../../../../components/cpnPlay/cpnPlay.vue";
-import { iconCode } from "../doc";
+import { pathCode } from "../doc";
 const menuList = [
   {
     label: "腾讯",
@@ -28,15 +28,18 @@ const menuList = [
     children: [
       {
         label: "天美",
-        value: "timi"
+        value: "timi",
+        path: "/component/card"
       },
       {
         label: "天游",
-        value: "ty"
+        value: "ty",
+        path: "/component/divider"
       },
       {
         label: "腾讯云",
-        value: "yun"
+        value: "yun",
+        path: "/component/check"
       }
     ]
   },
@@ -66,11 +69,13 @@ const menuList = [
     children: [
       {
         label: "淘宝",
-        value: "tb"
+        value: "tb",
+        path: "/component/carousel"
       },
       {
         label: "支付宝",
-        value: "zfb"
+        value: "zfb",
+        path: "/component/tooltip"
       },
       {
         label: "蚂蚁金服",
@@ -78,11 +83,13 @@ const menuList = [
         children: [
           {
             label: "蚂蚁财富",
-            value: "cf"
+            value: "cf",
+            path: "/component/input"
           },
           {
             label: "饿了吗",
-            value: "elm"
+            value: "elm",
+            path: "/component/button"
           }
         ]
       }
@@ -90,3 +97,4 @@ const menuList = [
   }
 ];
 </script>
+
