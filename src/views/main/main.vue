@@ -83,6 +83,10 @@ const base = [
   {
     name: "菜单Menu",
     path: "/menu"
+  },
+  {
+    name: "提示Alert",
+    path: "/alert"
   }
 ];
 </script>
@@ -147,4 +151,3 @@ const base = [
   }
 }
 </style>
-

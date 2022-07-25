@@ -64,6 +64,8 @@ import { mCarousel, mCarouselItem } from "./packages/carousel";
 
 import { mMenu, mMenuItem } from "./packages/menu";
 
+import { mAlert } from "./packages/alert";
+
 import { App } from "vue";
 
 const monkeysUI = [
@@ -108,7 +110,8 @@ const monkeysUI = [
   mCarousel,
   mCarouselItem,
   mMenu,
-  mMenuItem
+  mMenuItem,
+  mAlert
 ]
 
 export default (app: App, opt?: any) => {
@@ -159,5 +162,6 @@ export {
   mCarousel,
   mCarouselItem,
   mMenu,
-  mMenuItem
+  mMenuItem,
+  mAlert
 }

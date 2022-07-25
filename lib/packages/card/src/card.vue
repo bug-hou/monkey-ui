@@ -83,7 +83,9 @@ function handleClick() {
   }
   &.active {
     box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.08),
-      0 3px 6px 0 rgba(0, 0, 0, 0.06), 0 5px 12px 4px rgba(0, 0, 0, 0.04);
+      0 3px 6px 0 rgba(0, 0, 0, 0.06), 0 5px 12px 4px rgba(0, 0, 0, 0.04),
+      0 2px 4px 0 rgb(54 58 80 / 32%);
   }
 }
 </style>
+

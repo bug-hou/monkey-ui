@@ -32,5 +32,6 @@ const props = withDefaults(
   color: var(--icon-color);
   text-align: center;
   font-size: inherit;
+  line-height: 1;
 }
 </style>
