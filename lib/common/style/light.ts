@@ -16,4 +16,3 @@ export const LightTheme: Theme = {
   error: "#f56c6c",
   default: "rgb(48, 170, 105)"
 }
-
