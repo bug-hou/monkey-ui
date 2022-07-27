@@ -1,5 +1,8 @@
 <template>
-  <div class="m-list"></div>
+  <div class="m-list">
+    <slot name="title"></slot>
+    <slot></slot>
+  </div>
 </template>
 
 <script lang="ts" setup name="m-list">
@@ -14,9 +17,19 @@ type ListType = "public" | "bullet" | "number" | "option";
 const props = withDefaults(
   defineProps<{
     type: ListType;
+    list: any[];
+    labelName: "label";
   }>(),
   {}
 );
+let count = 1;
+function getCount() {
+  return count++;
+}
+
+defineExpose({
+  getCount
+});
 </script>
 <style scoped lang="less">
 .m-list {
