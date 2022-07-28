@@ -87,6 +87,10 @@ const base = [
   {
     name: "提示Alert",
     path: "/alert"
+  },
+  {
+    name: "列表List",
+    path: "/list"
   }
 ];
 </script>

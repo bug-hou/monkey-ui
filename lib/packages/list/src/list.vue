@@ -1,7 +1,19 @@
 <template>
   <div class="m-list">
-    <slot name="title"></slot>
-    <slot></slot>
+    <p style="color: rgba(0, 0, 0, 0.4)">
+      <slot name="title"></slot>
+    </p>
+
+    <ul
+      class="m-list-ul"
+      :style="[
+        !(type === 'divider' || type === 'public' || type === 'stripe') && {
+          listStyle: type
+        }
+      ]"
+    >
+      <slot></slot>
+    </ul>
   </div>
 </template>
 
@@ -12,26 +24,36 @@
  * @Description: 创建一个m-list组件
  */
 // 从下载的组件中导入函数
-import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
-type ListType = "public" | "bullet" | "number" | "option";
+import {
+  defineProps,
+  provide
+} from "vue";
+type ListType =
+  | "decimal"
+  | "option"
+  | "circle"
+  | "square"
+  | "divider"
+  | "stripe"
+  | "public";
 const props = withDefaults(
   defineProps<{
     type: ListType;
     list: any[];
     labelName: "label";
   }>(),
-  {}
+  {
+    type: "public"
+  }
 );
-let count = 1;
-function getCount() {
-  return count++;
-}
-
-defineExpose({
-  getCount
-});
+provide<ListType>("listType", props.type);
 </script>
 <style scoped lang="less">
 .m-list {
+  font-size: 16px;
+  .m-list-ul {
+    padding-left: 20px;
+    list-style: none;
+  }
 }
 </style>
