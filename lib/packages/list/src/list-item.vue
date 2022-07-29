@@ -52,6 +52,9 @@ const listItemRef = ref<HTMLDivElement>();
   }
   &.m-list-item-divider {
     font-size: 0;
+    .m-list-item-p {
+      font-size: 14px;
+    }
     &:last-of-type {
       .m-list-item-divider-cpn {
         display: none;
@@ -59,7 +62,6 @@ const listItemRef = ref<HTMLDivElement>();
     }
   }
   .m-list-item-p {
-    font-size: 16px;
     padding: 8px 0;
   }
 }

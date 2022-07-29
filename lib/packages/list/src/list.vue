@@ -24,10 +24,7 @@
  * @Description: 创建一个m-list组件
  */
 // 从下载的组件中导入函数
-import {
-  defineProps,
-  provide
-} from "vue";
+import { defineProps, provide } from "vue";
 type ListType =
   | "decimal"
   | "option"
@@ -54,6 +51,7 @@ provide<ListType>("listType", props.type);
   .m-list-ul {
     padding-left: 20px;
     list-style: none;
+    font-size: 13px;
   }
 }
 </style>

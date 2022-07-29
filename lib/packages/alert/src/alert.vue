@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="close"
     class="m-alert"
     :style="[
       { ['--m-alert-background' as any]: bgColor },
@@ -61,12 +60,13 @@ const props = withDefaults(
     extend?: boolean;
     type?: AlertType;
     color?: string;
+    background?: string;
     close?: boolean;
   }>(),
   {
     type: "default",
     extend: false,
-    close: true
+    close: false
   }
 );
 
@@ -78,7 +78,7 @@ watch(
 );
 
 const color = props.color ?? LightTheme[props.type];
-const bgColor = getLightColor(color, 0.8);
+const bgColor = props.background ?? getLightColor(color, 0.8);
 const titleColor = getDarkColor(color);
 const close = ref(props.close);
 
