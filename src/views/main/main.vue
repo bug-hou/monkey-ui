@@ -91,6 +91,10 @@ const base = [
   {
     name: "列表List",
     path: "/list"
+  },
+  {
+    name: "水印Watermark",
+    path: "/watermark"
   }
 ];
 </script>

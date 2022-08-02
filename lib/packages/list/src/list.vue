@@ -35,9 +35,7 @@ type ListType =
   | "public";
 const props = withDefaults(
   defineProps<{
-    type: ListType;
-    list: any[];
-    labelName: "label";
+    type?: ListType;
   }>(),
   {
     type: "public"

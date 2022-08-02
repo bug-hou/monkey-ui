@@ -1,5 +1,7 @@
 <template>
-  <div class="m-watermark" ref="watermarkRef">
+  <div class="m-watermark">
+    <div class="m-watermark-canvas" ref="watermarkRef"></div>
+    <div class="m-watermark-test" ref="watermarkTestRef">{{ content }}</div>
     <slot></slot>
   </div>
 </template>
@@ -22,34 +24,40 @@ import {
 
 const props = withDefaults(
   defineProps<{
-    fontSize: number;
-    color: string;
-    text: string;
-    textAlign: CanvasTextAlign;
-    textBaseline: CanvasTextBaseline;
+    fontSize?: number;
+    color?: string;
+    content?: string;
+    textAlign?: CanvasTextAlign;
+    textBaseline?: CanvasTextBaseline;
+    fontFamily?: string;
   }>(),
-  {}
+  {
+    content: "继续努力进大厂是我唯一的梦想",
+    textAlign: "left",
+    textBaseline: "top",
+    fontSize: 18,
+    fontFamily: "Microsoft Yahei"
+  }
 );
 
 const watermarkRef = ref<HTMLElement>();
 
+const watermarkTestRef = ref<HTMLElement>();
+
 function __canvasWM({
-  container = document.body,
-  width = 300,
-  height = 200,
+  width = 30,
   textAlign = props.textAlign,
   textBaseline = props.textBaseline,
-  font = "20px Microsoft Yahei",
+  font = `${props.fontSize}px ${props.fontFamily}`,
   fillStyle = "rgba(184, 184, 184, 0.6)",
-  content = "水印",
-  rotate = 45,
-  zIndex = 10000
+  content = props.content,
+  rotate = 30
 } = {}) {
-  const args = arguments[0];
   const canvas = document.createElement("canvas");
 
-  canvas.setAttribute("width", String(width * 2));
-  canvas.setAttribute("height", String(height * 2));
+  canvas.setAttribute("width", String(width));
+  canvas.setAttribute("height", String(width));
+  canvas.style.transform = `rotate(30deg);`;
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     return;
@@ -59,48 +67,35 @@ function __canvasWM({
   ctx.font = font;
   ctx.fillStyle = fillStyle;
   ctx.rotate((Math.PI / 180) * rotate);
-  ctx.fillText(content, width / 2, height / 2);
+  ctx.fillText(content, 0, 0);
   const base64Url = canvas.toDataURL();
-  const __wm = container;
 
-  const watermarkDiv = __wm || document.createElement("div");
-  const styleStr = `
-                  position:fixed;
-                  top:0;
-                  left:0;
-                  bottom:0;
-                  right:0;
-                  width:100%;
-                  height:100%;
-                  z-index:${zIndex};
-                  pointer-events:none;
-                  background-repeat:repeat;
-                  background-image:url('${base64Url}')`;
-
-  watermarkDiv.setAttribute("style", styleStr);
-  watermarkDiv.classList.add("__wm");
-
-  if (!__wm) {
-    container.insertBefore(watermarkDiv, container.firstChild);
-  }
-
-  if (typeof module != "undefined" && module.exports) {
-    //CMD
-    module.exports = __canvasWM;
-  } else if (typeof define == "function" && define.amd) {
-    // AMD
-    define(function () {
-      return __canvasWM;
-    });
-  } else {
-    window.__canvasWM = __canvasWM;
+  if (watermarkRef.value) {
+    watermarkRef.value.style.backgroundImage = `url(${base64Url})`;
   }
 }
 
+function calcNumberOfString(str: string) {
+  const reg = /[\u4E00-\u9FA5]/;
+
+  const len = str.length;
+
+  let count = len / 2;
+
+  for (let i = 0; i < len; i++) {
+    const s = str[i];
+    if (reg.test(s)) {
+      count += 1;
+    }
+  }
+
+  return count;
+}
+
 onMounted(() => {
-  if (watermarkRef.value) {
-    const height = getComputedStyle(watermarkRef.value).height;
-    const width = getComputedStyle(watermarkRef.value).width;
+  if (watermarkTestRef.value) {
+    const width = parseInt(getComputedStyle(watermarkTestRef.value).width);
+    __canvasWM({ width });
   }
 });
 </script>
@@ -108,5 +103,26 @@ onMounted(() => {
 .m-watermark {
   width: 100%;
   height: 100%;
+  position: relative;
+  .m-watermark-test {
+    display: inline-block;
+    opacity: 0;
+    position: absolute;
+    z-index: -100;
+  }
+  .m-watermark-canvas {
+    position: absolute;
+    background-repeat: repeat;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-repeat: repeat;
+    z-index: 10;
+    // background-size: 200px;
+    // background-position: 96px 64px, -20px -10px;
+  }
 }
 </style>
