@@ -6,19 +6,15 @@
       description="用起来还是挺好用的"
     >
     </cpn-header-vue>
-    <m-watermark>
-      <m-list>
-        <m-list-item>fdslkfjds</m-list-item>
-        <m-list-item>fdslkfjds</m-list-item>
-        <m-list-item>fdslkfjds</m-list-item>
-        <m-list-item>fdslkfjds</m-list-item>
-      </m-list>
-    </m-watermark>
-    <div class="layout"></div>
+    <div class="layout">
+      <base-vue></base-vue>
+      <image-vue></image-vue>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
+import baseVue from "./cpn/base.vue";
+import imageVue from "./cpn/image.vue";
 </script>
-

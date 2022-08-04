@@ -13,14 +13,7 @@
  * @Description: 创建一个m-watermark组件
  */
 // 从下载的组件中导入函数
-import {
-  ref,
-  reactive,
-  defineEmits,
-  defineExpose,
-  defineProps,
-  onMounted
-} from "vue";
+import { ref, defineProps, onMounted, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
@@ -30,13 +23,23 @@ const props = withDefaults(
     textAlign?: CanvasTextAlign;
     textBaseline?: CanvasTextBaseline;
     fontFamily?: string;
+    rotate?: number;
+    img?: HTMLImageElement;
+    textInterval?: number;
+    imgWidth?: number;
+    imgHeight?: number;
+    visible?: boolean;
   }>(),
   {
-    content: "继续努力进大厂是我唯一的梦想",
-    textAlign: "left",
-    textBaseline: "top",
+    content: "商业机密",
+    textAlign: "center",
+    textBaseline: "middle",
     fontSize: 18,
-    fontFamily: "Microsoft Yahei"
+    fontFamily: "Microsoft Yahei",
+    color: "rgba(184, 184, 184, 0.6)",
+    rotate: 45,
+    textInterval: 1.5,
+    visible: true
   }
 );
 
@@ -44,15 +47,18 @@ const watermarkRef = ref<HTMLElement>();
 
 const watermarkTestRef = ref<HTMLElement>();
 
-function __canvasWM({
-  width = 30,
-  textAlign = props.textAlign,
-  textBaseline = props.textBaseline,
-  font = `${props.fontSize}px ${props.fontFamily}`,
-  fillStyle = "rgba(184, 184, 184, 0.6)",
-  content = props.content,
-  rotate = 30
-} = {}) {
+function __canvasWM(
+  width: number,
+  {
+    textAlign = props.textAlign,
+    textBaseline = props.textBaseline,
+    font = `${props.fontSize}px ${props.fontFamily}`,
+    fillStyle = props.color,
+    content = props.content,
+    rotate = props.rotate,
+    img = null as HTMLImageElement | null
+  } = {}
+) {
   const canvas = document.createElement("canvas");
 
   canvas.setAttribute("width", String(width));
@@ -62,6 +68,12 @@ function __canvasWM({
   if (!ctx) {
     return;
   }
+  ctx.translate(width / 2, width / 2);
+
+  if (img) {
+    console.log(img )
+    ctx.drawImage(img as any, 0, 0);
+  }
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font;
@@ -70,32 +82,33 @@ function __canvasWM({
   ctx.fillText(content, 0, 0);
   const base64Url = canvas.toDataURL();
 
-  if (watermarkRef.value) {
-    watermarkRef.value.style.backgroundImage = `url(${base64Url})`;
-  }
-}
-
-function calcNumberOfString(str: string) {
-  const reg = /[\u4E00-\u9FA5]/;
-
-  const len = str.length;
-
-  let count = len / 2;
-
-  for (let i = 0; i < len; i++) {
-    const s = str[i];
-    if (reg.test(s)) {
-      count += 1;
+  watch(
+    () => props.visible,
+    (newValue) => {
+      if (watermarkRef.value) {
+        if (!newValue) {
+          watermarkRef.value.style.backgroundImage = ``;
+          return;
+        }
+        watermarkRef.value.style.backgroundImage = `url(${base64Url})`;
+      }
+    },
+    {
+      immediate: true
     }
-  }
-
-  return count;
+  );
 }
 
 onMounted(() => {
   if (watermarkTestRef.value) {
-    const width = parseInt(getComputedStyle(watermarkTestRef.value).width);
-    __canvasWM({ width });
+    const { img, imgWidth, textInterval } = props;
+    const width =
+      parseInt(getComputedStyle(watermarkTestRef.value).width) * textInterval;
+    if (img) {
+      __canvasWM(imgWidth ?? img.width + width, { img });
+      return;
+    }
+    __canvasWM(width);
   }
 });
 </script>
@@ -121,8 +134,6 @@ onMounted(() => {
     pointer-events: none;
     background-repeat: repeat;
     z-index: 10;
-    // background-size: 200px;
-    // background-position: 96px 64px, -20px -10px;
   }
 }
 </style>
