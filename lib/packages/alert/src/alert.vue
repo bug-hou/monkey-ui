@@ -10,7 +10,7 @@
     <div class="m-alert-icon">
       <m-icon :name="iconMap[type]"></m-icon>
     </div>
-    <div v-if="props.close" class="m-alert-close" @click="closeHandle">
+    <div v-if="close" class="m-alert-close" @click="closeHandle">
       <m-icon name="m-cha"></m-icon>
     </div>
     <div class="m-alert-title">
@@ -43,7 +43,7 @@
 import { AlertType } from "../config/alert";
 import { getLightColor, getDarkColor } from "../../../utils";
 import mIcon from "../../icon/src/icon.vue";
-import { ref, reactive, defineEmits, unref, defineProps, watch } from "vue";
+import { ref, unref, defineProps, watch } from "vue";
 import { LightTheme } from "../../../common/style";
 
 const iconMap = {
@@ -70,17 +70,11 @@ const props = withDefaults(
   }
 );
 
-watch(
-  () => props.close,
-  (newValue) => {
-    close.value = newValue;
-  }
-);
+const emits = defineEmits(["close"]);
 
 const color = props.color ?? LightTheme[props.type];
 const bgColor = props.background ?? getLightColor(color, 0.8);
 const titleColor = getDarkColor(color);
-const close = ref(props.close);
 
 const visibleBody = ref(!props.extend);
 
@@ -90,7 +84,7 @@ function clickHandle() {
   }
 }
 function closeHandle() {
-  close.value = false;
+  emits("close");
 }
 </script>
 <style scoped lang="less">

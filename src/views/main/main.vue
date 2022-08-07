@@ -95,7 +95,9 @@ const base = [
   {
     name: "水印Watermark",
     path: "/watermark"
-  }
+  },
+  { name: "制表Tab", path: "/tab" },
+
 ];
 </script>
 <style scoped lang="less">

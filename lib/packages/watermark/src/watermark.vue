@@ -70,10 +70,6 @@ function __canvasWM(
   }
   ctx.translate(width / 2, width / 2);
 
-  if (img) {
-    console.log(img )
-    ctx.drawImage(img as any, 0, 0);
-  }
   ctx.textAlign = textAlign;
   ctx.textBaseline = textBaseline;
   ctx.font = font;
