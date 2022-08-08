@@ -1,7 +1,18 @@
 <template>
   <div class="m-tab">
-    <div class="m-tab-head-scroll" ref="tabHeadRef">
-      <ul class="m-tab-head" :class="'m-tab-head-' + type">
+    <div
+      class="m-tab-head-scroll"
+      ref="tabHeadRef"
+      :class="[
+        scrollTabShadow.left && 'm-tab-scroll-left',
+        scrollTabShadow.right && 'm-tab-scroll-right'
+      ]"
+    >
+      <ul
+        class="m-tab-head"
+        :class="['m-tab-head-' + type]"
+        :style="{ justifyContent }"
+      >
         <template v-for="(item, index) in tabNames" :key="index">
           <li
             :class="[
@@ -35,7 +46,7 @@
  */
 // 从下载的组件中导入函数
 import { useScroll } from "../../../hooks";
-import { ref, defineProps, provide, onMounted, nextTick } from "vue";
+import { ref, defineProps, provide, onMounted, nextTick, reactive } from "vue";
 import mIcon from "../../icon/src/icon.vue";
 import { BScrollInstance } from "better-scroll";
 
@@ -45,18 +56,24 @@ interface IOption {
 }
 const props = withDefaults(
   defineProps<{
-    type?: "line" | "card" | "none" | "segment";
+    type?: "line" | "card" | "bar" | "segment";
     animated?: boolean;
     barWidth?: number;
     defaultValue?: string;
     size?: "mini" | "small" | "medium";
-    justifyContent?: "center" | "left" | "right";
+    justifyContent?:
+      | "center"
+      | "space-around"
+      | "start"
+      | " space-between"
+      | "space-evenly";
     closable?: boolean;
     addTabName?: (...args: any) => any;
   }>(),
   {
     addTabName: () => {},
-    type: "line"
+    type: "line",
+    justifyContent: "space-evenly"
   }
 );
 const tabNames = ref<IOption[]>([]);
@@ -65,6 +82,11 @@ const activeTabName = ref("");
 let bsScroll: BScrollInstance;
 
 const tabHeadRef = ref<HTMLElement>();
+
+const scrollTabShadow = reactive({
+  left: false,
+  right: false
+});
 
 provide("addTabName", addTabName);
 provide("delTabName", delTabName);
@@ -96,12 +118,37 @@ function deleteItemHandle(index: number) {
 onMounted(() => {
   activeTabName.value = props.defaultValue ?? tabNames.value[0].name;
   if (tabHeadRef.value) {
+    const totalLength = parseFloat(
+      getComputedStyle(tabHeadRef.value.children[0]).width
+    );
+    let startX: number = 0;
+    const index = tabNames.value.findIndex(
+      (item) => item.name === props.defaultValue
+    );
+    if (index !== -1) {
+      startX = (totalLength / tabNames.value.length) * index * -1;
+    }
     bsScroll = useScroll(tabHeadRef.value, {
+      startX,
       click: true,
       scrollX: true,
       scrollY: false,
-      bounce: false
+      bounce: false,
+      scrollbar: false as any,
+      eventPassthrough: "vertical"
     });
+    const scrollX = bsScroll.maxScrollX;
+    if (scrollX) {
+      bsScroll.on("scroll", ({ x }) => {
+        scrollTabShadow.right = true;
+        scrollTabShadow.left = true;
+        if (x === 0) {
+          scrollTabShadow.left = false;
+        } else if (x <= scrollX) {
+          scrollTabShadow.right = false;
+        }
+      });
+    }
   }
 });
 </script>
@@ -115,18 +162,39 @@ onMounted(() => {
   .m-tab-head-scroll {
     overflow: hidden;
     width: 100%;
+    position: relative;
+    &::after,
+    &::before {
+      transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      z-index: 1;
+    }
+    &.m-tab-scroll-right::after {
+      box-shadow: inset -20px -3px 8px -8px rgb(0 0 0 / 20%);
+      right: 0;
+    }
+    &.m-tab-scroll-left::before {
+      left: 0;
+      box-shadow: inset 20px 0 8px -8px rgb(0 0 0 / 20%);
+    }
   }
   .m-tab-head {
     display: flex;
-    justify-content: start;
     align-items: center;
     box-sizing: border-box;
-    height: 36px;
+    height: 40px;
     gap: 5px;
     white-space: nowrap;
     width: fit-content;
-    &.m-tab-head-none {
+    min-width: 100%;
+    &.m-tab-head-bar {
       border-bottom: none;
+      padding-bottom: 2px;
       li::after {
         background-color: @color;
       }
@@ -201,6 +269,9 @@ onMounted(() => {
       &.m-tab-head-li-disabled {
         cursor: not-allowed;
         opacity: 0.5;
+        &:hover {
+          color: initial;
+        }
       }
       &:hover {
         color: @color;
@@ -217,6 +288,7 @@ onMounted(() => {
     // overflow: hidden;
     width: 100%;
     position: relative;
+    padding: 10px 0;
   }
 }
 </style>

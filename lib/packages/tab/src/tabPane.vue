@@ -53,17 +53,17 @@ addTabName(props.name, {
   height: 100%;
 }
 
-.verticalto-enter-active,
-.verticalto-leave-active {
-  transition: all 0.3s;
-  position: absolute;
-}
-.verticalto-enter-to,
-.verticalto-leave-from {
-  opacity: 1;
-}
-.verticalto-enter-from,
-.verticalto-leave-to {
-  opacity: 0;
-}
+// .verticalto-enter-active,
+// .verticalto-leave-active {
+//   transition: all 0.3s;
+//   position: absolute;
+// }
+// .verticalto-enter-to,
+// .verticalto-leave-from {
+//   opacity: 1;
+// }
+// .verticalto-enter-from,
+// .verticalto-leave-to {
+//   opacity: 0;
+// }
 </style>
