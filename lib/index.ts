@@ -72,6 +72,8 @@ import { mWatermark } from "./packages/watermark";
 
 import { mTab, mTabPane } from "./packages/tab";
 
+import { mForm, mFormItem } from "./packages/form";
+
 import { App } from "vue";
 
 const monkeysUI = [
@@ -122,7 +124,9 @@ const monkeysUI = [
   mListItem,
   mWatermark,
   mTab,
-  mTabPane
+  mTabPane,
+  mForm,
+  mFormItem
 ]
 
 export default (app: App, opt?: any) => {
@@ -179,5 +183,7 @@ export {
   mListItem,
   mWatermark,
   mTab,
-  mTabPane
+  mTabPane,
+  mForm,
+  mFormItem
 }
