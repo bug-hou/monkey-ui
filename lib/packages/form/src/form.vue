@@ -23,7 +23,9 @@ import { ref, reactive, defineEmits, defineExpose, defineProps } from "vue";
 </script>
 <style scoped lang="less">
 .m-form {
-  padding: 20px;
+  padding: 10px;
+  .m-form-body {
+    // display: flex;
+  }
 }
 </style>
-

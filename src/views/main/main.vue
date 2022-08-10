@@ -97,6 +97,7 @@ const base = [
     path: "/watermark"
   },
   { name: "制表Tab", path: "/tab" },
+  { name: "表单Form", path: "/form" },
 
 ];
 </script>

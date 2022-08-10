@@ -140,7 +140,7 @@ const props = withDefaults(
     type: "text",
     clear: false,
     list: () => [],
-    radius: "10px",
+    radius: "6px",
     round: false,
     prefixColor: "#f1f2f3",
     prefixTextColor: "#606366",
@@ -276,10 +276,12 @@ const upHandler = () => {
   height: 30px;
   display: inline-block;
   width: 100%;
+  box-sizing: border-box;
 }
 .mInput {
   overflow: hidden;
   height: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   border-radius: var(--input-radius);
@@ -415,3 +417,4 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 </style>
+
