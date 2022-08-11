@@ -7,4 +7,6 @@ const collapseMitt = mitt();
 
 const dropdownMitt = mitt();
 
-export { menuMitt, collapseMitt, dropdownMitt };
+const formMitt = mitt();
+
+export { menuMitt, collapseMitt, dropdownMitt, formMitt };

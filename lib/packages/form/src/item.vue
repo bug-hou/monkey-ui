@@ -1,12 +1,22 @@
 <template>
-  <div class="m-form-item" :class="'m-form-item-' + placement">
-    <div class="m-form-item-label">
+  <div
+    class="m-form-item"
+    :class="'m-form-item-' + placement"
+    :style="{ ['--m-form-item-label-width' as any]: labelWidth + 'px' }"
+  >
+    <div class="m-form-item-label" v-if="label">
       <slot name="label">{{ label }}</slot>
       <span v-if="required" style="color: red"> * </span>
     </div>
     <div class="m-form-item-body">
       <slot>
-        <m-input v-model="value"></m-input>
+        <m-input
+          v-model="value"
+          :color="showTooltip && !isCorrect ? color : ''"
+          @blur="blurHandle"
+          :placeholder="placeholder"
+          v-bind="$attrs"
+        ></m-input>
       </slot>
       <div v-if="showTooltip && !isCorrect" class="m-form-item-tooltip">
         <slot name="tooltip" :value="errorContent">
@@ -35,6 +45,8 @@ import {
   defineProps,
   watch
 } from "vue";
+import { useInject } from "../../../hooks";
+import { formMitt } from "../../../utils";
 
 interface IVerify {
   rule: string | RegExp;
@@ -44,28 +56,46 @@ interface IVerify {
 const props = withDefaults(
   defineProps<{
     placement?: "left" | "right" | "top" | "bottom";
+    labelWidth?: "auto" | number;
     verify?: IVerify[];
     verifyFn?: (value: string) => boolean;
+    verifyTigger?: "lazy" | "input";
     showTooltip?: boolean;
-    verifyTigger?: "lazy" | "change";
-    label: string;
-    modelValue: string;
+    label?: string;
+    modelValue?: string;
     required?: boolean;
+    placeholder?: string;
+    color?: string;
+    name?: string;
   }>(),
   {
-    placement: "left",
-    required: true,
-    verifyTigger: "lazy"
+    required: false,
+    verifyTigger: "input",
+    color: "#f56c6c"
   }
 );
-
+const placement = useInject(props.placement, "placement", "left");
+const labelWidth = useInject(props.labelWidth, "labelWidth", "auto");
 const emits = defineEmits(["update:modelValue"]);
 const isCorrect = ref<boolean>(false);
 const errorContent = ref("");
+let commitValue = "";
 
-const value = ref(props.modelValue);
+const value = ref(props.modelValue ?? "");
 watch(value, (newValue) => {
   emits("update:modelValue", newValue);
+  if (props.verifyTigger === "input") {
+    processRegistyHandle(newValue);
+  }
+});
+
+function blurHandle() {
+  if (props.verifyTigger === "lazy") {
+    processRegistyHandle(value.value);
+  }
+}
+
+function processRegistyHandle(newValue: string) {
   if (props.showTooltip) {
     if (props.verifyFn) {
       isCorrect.value = props.verifyFn(newValue);
@@ -84,6 +114,16 @@ watch(value, (newValue) => {
         }
       }
     }
+  }
+}
+formMitt.on("reset", () => {
+  value.value = "";
+});
+
+formMitt.on("submit", () => {
+  if (commitValue !== value.value) {
+    formMitt.emit("commit", { name: props.name, value: value.value });
+    commitValue = value.value;
   }
 });
 </script>
@@ -113,6 +153,7 @@ watch(value, (newValue) => {
   }
   .m-form-item-label {
     width: 20%;
+    width: var(--m-form-item-label-width);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

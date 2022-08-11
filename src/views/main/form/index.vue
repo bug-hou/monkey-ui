@@ -7,17 +7,21 @@
     >
     </cpn-header-vue>
     <div class="layout">
-      <m-form>
+      <m-form v-model="userInfo">
         <m-form-item
           label="bughou"
           v-model="value"
+          name="name.age"
           showTooltip
           :verify="[{ rule: 'bughou', content: ' LY' }]"
         >
         </m-form-item>
-        <m-form-item label="bughou"> </m-form-item>
+        <m-form-item label="bughou" name="age"> </m-form-item>
+        <template #submit>
+          <m-button>提交</m-button>
+        </template>
       </m-form>
-      <p>{{ value }}</p>
+      <p>{{ userInfo }}</p>
     </div>
   </div>
 </template>
@@ -29,8 +33,13 @@
  * @Description: 创建一个gradient组件
  */
 // 从下载的组件中导入函数
-import { ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
 const value = ref();
+
+const userInfo = ref({});
+watch(userInfo, (newValue) => {
+  console.log(newValue);
+});
 </script>
 <style scoped lang="less"></style>
