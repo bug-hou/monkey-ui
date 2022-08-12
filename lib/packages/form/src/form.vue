@@ -41,6 +41,8 @@ const props = withDefaults(
 );
 const emits = defineEmits(["update:modelValue"]);
 const { placement, labelWidth } = props;
+
+let isCorrect = true;
 let result = {};
 
 providesHandle(["placement", "labelWidth"], [placement, labelWidth]);
@@ -50,13 +52,21 @@ function resetHandle() {
 }
 
 function submitHandle() {
+  isCorrect = true;
   formMitt.emit("submit");
 }
 let timer;
 formMitt.on("commit", (formItem: any) => {
-  result[formItem.name] = formItem.value;
   if (timer) {
     clearInterval(timer);
+  }
+  if (!isCorrect) {
+    return;
+  }
+  isCorrect = formItem.isCorrect;
+  result[formItem.name] = formItem.value;
+  if (formItem.disabled) {
+    return;
   }
   timer = setTimeout(() => {
     emits("update:modelValue", result);

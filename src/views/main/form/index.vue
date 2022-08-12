@@ -13,10 +13,10 @@
           v-model="value"
           name="name.age"
           showTooltip
-          :verify="[{ rule: 'bughou', content: ' LY' }]"
+          :verify="[{ rule: 'bughou', content: '请输入艳玲' }]"
         >
         </m-form-item>
-        <m-form-item label="bughou" name="age"> </m-form-item>
+        <m-form-item label="bughou" name="age" disabled> </m-form-item>
         <template #submit>
           <m-button>提交</m-button>
         </template>

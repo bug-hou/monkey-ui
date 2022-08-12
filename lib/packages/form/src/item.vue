@@ -1,7 +1,7 @@
 <template>
   <div
     class="m-form-item"
-    :class="'m-form-item-' + placement"
+    :class="['m-form-item-' + placement, disabled && 'm-form-item-disabled']"
     :style="{ ['--m-form-item-label-width' as any]: labelWidth + 'px' }"
   >
     <div class="m-form-item-label" v-if="label">
@@ -12,13 +12,14 @@
       <slot>
         <m-input
           v-model="value"
-          :color="showTooltip && !isCorrect ? color : ''"
+          :color="showFeedback && !isCorrect ? color : ''"
           @blur="blurHandle"
           :placeholder="placeholder"
           v-bind="$attrs"
+          :disabled="disabled"
         ></m-input>
       </slot>
-      <div v-if="showTooltip && !isCorrect" class="m-form-item-tooltip">
+      <div v-if="showFeedback && !isCorrect" class="m-form-item-tooltip">
         <slot name="tooltip" :value="errorContent">
           <span>
             {{ errorContent }}
@@ -55,29 +56,36 @@ interface IVerify {
 }
 const props = withDefaults(
   defineProps<{
-    placement?: "left" | "right" | "top" | "bottom";
+    placement?: "left" | "top";
     labelWidth?: "auto" | number;
+    labelAlign?: "left" | "right";
+    showLabel?: boolean;
     verify?: IVerify[];
     verifyFn?: (value: string) => boolean;
     verifyTigger?: "lazy" | "input";
-    showTooltip?: boolean;
+    showFeedback?: boolean;
     label?: string;
     modelValue?: string;
     required?: boolean;
     placeholder?: string;
     color?: string;
     name?: string;
+    disabled?: boolean;
   }>(),
   {
     required: false,
     verifyTigger: "input",
-    color: "#f56c6c"
+    color: "#f56c6c",
+    showFeedback: true,
+    showLabel: true
   }
 );
+const emits = defineEmits(["update:modelValue"]);
+
 const placement = useInject(props.placement, "placement", "left");
 const labelWidth = useInject(props.labelWidth, "labelWidth", "auto");
-const emits = defineEmits(["update:modelValue"]);
-const isCorrect = ref<boolean>(false);
+
+const isCorrect = ref<boolean>(true);
 const errorContent = ref("");
 let commitValue = "";
 
@@ -96,7 +104,7 @@ function blurHandle() {
 }
 
 function processRegistyHandle(newValue: string) {
-  if (props.showTooltip) {
+  if (props.showFeedback) {
     if (props.verifyFn) {
       isCorrect.value = props.verifyFn(newValue);
     } else {
@@ -118,11 +126,26 @@ function processRegistyHandle(newValue: string) {
 }
 formMitt.on("reset", () => {
   value.value = "";
+  isCorrect.value = true;
 });
 
 formMitt.on("submit", () => {
+  if (props.disabled) {
+    formMitt.emit("commit", {
+      name: props.name,
+      value: value.value,
+      isCorrect: isCorrect.value,
+      disabled: props.disabled
+    });
+    return;
+  }
+  processRegistyHandle(value.value);
   if (commitValue !== value.value) {
-    formMitt.emit("commit", { name: props.name, value: value.value });
+    formMitt.emit("commit", {
+      name: props.name,
+      value: value.value,
+      isCorrect: isCorrect.value
+    });
     commitValue = value.value;
   }
 });
@@ -137,6 +160,10 @@ formMitt.on("submit", () => {
   align-items: center;
   min-height: 40px;
   padding: 10px 0;
+  &.m-form-item-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .m-form-item-body {
     max-width: 90%;
     flex: 1;
