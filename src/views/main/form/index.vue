@@ -7,21 +7,9 @@
     >
     </cpn-header-vue>
     <div class="layout">
-      <m-form v-model="userInfo">
-        <m-form-item
-          label="bughou"
-          v-model="value"
-          name="name.age"
-          showTooltip
-          :verify="[{ rule: 'bughou', content: '请输入艳玲' }]"
-        >
-        </m-form-item>
-        <m-form-item label="bughou" name="age" disabled> </m-form-item>
-        <template #submit>
-          <m-button>提交</m-button>
-        </template>
-      </m-form>
-      <p>{{ userInfo }}</p>
+      <base-vue></base-vue>
+      <disabled-vue></disabled-vue>
+      <form-vue></form-vue>
     </div>
   </div>
 </template>
@@ -35,11 +23,8 @@
 // 从下载的组件中导入函数
 import { reactive, ref, watch } from "vue";
 import cpnHeaderVue from "../../../components/cpnHeader/cpnHeader.vue";
-const value = ref();
-
-const userInfo = ref({});
-watch(userInfo, (newValue) => {
-  console.log(newValue);
-});
+import baseVue from "./cpn/base.vue";
+import disabledVue from "./cpn/disabled.vue";
+import formVue from "./cpn/form.vue";
 </script>
 <style scoped lang="less"></style>

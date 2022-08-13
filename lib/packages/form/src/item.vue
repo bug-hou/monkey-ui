@@ -2,9 +2,12 @@
   <div
     class="m-form-item"
     :class="['m-form-item-' + placement, disabled && 'm-form-item-disabled']"
-    :style="{ ['--m-form-item-label-width' as any]: labelWidth + 'px' }"
+    :style="[
+      { ['--m-form-item-label-width' as any]: labelWidth + 'px' },
+      { ['--m-form-item-label-dir' as any ] : labelAlign }
+    ]"
   >
-    <div class="m-form-item-label" v-if="label">
+    <div class="m-form-item-label" v-if="showLabel">
       <slot name="label">{{ label }}</slot>
       <span v-if="required" style="color: red"> * </span>
     </div>
@@ -16,6 +19,7 @@
           @blur="blurHandle"
           :placeholder="placeholder"
           v-bind="$attrs"
+          radius="1px"
           :disabled="disabled"
         ></m-input>
       </slot>
@@ -44,15 +48,20 @@ import {
   defineEmits,
   defineExpose,
   defineProps,
-  watch
+  watch,
+  nextTick,
+  unref
 } from "vue";
 import { useInject } from "../../../hooks";
 import { formMitt } from "../../../utils";
-
-interface IVerify {
+interface Irule {
   rule: string | RegExp;
   content: string;
   [key: string]: any;
+}
+interface IRuleResult {
+  value: boolean;
+  content?: string;
 }
 const props = withDefaults(
   defineProps<{
@@ -60,9 +69,9 @@ const props = withDefaults(
     labelWidth?: "auto" | number;
     labelAlign?: "left" | "right";
     showLabel?: boolean;
-    verify?: IVerify[];
-    verifyFn?: (value: string) => boolean;
-    verifyTigger?: "lazy" | "input";
+    rule?: Irule[];
+    ruleFn?: (value: string) => IRuleResult;
+    ruleTigger?: "lazy" | "input";
     showFeedback?: boolean;
     label?: string;
     modelValue?: string;
@@ -74,42 +83,48 @@ const props = withDefaults(
   }>(),
   {
     required: false,
-    verifyTigger: "input",
+    ruleTigger: "input",
     color: "#f56c6c",
     showFeedback: true,
-    showLabel: true
+    showLabel: true,
+    name: ""
   }
 );
 const emits = defineEmits(["update:modelValue"]);
 
 const placement = useInject(props.placement, "placement", "left");
 const labelWidth = useInject(props.labelWidth, "labelWidth", "auto");
+const labelAlign = useInject(props.labelAlign, "labelAlign", "left");
+const formObject = useInject(props.modelValue, "formObject", "");
 
 const isCorrect = ref<boolean>(true);
 const errorContent = ref("");
-let commitValue = "";
-
-const value = ref(props.modelValue ?? "");
+const value = ref(
+  typeof formObject === "object" ? formObject[props.name] : formObject
+);
 watch(value, (newValue) => {
   emits("update:modelValue", newValue);
-  if (props.verifyTigger === "input") {
+  formMitt.emit("commit", { name: props.name, value: newValue });
+  if (props.ruleTigger === "input") {
     processRegistyHandle(newValue);
   }
 });
 
 function blurHandle() {
-  if (props.verifyTigger === "lazy") {
+  if (props.ruleTigger === "lazy") {
     processRegistyHandle(value.value);
   }
 }
 
 function processRegistyHandle(newValue: string) {
   if (props.showFeedback) {
-    if (props.verifyFn) {
-      isCorrect.value = props.verifyFn(newValue);
+    if (props.ruleFn) {
+      const { value = true, content } = props.ruleFn(newValue);
+      isCorrect.value = value;
+      errorContent.value = content ?? "";
     } else {
-      if (props.verify) {
-        for (const item of props.verify) {
+      if (props.rule) {
+        for (const item of props.rule) {
           if (item.rule instanceof RegExp) {
             isCorrect.value = item.rule.test(newValue);
           } else {
@@ -126,28 +141,13 @@ function processRegistyHandle(newValue: string) {
 }
 formMitt.on("reset", () => {
   value.value = "";
-  isCorrect.value = true;
+  nextTick(() => {
+    isCorrect.value = true;
+  });
 });
 
 formMitt.on("submit", () => {
-  if (props.disabled) {
-    formMitt.emit("commit", {
-      name: props.name,
-      value: value.value,
-      isCorrect: isCorrect.value,
-      disabled: props.disabled
-    });
-    return;
-  }
   processRegistyHandle(value.value);
-  if (commitValue !== value.value) {
-    formMitt.emit("commit", {
-      name: props.name,
-      value: value.value,
-      isCorrect: isCorrect.value
-    });
-    commitValue = value.value;
-  }
 });
 </script>
 <style scoped lang="less">
@@ -159,7 +159,7 @@ formMitt.on("submit", () => {
   justify-content: center;
   align-items: center;
   min-height: 40px;
-  padding: 10px 0;
+  padding-bottom: 20px;
   &.m-form-item-disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -175,7 +175,9 @@ formMitt.on("submit", () => {
       bottom: -18px;
       font-size: 12px;
       color: red;
-      padding-left: 1em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .m-form-item-label {
@@ -184,6 +186,7 @@ formMitt.on("submit", () => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 14px;
   }
 }
 .m-form-item-top {
@@ -194,7 +197,10 @@ formMitt.on("submit", () => {
     padding: 10px 0;
   }
 }
-
+.m-form-item-right,
+.m-form-item-left {
+  text-align: var(--m-form-item-label-dir);
+}
 .m-form-item-right {
   flex-direction: row-reverse;
   .m-form-item-label {

@@ -31,7 +31,8 @@ const props = withDefaults(
     direction?: "vertical" | "horizontal";
     placement?: "left" | "right" | "top" | "bottom";
     labelWidth?: "auto" | number;
-    modelValue: Object;
+    labelAlign?: "left" | "right";
+    modelValue?: Object;
   }>(),
   {
     direction: "vertical",
@@ -40,38 +41,26 @@ const props = withDefaults(
   }
 );
 const emits = defineEmits(["update:modelValue"]);
-const { placement, labelWidth } = props;
+const { placement, labelWidth, labelAlign, modelValue } = props;
 
-let isCorrect = true;
 let result = {};
 
-providesHandle(["placement", "labelWidth"], [placement, labelWidth]);
+providesHandle(
+  ["placement", "labelWidth", "labelAlign", "formObject"],
+  [placement, labelWidth, labelAlign, modelValue]
+);
 
 function resetHandle() {
   formMitt.emit("reset");
 }
 
 function submitHandle() {
-  isCorrect = true;
   formMitt.emit("submit");
 }
-let timer;
 formMitt.on("commit", (formItem: any) => {
-  if (timer) {
-    clearInterval(timer);
-  }
-  if (!isCorrect) {
-    return;
-  }
-  isCorrect = formItem.isCorrect;
   result[formItem.name] = formItem.value;
-  if (formItem.disabled) {
-    return;
-  }
-  timer = setTimeout(() => {
-    emits("update:modelValue", result);
-    result = { ...result };
-  }, 100);
+  emits("update:modelValue", result);
+  result = { ...result };
 });
 
 function providesHandle(names: string[], values: any[]) {
@@ -88,9 +77,12 @@ function providesHandle(names: string[], values: any[]) {
   padding: 10px;
   .m-form-body-horizontal {
     display: flex;
+    gap: 10px;
   }
   .m-form-footer {
     width: 100%;
+    display: flex;
+    justify-content: space-evenly;
   }
 }
 </style>
