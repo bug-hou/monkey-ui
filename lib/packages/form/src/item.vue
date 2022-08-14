@@ -65,7 +65,7 @@ interface IRuleResult {
 }
 const props = withDefaults(
   defineProps<{
-    placement?: "left" | "top";
+    placement?: "left" | "top" | "right";
     labelWidth?: "auto" | number;
     labelAlign?: "left" | "right";
     showLabel?: boolean;

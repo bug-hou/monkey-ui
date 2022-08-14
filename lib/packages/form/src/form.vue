@@ -43,7 +43,7 @@ const props = withDefaults(
 const emits = defineEmits(["update:modelValue"]);
 const { placement, labelWidth, labelAlign, modelValue } = props;
 
-let result = {};
+let result = { ...modelValue };
 
 providesHandle(
   ["placement", "labelWidth", "labelAlign", "formObject"],

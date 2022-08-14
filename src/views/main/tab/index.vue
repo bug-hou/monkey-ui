@@ -7,27 +7,22 @@
     >
     </cpn-header-vue>
     <div class="layout">
-      <div style="width: 70%; border: 1px solid #6666; padding: 10px">
-        <m-tab type="line" defaultValue="登陆">
-          <m-tabPane name="登陆">
-            <div class="login">
-              <m-input radius="3" placeholder="请输入账号"> </m-input>
-              <m-input radius="3" placeholder="请输入密码"></m-input>
-              <m-radio>我已经阅读了monkey的所有信息</m-radio>
-              <m-button style="width: 80%">登陆</m-button>
-            </div>
-          </m-tabPane>
-          <m-tabPane name="注册" closable>
-            <div class="login">
-              <m-input radius="3" placeholder="请输入账号"> </m-input>
-              <m-input radius="3" placeholder="请输入密码"></m-input>
-              <m-input radius="3" placeholder="请确认密码"></m-input>
-              <m-radio>我已经阅读了monkey的所有信息</m-radio>
-              <m-button style="width: 80%">登陆</m-button>
-            </div>
-          </m-tabPane>
-        </m-tab>
-      </div>
+      <m-tab type="line" defaultValue="登陆">
+        <m-tabPane name="登陆">
+          <m-form>
+            <m-form-item label="账号" required></m-form-item>
+            <m-form-item placement="right">
+              <template #label>
+                <m-button style="width: 100%; height: 100%"
+                  >获取验证吗</m-button
+                >
+              </template>
+            </m-form-item>
+            <m-form-item label="密码"></m-form-item>
+          </m-form>
+        </m-tabPane>
+        <m-tabPane name="注册"> </m-tabPane>
+      </m-tab>
     </div>
   </div>
 </template>

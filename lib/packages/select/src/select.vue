@@ -8,6 +8,7 @@
         'm-select-' + size,
         selectItem.length === 0 && 'm-select-placeholder'
       ]"
+      :style="{ ['--m-select-radius' as any]: processUnit(radius) }"
       @click.stop="showListClickHandle"
     >
       <div v-if="multiple" class="m-select-box-multipart">
@@ -97,6 +98,7 @@ import { computedPosition } from "../../../utils";
 import { useScroll } from "../../../hooks";
 import mDivider from "../../divider/src/divider.vue";
 import longVue from "../../../common/loading/long.vue";
+import { processUnit } from "../../../hooks";
 
 const props = withDefaults(
   defineProps<{
@@ -109,12 +111,14 @@ const props = withDefaults(
     autoPosition?: boolean;
     delete?: boolean;
     more?: boolean;
+    radius?: number | string;
   }>(),
   {
     size: "small",
     multiple: false,
     delete: false,
-    more: false
+    more: false,
+    radius: 6
   }
 );
 
@@ -127,7 +131,7 @@ const isShowList = ref(false);
 let selectItem = reactive([]);
 let values = reactive([]);
 const position = ref<"bottom" | "top">("bottom");
-const listRef = ref<HTMLElement>(null);
+const listRef = ref<HTMLElement>();
 let bscroll = null;
 const loading = ref(false);
 
@@ -250,7 +254,7 @@ onMounted(() => {
     padding-left: 0.5em;
     display: flex;
     align-items: center;
-    border-radius: 10px;
+    border-radius: var(--m-select-radius);
     color: var(--font-color-select);
     cursor: pointer;
     border: 1px solid var(--border-color-select);
@@ -401,3 +405,4 @@ onMounted(() => {
   min-height: 45px;
 }
 </style>
+

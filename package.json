@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "dev": "vite --host",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "prepare": "husky install",
     "prettier": "prettier --write .",

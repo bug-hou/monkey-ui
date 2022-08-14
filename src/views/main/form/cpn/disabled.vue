@@ -53,9 +53,6 @@
         >
       </template>
     </m-form>
-    <pre>
-      {{ userInfo }}
-    </pre>
   </cpn-play-vue>
 </template>
 
